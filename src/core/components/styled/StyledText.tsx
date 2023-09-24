@@ -1,6 +1,7 @@
-import React, { LegacyRef } from "react";
+import React from "react";
 import { Text } from "react-native";
 import { styled } from "nativewind";
+import { twMerge } from "tailwind-merge";
 
 const StyledTextInstance = styled(Text);
 
@@ -9,7 +10,7 @@ const StyledTextInstance = styled(Text);
  */
 
 const StyledText = React.forwardRef<any, React.ComponentPropsWithRef<typeof StyledTextInstance>>((props, ref) => {
-  return <StyledTextInstance {...props} ref={ref} />;
+  return <StyledTextInstance {...props} ref={ref} className={twMerge("font-noto", props.className)} />;
 });
 
 export default StyledText;

@@ -5,6 +5,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        "purple": {
+          "primary": "#B146C2"
+        }
+      },
+      fontFamily: {
+        "noto": "noto",
+        "noto-semibold": "noto-semibold",
+        "noto-medium": "noto-medium",
+        "noto-bold": "noto-bold"
       }
     },
   },
