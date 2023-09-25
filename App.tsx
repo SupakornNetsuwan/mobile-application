@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect } from "react";
-import MainRouter from "./src/router/MainRouter";
+import React, { useEffect } from "react";
+import MainRouter from "./src/routers/MainRouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
+import AuthProvider from "./src/core/providers/AuthProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -20,6 +21,7 @@ const App = () => {
     "noto-medium": require("./assets/fonts/NotoSansThai-Medium.ttf"),
     "noto-semibold": require("./assets/fonts/NotoSansThai-SemiBold.ttf"),
     "noto-bold": require("./assets/fonts/NotoSansThai-Bold.ttf"),
+    "noto-extrabold": require("./assets/fonts/NotoSansThai-ExtraBold.ttf"),
   });
 
   useEffect(() => {
@@ -34,7 +36,9 @@ const App = () => {
   return (
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
-        <MainRouter />
+        <AuthProvider>
+          <MainRouter />
+        </AuthProvider>
       </QueryClientProvider>
     </NavigationContainer>
   );

@@ -13,7 +13,8 @@ module.exports = {
         "noto": "noto",
         "noto-semibold": "noto-semibold",
         "noto-medium": "noto-medium",
-        "noto-bold": "noto-bold"
+        "noto-bold": "noto-bold",
+        "noto-extrabold": "noto-extrabold"
       }
     },
   },

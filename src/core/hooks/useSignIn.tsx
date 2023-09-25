@@ -1,8 +1,8 @@
 import { useMutation } from "@tanstack/react-query";
 import type { MutationOptions } from "@tanstack/react-query";
-import axios from "../utils/axios";
+import axios from "../../utils/axios";
 import { AxiosError, AxiosResponse } from "axios";
-import { ResponseErrorType } from "../types/app";
+import { ResponseErrorType } from "../../types/app";
 
 type SignInResponseType = {
   jwt: string;

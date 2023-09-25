@@ -1,11 +1,13 @@
 import React from "react";
-import Landing from "../pages/Landing";
+import Events from "../pages/Events";
 import Account from "../pages/Account";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { StyledText, StyledView } from "../core/components/styled";
+import { StyledText } from "../core/components/styled";
 import { twMerge } from "tailwind-merge";
+import useAuthen from "../core/hooks/useAuthen";
+import SignIn from "../pages/SignIn";
 
 export type MainRouterType = {
   Landing: undefined;
@@ -15,16 +17,20 @@ export type MainRouterType = {
 const BottomStack = createBottomTabNavigator<MainRouterType>();
 
 const MainRouter = () => {
+  const { session } = useAuthen();
+
+  if (!session) {
+    return <SignIn />;
+  }
+
   return (
     <BottomStack.Navigator
-      initialRouteName="Account"
+      initialRouteName="Landing"
       screenOptions={({ navigation, route }: BottomTabScreenProps<MainRouterType>) => {
         return {
           headerShown: false,
-          tabBarActiveTintColor: "#B146C2",
-          tabBarStyle: {
-            height: 60,
-          },
+          tabBarActiveTintColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+          tabBarStyle: {},
           tabBarLabelStyle: {
             paddingTop: 0,
             paddingBottom: 5,
@@ -33,11 +39,11 @@ const MainRouter = () => {
       }}
     >
       <BottomStack.Screen
-        component={Landing}
+        component={Events}
         name="Landing"
         options={{
           tabBarLabel: ({ focused }) => (
-            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-[#B146C2]")}>
+            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
               กิจกรรม
             </StyledText>
           ),
@@ -51,7 +57,7 @@ const MainRouter = () => {
         name="Account"
         options={{
           tabBarLabel: ({ focused }) => (
-            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-[#B146C2]")}>
+            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
               บัญชี
             </StyledText>
           ),

@@ -2,4 +2,5 @@
 export { default as StyledText } from "./StyledText";
 export { default as StyledView } from "./StyledView";
 export { default as StyledImage } from "./StyledImage";
-export { default as TouchableOpacity } from "./TouchableOpacity";
+export { default as StyledTouchableOpacity } from "./StyledTouchableOpacity";
+export { default as StyledTextInput } from "./StyledTextInput";

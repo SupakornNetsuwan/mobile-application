@@ -1,5 +1,5 @@
 import React from "react";
-import { StyledImage, StyledText, StyledView } from "../../core/components/styled";
+import { StyledImage, StyledText, StyledView } from "../../../core/components/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const ProfileImage: React.FC<{ imageUri: string; name: string; accountId: string }> = ({
@@ -12,7 +12,7 @@ const ProfileImage: React.FC<{ imageUri: string; name: string; accountId: string
       <StyledImage
         source={{ uri: imageUri }}
         className="h-24 aspect-square rounded-full"
-        style={{ borderColor: "#B146C2", borderWidth: 2 }}
+        style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
       />
       <StyledText className="font-noto-semibold text-xl mt-2">{name}</StyledText>
       <StyledView className="flex-row space-x-2 items-center">

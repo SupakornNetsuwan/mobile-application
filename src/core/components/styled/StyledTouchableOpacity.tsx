@@ -6,15 +6,16 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const StyledTouchableOpacityInstance = styled(TouchableOpacity);
 
-const button = cva("rounded-lg", {
+const touchableOpacity = cva("rounded-lg", {
   variants: {
     intent: {
       primary: ["bg-purple-primary", "border-none"],
       secondary: ["bg-white", "border-purple-primary", "border"],
+      plain: undefined,
     },
     size: {
       small: ["text-sm", "py-1", "px-2"],
-      medium: ["text-base", "py-2", "px-4"],
+      medium: ["text-base", "py-1.5", "px-3"],
     },
     hasIcon: {
       false: undefined,
@@ -28,7 +29,7 @@ const button = cva("rounded-lg", {
 });
 
 type StyledTocuhableHighlightProps = React.ComponentPropsWithRef<typeof StyledTouchableOpacityInstance> &
-  VariantProps<typeof button> & { icon?: React.ReactElement };
+  VariantProps<typeof touchableOpacity> & { icon?: React.ReactElement };
 
 /**
  * @description เป็น TouchableOpacity แบบ styled กับ nativewind ได้ (คล้าย ๆ <button> ใน HTML)
@@ -41,7 +42,7 @@ const StyledTouchableOpacity = React.forwardRef<any, StyledTocuhableHighlightPro
     <StyledTouchableOpacityInstance
       activeOpacity={0.7}
       {...props}
-      className={button({ className, intent, size, hasIcon })}
+      className={touchableOpacity({ className, intent, size, hasIcon })}
     >
       {Icon}
       {props.children}
