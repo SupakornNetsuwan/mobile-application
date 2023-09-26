@@ -6,6 +6,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StyledText } from "../core/components/styled";
 import { twMerge } from "tailwind-merge";
+import Loading from "../core/components/Loading";
 import useAuthen from "../core/hooks/useAuthen";
 import SignIn from "../pages/SignIn";
 
@@ -19,9 +20,9 @@ const BottomStack = createBottomTabNavigator<MainRouterType>();
 const MainRouter = () => {
   const { session } = useAuthen();
 
-  if (!session) {
-    return <SignIn />;
-  }
+  if (session === "loading") return <Loading />;
+
+  if (!session) return <SignIn />;
 
   return (
     <BottomStack.Navigator

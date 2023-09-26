@@ -4,7 +4,7 @@ import axios from "../../utils/axios";
 import { AxiosError, AxiosResponse } from "axios";
 import { ResponseErrorType } from "../../types/app";
 
-type SignInResponseType = {
+export type SignInResponseType = {
   jwt: string;
   user: {
     id: number;

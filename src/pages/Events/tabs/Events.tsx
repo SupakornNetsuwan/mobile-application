@@ -15,7 +15,8 @@ const Events = () => {
             style={{ position: "absolute", top: "50%", left: 10, transform: [{ translateY: -12 }] }}
           />
         }
-        className="text-lg"
+        placeholder="ค้นหากิจกรรม"
+        className="text-lg bg-gray-100"
       />
     </StyledView>
   );

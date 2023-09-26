@@ -5,6 +5,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import AuthProvider from "./src/core/providers/AuthProvider";
+import Toast from "react-native-toast-message";
+import toastConfig from "./src/utils/toastConfig";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -38,6 +40,7 @@ const App = () => {
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <MainRouter />
+          <Toast config={toastConfig} />
         </AuthProvider>
       </QueryClientProvider>
     </NavigationContainer>

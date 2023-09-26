@@ -16,7 +16,9 @@ const Page = () => {
   const { handleSubmit, control } = useFormContext<SignInFormType>();
   const { signIn } = useAuthen();
 
-  const onSubmit: SubmitHandler<SignInFormType> = (data) => signIn(data.identifier, data.password);
+  const onSubmit: SubmitHandler<SignInFormType> = (data) => {
+    signIn(data.identifier, data.password)
+  };
 
   return (
     <ImageBackground
@@ -24,7 +26,7 @@ const Page = () => {
       className="w-full h-screen items-center justify-start pt-24"
     >
       <StyledView className="space-y-8 w-full px-12">
-        <StyledImage source={require("../../../assets/signin-logo.png")} className="self-center" />
+        <StyledImage source={require("../../../assets/signin-logo.png")} className="self-center scale-[0.35]" />
         <StyledView className="">
           <Controller
             name="identifier"
