@@ -30,22 +30,22 @@ const EventTabRouter = () => {
       sceneContainerStyle={{ backgroundColor: "white", padding: 12 }}
     >
       <EventTab.Screen
-        name="Following"
-        key="Following"
-        component={Following}
+        name="Events"
+        key="Events"
+        component={Events}
         options={({ navigation, route }) => ({
-          title: "ที่ถูกใจ",
+          title: "กิจกรรม",
           tabBarIcon(props) {
             return <MaterialCommunityIcons size={20} name="calendar" {...props} />;
           },
         })}
       />
       <EventTab.Screen
-        name="Events"
-        key="Events"
-        component={Events}
+        name="Following"
+        key="Following"
+        component={Following}
         options={({ navigation, route }) => ({
-          title: "กิจกรรม",
+          title: "ที่ถูกใจ",
           tabBarIcon(props) {
             return <MaterialCommunityIcons size={20} name="calendar" {...props} />;
           },

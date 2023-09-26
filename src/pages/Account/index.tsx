@@ -4,12 +4,22 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ProfileImage from "./components/ProfileImage";
 import ProfileStatistic from "./components/ProfileStatistic";
 import AccountTabRouter from "./routers/AccountTabRouter";
+import useAuthen from "../../core/hooks/useAuthen";
 
 const Account = () => {
+  const { signOut } = useAuthen();
+
   return (
     <>
       <StyledView className="m-0 bg-white">
         <StyledImage source={require("../../../assets/profile-backdrop.png")} className="w-full h-44" />
+        <StyledTouchableOpacity
+          onPress={signOut}
+          size="small"
+          className="bg-white/30 border border-white/50 aspect-square px-2 py-2 backdrop-blur-sm absolute flex-row items-center top-12 right-6"
+        >
+          <MaterialCommunityIcons name="logout" size={24} color="#d73434" />
+        </StyledTouchableOpacity>
         <StyledView className="transform -translate-y-12 px-8">
           <StyledView className="flex flex-row justify-between w-full items-end">
             <ProfileImage

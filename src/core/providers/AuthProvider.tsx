@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AuthContext, { type SessionType } from "../contexts/AuthContext";
 import useSignIn, { type SignInResponseType } from "../hooks/useSignIn";
-import useSignOut from "../hooks/useSignOut";
 import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -18,13 +17,13 @@ const getSessionFromStorage = async () => {
 
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { mutate } = useSignIn();
-  const signOut = useSignOut();
+
   const [session, setSession] = useState<SessionType>("loading");
 
   // ทำหน้าที่เก็บ set state จาก local storage
   const setSessionFromStorage = async () => {
-    const sessionFromStorage: SignInResponseType = await getSessionFromStorage();
-    setSession({ jwt: sessionFromStorage.jwt, user: sessionFromStorage.user });
+    const sessionFromStorage: SignInResponseType | null = await getSessionFromStorage();
+    setSession(sessionFromStorage ? { jwt: sessionFromStorage.jwt, user: sessionFromStorage.user } : null);
   };
 
   useEffect(() => {
@@ -68,6 +67,11 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         },
       }
     );
+  };
+
+  const signOut = () => {
+    setSession(null);
+    AsyncStorage.removeItem("user-session");
   };
 
   return (
