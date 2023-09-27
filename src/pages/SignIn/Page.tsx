@@ -17,7 +17,7 @@ const Page = () => {
   const { signIn } = useAuthen();
 
   const onSubmit: SubmitHandler<SignInFormType> = (data) => {
-    signIn(data.identifier, data.password)
+    signIn(data.identifier, data.password);
   };
 
   return (
@@ -29,6 +29,7 @@ const Page = () => {
         <StyledImage source={require("../../../assets/signin-logo.png")} className="self-center scale-[0.35]" />
         <StyledView className="">
           <Controller
+            control={control}
             name="identifier"
             render={({ field: { onChange, value, ref, onBlur, name } }) => {
               return (
@@ -53,10 +54,10 @@ const Page = () => {
                 </StyledView>
               );
             }}
-            control={control}
           />
           <StyledView className="mt-2 mb-4">
             <Controller
+              control={control}
               name="password"
               render={({ field: { onChange, value, ref, onBlur, name } }) => {
                 return (
@@ -82,7 +83,6 @@ const Page = () => {
                   </StyledView>
                 );
               }}
-              control={control}
             />
           </StyledView>
           <StyledTouchableOpacity

@@ -1,7 +1,7 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Events from "../tabs/Events";
-import Following from "../tabs/Following";
+import Events from "../pages/Events";
+import Following from "../pages/Following";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TabBar from "../components/TabBar";
 import withSafeArea from "../../../core/components/HOC/withSafeArea";

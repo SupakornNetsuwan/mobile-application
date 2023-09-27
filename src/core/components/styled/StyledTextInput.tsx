@@ -13,7 +13,7 @@ const textInput = cva(" bg-white text-gray-500 rounded-xl font-noto text-base px
      */
     hasIcon: {
       false: undefined,
-      true: ["pl-10", "pr-4"],
+      true: ["pl-12", "pr-4"],
     },
   },
   defaultVariants: {

@@ -38,6 +38,18 @@ type StyledTocuhableHighlightProps = React.ComponentPropsWithRef<typeof StyledTo
 const StyledTouchableOpacity = React.forwardRef<any, StyledTocuhableHighlightProps>((props, ref) => {
   const { className, intent, size, hasIcon, icon: Icon } = props;
 
+  if (!hasIcon) {
+    return (
+      <StyledTouchableOpacityInstance
+        activeOpacity={0.7}
+        {...props}
+        className={touchableOpacity({ className, intent, size, hasIcon })}
+      >
+        {props.children}
+      </StyledTouchableOpacityInstance>
+    );
+  }
+
   return (
     <StyledTouchableOpacityInstance
       activeOpacity={0.7}
