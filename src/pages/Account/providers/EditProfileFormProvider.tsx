@@ -8,6 +8,7 @@ const EditProfileSchema = z.object({
   lastname: z.string().nonempty({ message: "โปรดกรอกนามสกุล" }),
   address: z.string(),
   birthdate: z.number(),
+  pictureId: z.string(), // Picture ID
 });
 
 export type EditProfileSchemaType = z.infer<typeof EditProfileSchema>;
@@ -20,6 +21,7 @@ const EditProfileFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       lastname: "",
       address: "",
       birthdate: 0,
+      pictureId: "",
     },
   });
 

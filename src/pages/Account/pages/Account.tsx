@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { StyledImage, StyledView, StyledText, StyledTouchableOpacity } from "../../../core/components/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ProfileImage from "../components/ProfileImage";
@@ -7,12 +7,30 @@ import AccountTabRouter from "../routers/ProfiletabRouter";
 import useAuthen from "../../../core/hooks/useAuthen";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import type { AccountStackRouterType } from "../routers/AccountStackRouter";
+import useGetProfile from "../../../core/hooks/useGetProfile";
 
 const Account = () => {
-  const { signOut } = useAuthen();
+  const { signOut, session } = useAuthen();
   const navigation = useNavigation<NavigationProp<AccountStackRouterType>>();
 
+  if (!session || session === "loading") return null;
+
+  const { data, isLoading, isError, error } = useGetProfile(session.user.id.toString())!;
+  const profile = useMemo(() => data?.data, [data?.data]);
+
+  // if(session){
+  //   throw new Error("x")
+  // }
+
   const navigateToEditProfile = () => navigation.navigate("EditProfile");
+
+  if (isLoading) {
+    return (
+      <StyledView>
+        <StyledText>Loading...</StyledText>
+      </StyledView>
+    );
+  }
 
   return (
     <>
@@ -28,9 +46,9 @@ const Account = () => {
         <StyledView className="transform -translate-y-12 px-8">
           <StyledView className="flex flex-row justify-between w-full items-end">
             <ProfileImage
-              imageUri="https://www.gravatar.com/avatar/2c7d99fe281ecd3bcd65ab915bac6dd5?s=250"
-              name="กัลยกร ยี่นาง"
-              accountId="64070005"
+              imageUri={`${process.env.EXPO_PUBLIC_BACKEND_URL}${profile?.picture.url}`}
+              name={profile?.username || "ไม่ระบุ"}
+              accountId={profile?.email.split("@")[0] || "ไม่ระบุ"}
             />
             <StyledTouchableOpacity
               onPress={navigateToEditProfile}

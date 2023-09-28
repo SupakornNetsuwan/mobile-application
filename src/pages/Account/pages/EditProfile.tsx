@@ -14,9 +14,20 @@ import { ScrollView } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import UploadProfilePicture from "../components/UploadProfilePicture";
+import useUpdateProfile from "../../../core/hooks/useUpdateProfile";
+import useAuthen from "../../../core/hooks/useAuthen";
+import Toast from "react-native-toast-message";
+import { useQueryClient } from "@tanstack/react-query";
 
 const EditProfile = () => {
+  const { session } = useAuthen();
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const queryClient = useQueryClient();
+
+  if (session === "loading" || !session) return null;
+
+  const updateProfile = useUpdateProfile(session?.user.id.toString());
+
   const {
     control,
     formState: { errors },
@@ -25,7 +36,15 @@ const EditProfile = () => {
   } = useFormContext<EditProfileSchemaType>();
 
   const onSubmit: SubmitHandler<EditProfileSchemaType> = (data) => {
-    console.log(data);
+    updateProfile?.mutate(data, {
+      onSuccess(data, variables, context) {
+        Toast.show({ text1: "อัปเดตข้อมูลสำเร็จ" });
+        queryClient.invalidateQueries(["getProfile", session.user.id.toString()]);
+      },
+      onError(error, variables, context) {
+        console.log(error.response?.data.error);
+      },
+    });
   };
 
   return (
