@@ -18,15 +18,35 @@ const getSessionFromStorage = async () => {
 const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { mutate } = useSignIn();
 
-  const [session, setSession] = useState<SessionType>("loading");
+  const [status, setStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
+  const [session, setSession] = useState<SessionType>({
+    jwt: "",
+    user: {
+      blocked: false,
+      confirmed: true,
+      createdAt: "",
+      email: "",
+      id: 0,
+      provider: "",
+      updatedAt: "",
+      username: "",
+    },
+  });
 
   // ทำหน้าที่เก็บ set state จาก local storage
   const setSessionFromStorage = async () => {
     const sessionFromStorage: SignInResponseType | null = await getSessionFromStorage();
-    setSession(sessionFromStorage ? { jwt: sessionFromStorage.jwt, user: sessionFromStorage.user } : null);
+    if (sessionFromStorage) {
+      setStatus("authenticated");
+      setSession({ jwt: sessionFromStorage.jwt, user: sessionFromStorage.user });
+      return;
+    }
+    // ถ้าไม่มี ก็คือยังไม่ได้เข้าสู่ระบบ
+    setStatus("unauthenticated");
   };
 
   useEffect(() => {
+    setStatus("loading");
     setSessionFromStorage();
   }, []);
 
@@ -53,6 +73,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
             text2: "ยินดีต้อนรับ",
           });
 
+          setStatus("authenticated");
           setSession({
             jwt,
             user,
@@ -70,7 +91,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   };
 
   const signOut = () => {
-    setSession(null);
+    setStatus("unauthenticated");
     AsyncStorage.removeItem("user-session");
   };
 
@@ -80,6 +101,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         signIn,
         signOut,
         session,
+        status,
       }}
     >
       {children}

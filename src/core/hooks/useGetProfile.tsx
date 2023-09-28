@@ -53,15 +53,15 @@ export interface ThumbnailOrSmall {
 }
 
 const useGetProfile = (userId: string) => {
-  const { session } = useAuthen();
+  const auth = useAuthen();
 
-  if (session === "loading" || !session) return null;
+  if (auth.status === "loading" || auth.status === "unauthenticated") return null;
 
   return useQuery<AxiosResponse<GetProfileResponseType>, AxiosError<ResponseErrorType>>({
     queryFn: async () => {
       return axios.get(`/users/${userId}?populate=picture`, {
         headers: {
-          Authorization: `Bearer ${session.jwt}`,
+          Authorization: `Bearer ${auth.session.jwt}`,
         },
       });
     },

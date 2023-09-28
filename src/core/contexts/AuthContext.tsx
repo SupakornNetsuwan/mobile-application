@@ -1,28 +1,37 @@
 import React from "react";
 
-export type SessionType =
-  | {
-      jwt: string;
-      user: {
-        id: number;
-        username: string;
-        email: string;
-        provider: string;
-        confirmed: boolean;
-        blocked: boolean;
-        createdAt: string;
-        updatedAt: string;
-      };
-    }
-  | "loading"
-  | null
-  | undefined;
+export type SessionType = {
+  jwt: string;
+  user: {
+    id: number;
+    username: string;
+    email: string;
+    provider: string;
+    confirmed: boolean;
+    blocked: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
+};
 
-export type AuthType = {
+type AuthFeature = {
   signIn: (identifier: string, password: string) => void;
   signOut: () => void;
-  session: SessionType;
 };
+
+export type AuthType = AuthFeature &
+  (
+    | {
+        status: "loading";
+      }
+    | {
+        status: "unauthenticated";
+      }
+    | {
+        status: "authenticated";
+        session: SessionType;
+      }
+  );
 
 const AuthContext = React.createContext<null | AuthType>(null);
 

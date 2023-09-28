@@ -18,11 +18,10 @@ export type MainRouterType = {
 const BottomStack = createBottomTabNavigator<MainRouterType>();
 
 const MainRouter = () => {
-  const { session } = useAuthen();
+  const auth = useAuthen();
 
-  if (session === "loading") return <Loading />;
-
-  if (!session) return <SignIn />;
+  if (auth.status === "loading") return <Loading />;
+  if (auth.status === "unauthenticated") return <SignIn />;
 
   return (
     <BottomStack.Navigator

@@ -18,15 +18,16 @@ import useUpdateProfile from "../../../core/hooks/useUpdateProfile";
 import useAuthen from "../../../core/hooks/useAuthen";
 import Toast from "react-native-toast-message";
 import { useQueryClient } from "@tanstack/react-query";
+import Loading from "../../../core/components/Loading";
 
 const EditProfile = () => {
-  const { session } = useAuthen();
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const auth = useAuthen();
   const queryClient = useQueryClient();
+  if (auth.status == "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+  if (auth.status === "loading") return <Loading />;
 
-  if (session === "loading" || !session) return null;
-
-  const updateProfile = useUpdateProfile(session?.user.id.toString());
+  const updateProfile = useUpdateProfile(auth.session.user.id.toString());
 
   const {
     control,
@@ -36,10 +37,13 @@ const EditProfile = () => {
   } = useFormContext<EditProfileSchemaType>();
 
   const onSubmit: SubmitHandler<EditProfileSchemaType> = (data) => {
+    if (!data.pictureId) delete data.pictureId;
+    if (!data.address) delete data.address;
+
     updateProfile?.mutate(data, {
       onSuccess(data, variables, context) {
         Toast.show({ text1: "อัปเดตข้อมูลสำเร็จ" });
-        queryClient.invalidateQueries(["getProfile", session.user.id.toString()]);
+        queryClient.invalidateQueries(["getProfile", auth.session.user.id.toString()]);
       },
       onError(error, variables, context) {
         console.log(error.response?.data.error);
@@ -125,7 +129,7 @@ const EditProfile = () => {
                     mode="date"
                     is24Hour={true}
                     onChange={(e) => {
-                      onChange(e.nativeEvent.timestamp);
+                      onChange(new Date(e.nativeEvent.timestamp as number).toISOString());
                       setShowDatePicker(false);
                     }}
                   />

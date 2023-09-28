@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
 import React, { useEffect } from "react";
 import MainRouter from "./src/routers/MainRouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -8,6 +8,8 @@ import * as SplashScreen from "expo-splash-screen";
 import AuthProvider from "./src/core/providers/AuthProvider";
 import Toast from "react-native-toast-message";
 import toastConfig from "./src/utils/toastConfig";
+import ErrorBoundary from "react-native-error-boundary";
+import ErrorDisplay from "./src/core/components/ErrorDisplay";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -40,7 +42,9 @@ const App = () => {
     <NavigationContainer>
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
-          <MainRouter />
+          {/* <ErrorBoundary FallbackComponent={ErrorDisplay}> */}
+            <MainRouter />
+          {/* </ErrorBoundary> */}
           <Toast config={toastConfig} />
         </AuthProvider>
       </QueryClientProvider>

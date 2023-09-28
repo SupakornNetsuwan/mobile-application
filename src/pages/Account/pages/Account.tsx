@@ -8,19 +8,16 @@ import useAuthen from "../../../core/hooks/useAuthen";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import type { AccountStackRouterType } from "../routers/AccountStackRouter";
 import useGetProfile from "../../../core/hooks/useGetProfile";
+import Loading from "../../../core/components/Loading";
 
 const Account = () => {
-  const { signOut, session } = useAuthen();
+  const auth = useAuthen();
   const navigation = useNavigation<NavigationProp<AccountStackRouterType>>();
+  if (auth.status == "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+  if (auth.status == "loading") return <Loading />;
 
-  if (!session || session === "loading") return null;
-
-  const { data, isLoading, isError, error } = useGetProfile(session.user.id.toString())!;
+  const { data, isLoading, isError, error } = useGetProfile(auth.session.user.id.toString())!;
   const profile = useMemo(() => data?.data, [data?.data]);
-
-  // if(session){
-  //   throw new Error("x")
-  // }
 
   const navigateToEditProfile = () => navigation.navigate("EditProfile");
 
@@ -37,7 +34,7 @@ const Account = () => {
       <StyledView className="m-0 bg-white">
         <StyledImage source={require("../../../../assets/profile-backdrop.png")} className="w-full h-44" />
         <StyledTouchableOpacity
-          onPress={signOut}
+          onPress={auth.signOut}
           size="small"
           className="bg-white/30 border border-white/50 aspect-square px-2 py-2 backdrop-blur-sm absolute flex-row items-center top-12 right-6"
         >
