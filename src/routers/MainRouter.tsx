@@ -25,7 +25,7 @@ const MainRouter = () => {
 
   return (
     <BottomStack.Navigator
-      initialRouteName="AccountStackRouter"
+      initialRouteName="Landing"
       screenOptions={({ navigation, route }: BottomTabScreenProps<MainRouterType>) => {
         return {
           headerShown: false,

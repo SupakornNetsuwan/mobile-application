@@ -19,11 +19,15 @@ import useAuthen from "../../../core/hooks/useAuthen";
 import Toast from "react-native-toast-message";
 import { useQueryClient } from "@tanstack/react-query";
 import Loading from "../../../core/components/Loading";
+import { useNavigation, type NavigationProp } from "@react-navigation/core";
+import type { AccountStackRouterType } from "../routers/AccountStackRouter";
 
 const EditProfile = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const navigation = useNavigation<NavigationProp<AccountStackRouterType>>();
   const auth = useAuthen();
   const queryClient = useQueryClient();
+
   if (auth.status == "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
   if (auth.status === "loading") return <Loading />;
 
@@ -44,6 +48,7 @@ const EditProfile = () => {
       onSuccess(data, variables, context) {
         Toast.show({ text1: "อัปเดตข้อมูลสำเร็จ" });
         queryClient.invalidateQueries(["getProfile", auth.session.user.id.toString()]);
+        navigation.navigate("Account");
       },
       onError(error, variables, context) {
         console.log(error.response?.data.error);

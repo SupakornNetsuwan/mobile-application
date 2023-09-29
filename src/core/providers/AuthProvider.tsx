@@ -5,13 +5,14 @@ import Toast from "react-native-toast-message";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // ทำหน้าที่ดึงข้อมูลจาก local storage
-const getSessionFromStorage = async () => {
+export const getSessionFromStorage = async (): Promise<SignInResponseType | null> => {
   try {
     const jsonValue = await AsyncStorage.getItem("user-session");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (error) {
     // 🔴
     console.log(error);
+    return null;
   }
 };
 
@@ -35,7 +36,7 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
   // ทำหน้าที่เก็บ set state จาก local storage
   const setSessionFromStorage = async () => {
-    const sessionFromStorage: SignInResponseType | null = await getSessionFromStorage();
+    const sessionFromStorage = await getSessionFromStorage();
     if (sessionFromStorage) {
       setStatus("authenticated");
       setSession({ jwt: sessionFromStorage.jwt, user: sessionFromStorage.user });

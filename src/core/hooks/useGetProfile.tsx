@@ -16,7 +16,7 @@ export interface GetProfileResponseType {
   updatedAt: string;
   address: string;
   birthdate: string;
-  picture: {
+  picture?: {
     id: number;
     name: string;
     alternativeText?: null;

@@ -1,15 +1,33 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { StyledText, StyledView, StyledTouchableOpacity, StyledImage } from "../../../core/components/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useUploadFile from "../../../core/hooks/useUploadFile";
 import { useFormContext } from "react-hook-form";
 import { EditProfileSchemaType } from "../providers/EditProfileFormProvider";
 import pickImage from "../../../utils/pickImage";
+import useGetProfile from "../../../core/hooks/useGetProfile";
+import useAuthen from "../../../core/hooks/useAuthen";
+import Loading from "../../../core/components/Loading";
 
 const UploadProfilePicture = () => {
-  const { setValue } = useFormContext<EditProfileSchemaType>();
-  const [tempImageUri, setTempImageUri] = useState("");
+  const { setValue, getValues } = useFormContext<EditProfileSchemaType>();
   const uploadFile = useUploadFile();
+
+  const authen = useAuthen();
+  if (authen.status === "loading") return <Loading />;
+  if (authen.status === "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+
+  const { data } = useGetProfile(authen.session.user.id.toString())!;
+  const profile = useMemo(() => data?.data, [data?.data]);
+
+  const [tempImageUri, setTempImageUri] = useState("");
+
+  if (uploadFile.isLoading)
+    return (
+      <StyledView className="bg-white rounded w-fill h-24 items-center justify-center mt-2">
+        <StyledText className="text-gray-500">Loading...</StyledText>
+      </StyledView>
+    );
 
   const uploadProfilePicture = async () => {
     const receive = await pickImage();
@@ -46,9 +64,12 @@ const UploadProfilePicture = () => {
       >
         <StyledText className="text-purple-primary">เลือกรูปโปรไฟล์</StyledText>
       </StyledTouchableOpacity>
-      {tempImageUri && (
+      {(tempImageUri || profile?.picture?.url) && (
         <StyledView className="p-4 mt-2 flex-row justify-center bg-white w-full">
-          <StyledImage source={{ uri: tempImageUri }} className="w-1/2 aspect-square rounded-lg mt-2" />
+          <StyledImage
+            source={{ uri: tempImageUri || `${process.env.EXPO_PUBLIC_BACKEND_URL}${profile?.picture?.url}` }}
+            className="w-1/2 aspect-square rounded-lg mt-2"
+          />
         </StyledView>
       )}
     </StyledView>

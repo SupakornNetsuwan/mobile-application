@@ -14,7 +14,7 @@ const ProfileImage: React.FC<{ imageUri: string; name: string; accountId: string
         className="h-24 aspect-square rounded-full"
         style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
       />
-      <StyledText className="font-noto-semibold text-xl mt-2">{name}</StyledText>
+      <StyledText className="font-noto-semibold text-xl mt-2 max-w-[267px]" numberOfLines={1}>{name}</StyledText>
       <StyledView className="flex-row space-x-2 items-center">
         <MaterialCommunityIcons name="card-account-details-outline" size={20} color="rgb(107,114,128)" />
         <StyledText className="font-noto text-sm text-gray-500">Account ID : {accountId}</StyledText>

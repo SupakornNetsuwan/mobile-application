@@ -16,18 +16,12 @@ const Account = () => {
   if (auth.status == "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
   if (auth.status == "loading") return <Loading />;
 
-  const { data, isLoading, isError, error } = useGetProfile(auth.session.user.id.toString())!;
+  const { data, isLoading, error } = useGetProfile(auth.session.user.id.toString())!;
   const profile = useMemo(() => data?.data, [data?.data]);
 
   const navigateToEditProfile = () => navigation.navigate("EditProfile");
 
-  if (isLoading) {
-    return (
-      <StyledView>
-        <StyledText>Loading...</StyledText>
-      </StyledView>
-    );
-  }
+  if (isLoading) return <Loading />;
 
   return (
     <>
@@ -43,7 +37,7 @@ const Account = () => {
         <StyledView className="transform -translate-y-12 px-8">
           <StyledView className="flex flex-row justify-between w-full items-end">
             <ProfileImage
-              imageUri={`${process.env.EXPO_PUBLIC_BACKEND_URL}${profile?.picture.url}`}
+              imageUri={`${process.env.EXPO_PUBLIC_BACKEND_URL}${profile?.picture?.url}`}
               name={profile?.username || "ไม่ระบุ"}
               accountId={profile?.email.split("@")[0] || "ไม่ระบุ"}
             />
