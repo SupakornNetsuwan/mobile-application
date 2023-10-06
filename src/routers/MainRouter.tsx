@@ -9,10 +9,11 @@ import { twMerge } from "tailwind-merge";
 import Loading from "../core/components/Loading";
 import useAuthen from "../core/hooks/useAuthen";
 import SignIn from "../pages/SignIn";
-
+import EventDetails from "../pages/Event/pages/EventPage";
 export type MainRouterType = {
   Landing: undefined;
   AccountStackRouter: undefined;
+  EventDetails:undefined
 };
 
 const BottomStack = createBottomTabNavigator<MainRouterType>();
@@ -59,6 +60,20 @@ const MainRouter = () => {
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
               บัญชี
+            </StyledText>
+          ),
+          tabBarIcon(props) {
+            return <MaterialCommunityIcons name="account" {...props} />;
+          },
+        }}
+      />
+      <BottomStack.Screen
+        component={EventDetails}
+        name="EventDetails"
+        options={{
+          tabBarLabel: ({ focused }) => (
+            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
+              รายละเอียดกิจกรรม
             </StyledText>
           ),
           tabBarIcon(props) {
