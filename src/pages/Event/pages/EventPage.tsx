@@ -4,6 +4,7 @@ import useAuthen from "../../../core/hooks/useAuthen";
 import Loading from "../../../core/components/Loading";
 import { StyledView,StyledText, StyledImage} from "../../../core/components/styled";
 import EventStackRouter from "../routers/EventStackRouter";
+import AccountStackRouter from "../../Account/routers/AccountStackRouter";
 const EventPage = () =>{
     // check authentication
     // const auth = useAuthen()
@@ -15,12 +16,9 @@ const EventPage = () =>{
     return(
         <>
             <StyledView className="m0 bg-white">
-                <StyledImage source={require("../../../../assets/profile-backdrop.png")} className="w-full h-44" />
                 <StyledText>ITCAMP19</StyledText>
-                <StyledView>    
-                    <EventStackRouter></EventStackRouter>
-                </StyledView>
             </StyledView>
+            <EventStackRouter user={"admin"}></EventStackRouter>
         </>
     )
 
