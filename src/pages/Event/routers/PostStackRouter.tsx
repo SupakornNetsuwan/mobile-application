@@ -40,7 +40,7 @@ const PostStackRouter = ({route, navigation}:Props) =>{
                 }}
             >
                 <Stack.Screen name="EventDetails" component={EventDetails} options={{ headerShown: false }} /> 
-                <Stack.Screen name="CreatePost" component={CreatePost} options={{title:'เพิ่มกิจกรรม'}}></Stack.Screen>
+                <Stack.Screen name="CreatePost" component={CreatePost} options={{title:'สร้างโพสต์'}}></Stack.Screen>
             </Stack.Navigator>
     )
 
