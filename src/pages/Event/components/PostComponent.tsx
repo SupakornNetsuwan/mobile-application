@@ -82,12 +82,12 @@ const Comment = ()=>{
 const PostComponent = () =>{
     return (
         <>
-            <StyledView className="mb-5 p-2 shadow-sm border border-gray-300"
+            <StyledView className="mb-5 p-2  border border-gray-300 rounded-xl"
                    style={{
                     shadowColor: "#E0E0E0",
                     shadowOffset: {
-                      width: 3,
-                      height: 3,
+                      width: 2,
+                      height: 2,
                     },
                     shadowOpacity: 0.5,
                     shadowRadius: 3.84,

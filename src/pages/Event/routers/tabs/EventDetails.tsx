@@ -7,7 +7,12 @@ import PostComponent from "../../components/PostComponent";
 // 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native";
+import { useNavigation, type NavigationProp } from "@react-navigation/core";
+
+import type { RootPostStackParamsList } from "../PostStackRouter";
 const EventDetails = () => {
+  const navigate = useNavigation<NavigationProp<RootPostStackParamsList>>()
+  const navigateToCreatePost = () => navigate.navigate("CreatePost")
   const numberOfPost = 4;
   return (
     <StyledView className=""> 
@@ -19,7 +24,7 @@ const EventDetails = () => {
             <StyledText className="text-gray-500 text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</StyledText>
           </StyledView>
           {/* ส่วนแสดงผลโพสต์ */}
-          <StyledView className="justify-center pl-4 pr-4 pt-3 w-full border-t ">
+          <StyledView className="justify-center pl-4 pr-4 pt-3 w-full border-t border-t-gray-300 ">
             <StyledView className="flex flex-row bg-green-100 rounded-lg p-1 text-center w-full h-8 items-center mb-5">
                 < MaterialCommunityIcons name="alarm" size={17} color="green" />
                 <StyledText className="ml-1 font-bold text-sm">
@@ -35,6 +40,7 @@ const EventDetails = () => {
       </ScrollView>
       <StyledTouchableOpacity className=" border-opacity-20 flex items-center justify-center w-16 h-16 absolute bottom-10 right-5 rounded-full"
           style={{backgroundColor:"#B146C2"}}
+          onPress={navigateToCreatePost}
         >
           < MaterialCommunityIcons name="plus-circle-outline" size={30} color="white" />
         </StyledTouchableOpacity>

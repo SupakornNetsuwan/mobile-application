@@ -10,6 +10,7 @@ import Toast from "react-native-toast-message";
 import toastConfig from "./src/utils/toastConfig";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorDisplay from "./src/core/components/ErrorDisplay";
+import ManageStackRouter from "./src/pages/Event/routers/ManageStackRouter";
 
 SplashScreen.preventAutoHideAsync();
 

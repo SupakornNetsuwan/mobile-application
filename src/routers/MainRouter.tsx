@@ -9,16 +9,19 @@ import { twMerge } from "tailwind-merge";
 import Loading from "../core/components/Loading";
 import useAuthen from "../core/hooks/useAuthen";
 import SignIn from "../pages/SignIn";
-import EventDetails from "../pages/Event/pages/EventPage";
+import EventTabRouter from "../pages/Event/"
+
+
 export type MainRouterType = {
   Landing: undefined;
   AccountStackRouter: undefined;
-  EventDetails:undefined
+  EventTabRouter:undefined
 };
 
 const BottomStack = createBottomTabNavigator<MainRouterType>();
 
 const MainRouter = () => {
+  
   const auth = useAuthen();
 
   if (auth.status === "loading") return <Loading />;
@@ -68,8 +71,8 @@ const MainRouter = () => {
         }}
       />
       <BottomStack.Screen
-        component={EventDetails}
-        name="EventDetails"
+        component={EventTabRouter}
+        name="EventTabRouter"
         options={{
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
