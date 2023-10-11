@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyledText, StyledView, StyledTextInput, StyledImage, } from "../../../core/components/styled";
 import { ScrollView } from "react-native";
-const TopPostViewComponent = () =>{
+import useGetPost from "../../../core/hooks/useGetPost";
+//types
+import { OwnerAttributesType } from "../../../core/hooks/useGetPost";
+
+const TopPostViewComponent :React.FC<OwnerAttributesType> = ({username}) =>{
     return (
         <>
 
@@ -79,7 +83,18 @@ const Comment = ()=>{
         </StyledView>
     )
 }
-const PostComponent = () =>{
+interface PostComponentProps {
+    postId: string;
+  }
+const PostComponent: React.FC<PostComponentProps> = ({postId}) =>{
+
+    const {data, isLoading, error} = useGetPost(postId)!;
+    const response = useMemo(() => data?.data, [data?.data]);
+    const post =response?.data.attributes
+    console.log(post)
+
+    console.log("post", post)
+
     return (
         <>
             <StyledView className="mb-5 p-2  border border-gray-300 rounded-xl"
@@ -95,7 +110,7 @@ const PostComponent = () =>{
                   }}
             >
         
-                    <TopPostViewComponent/>
+                    {/* <TopPostViewComponent/> */}
                     <PostDetailViewComponent/>
                     <CommentsViewComponent/>
 
