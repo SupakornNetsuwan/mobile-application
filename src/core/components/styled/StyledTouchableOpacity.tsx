@@ -2,7 +2,6 @@ import React from "react";
 import { styled } from "nativewind";
 import { TouchableOpacity } from "react-native";
 import { cva, type VariantProps } from "class-variance-authority";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const StyledTouchableOpacityInstance = styled(TouchableOpacity);
 
@@ -11,6 +10,7 @@ const touchableOpacity = cva("rounded-lg", {
     intent: {
       primary: ["bg-purple-primary", "border-none"],
       secondary: ["bg-white", "border-purple-primary", "border"],
+      chip: ["bg-purple-secondary", "border-none"],
       plain: undefined,
     },
     size: {

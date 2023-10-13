@@ -5,9 +5,10 @@ import Following from "../pages/Following";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TabBar from "../components/TabBar";
 import withSafeArea from "../../../core/components/HOC/withSafeArea";
+import EventsStackRouter from "./EventsStackRouter";
 
 export type EventTabRouterType = {
-  Events: undefined;
+  EventsTab: undefined;
   Following: undefined;
 };
 
@@ -16,7 +17,7 @@ const EventTab = createMaterialTopTabNavigator<EventTabRouterType>();
 const EventTabRouter = () => {
   return (
     <EventTab.Navigator
-      initialRouteName="Events"
+      initialRouteName="EventsTab"
       screenOptions={{
         tabBarStyle: { backgroundColor: "#FAFAFA" },
         tabBarIndicatorContainerStyle: {},
@@ -30,7 +31,7 @@ const EventTabRouter = () => {
       sceneContainerStyle={{ backgroundColor: "white", padding: 12 }}
     >
       <EventTab.Screen
-        name="Events"
+        name="EventsTab"
         key="Events"
         component={Events}
         options={({ navigation, route }) => ({
@@ -45,7 +46,7 @@ const EventTabRouter = () => {
         key="Following"
         component={Following}
         options={({ navigation, route }) => ({
-          title: "ที่ถูกใจ",
+          title: "กำลังเข้าร่วม",
           tabBarIcon(props) {
             return <MaterialCommunityIcons size={20} name="calendar" {...props} />;
           },

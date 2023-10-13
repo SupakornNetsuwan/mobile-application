@@ -55,8 +55,12 @@ export interface ThumbnailOrSmall {
 const useGetProfile = (userId: string) => {
   const auth = useAuthen();
 
+  // console.log(auth.status, "👌");
+
   if (auth.status === "loading" || auth.status === "unauthenticated") return null;
 
+  // console.log(auth.session.jwt, "😂");
+  
   return useQuery<AxiosResponse<GetProfileResponseType>, AxiosError<ResponseErrorType>>({
     queryFn: async () => {
       return axios.get(`/users/${userId}?populate=picture`, {

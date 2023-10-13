@@ -30,7 +30,7 @@ const ProfileTabRouter = () => {
     >
       <ProfileTab.Screen name="Posts" component={Posts} options={{ title: "โพสต์" }} />
       <ProfileTab.Screen name="Events" component={Events} options={{ title: "กิจกรรม" }} />
-      <ProfileTab.Screen name="Favorites" component={Favorites} options={{ title: "ถูกใจ" }} />
+      <ProfileTab.Screen name="Favorites" component={Favorites} options={{ title: "กำลังติดตาม" }} />
       <ProfileTab.Screen name="comments" component={Comments} options={{ title: "คอมเม้นต์" }} />
     </ProfileTab.Navigator>
   );
