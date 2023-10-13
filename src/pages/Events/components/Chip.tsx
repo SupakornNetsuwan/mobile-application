@@ -5,58 +5,63 @@ import {
   StyledTouchableOpacity,
 } from "../../../core/components/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Category } from "../../../core/hooks/Events/Category/useGetCategories";
 
 interface ChipProperty {
   icon: any;
-  title: string[];
+  items: Category[];
 }
 
 const Chip: React.FC<{
   chips: ChipProperty;
-  selectedChips: string[];
-  onSelectedChipsChange: (newSelectedChips: string[]) => void;
+  selectedChips: number[];
+  onSelectedChipsChange: (newSelectedChips: number[]) => void;
 }> = ({ chips, selectedChips, onSelectedChipsChange }) => {
-  const handleChipPress = (label: string) => {
-    if (!selectedChips.includes(label)) {
-      const newSelectedChips = [...selectedChips, label];
+  const handleChipPress = (id: number) => {
+    if (!selectedChips.includes(id)) {
+      const newSelectedChips = [...selectedChips, id];
       onSelectedChipsChange(newSelectedChips); // Update selectedChips in the parent component
     } else {
-      const newSelectedChips = selectedChips.filter((chip) => chip !== label);
+      const newSelectedChips = selectedChips.filter((chip) => chip !== id);
       onSelectedChipsChange(newSelectedChips); // Update selectedChips in the parent component
     }
   };
 
   return (
-    <StyledView className="flex-row flex-wrap">
-      {chips.title.map((chip, index) => (
-        <StyledTouchableOpacity
-          intent={selectedChips.includes((index+1).toString()) ? "primary" : "chip"}
-          key={index}
-          className="flex-row space-x-2 mr-2 mt-2 items-center"
-          style={{
-            borderWidth: 1,
-            borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
-          }}
-          onPress={() => handleChipPress((index+1).toString())}
-        >
-          <MaterialCommunityIcons
-            name={chips.icon}
-            size={18}
-            color={
-              selectedChips.includes((index+1).toString())
-                ? "#fff"
-                : process.env.EXPO_PUBLIC_PRIMARY_COLOR
-            }
-          />
-          <StyledText
-            className={`text-${
-              selectedChips.includes((index+1).toString()) ? "white" : "purple-primary"
-            }`}
-          >
-            {chip}
-          </StyledText>
-        </StyledTouchableOpacity>
-      ))}
+    <StyledView>
+      {chips.items && (
+        <StyledView className="flex-row flex-wrap">
+          {chips.items.map((chip) => (
+            <StyledTouchableOpacity
+              key={chip.id}
+              intent={selectedChips.includes(chip.id) ? "primary" : "chip"}
+              className="flex-row space-x-2 mr-2 mt-2 items-center"
+              style={{
+                borderWidth: 1,
+                borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+              }}
+              onPress={() => handleChipPress(chip.id)}
+            >
+              <MaterialCommunityIcons
+                name={chips.icon}
+                size={18}
+                color={
+                  selectedChips.includes(chip.id)
+                    ? "#fff"
+                    : process.env.EXPO_PUBLIC_PRIMARY_COLOR
+                }
+              />
+              <StyledText
+                className={`text-${
+                  selectedChips.includes(chip.id) ? "white" : "purple-primary"
+                }`}
+              >
+                {chip.attributes.name}
+              </StyledText>
+            </StyledTouchableOpacity>
+          ))}
+        </StyledView>
+      )}
     </StyledView>
   );
 };
