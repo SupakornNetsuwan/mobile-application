@@ -11,6 +11,7 @@ const toastConfig: ToastConfig = {
       {...props}
       style={{ borderLeftColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR }}
       text1Style={{
+        fontFamily: "noto",
         fontSize: 15,
         fontWeight: "400",
       }}
