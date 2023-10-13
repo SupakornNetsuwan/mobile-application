@@ -6,7 +6,11 @@ module.exports = {
     extend: {
       colors: {
         "purple": {
-          "primary": "#B146C2"
+          "primary": "#B146C2",
+          "secondary": "#F8F1F9",
+        },
+        "pink": {
+          "primary": "#f6dffc"
         }
       },
       fontFamily: {

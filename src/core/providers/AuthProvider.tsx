@@ -38,18 +38,22 @@ const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const setSessionFromStorage = async () => {
     const sessionFromStorage = await getSessionFromStorage();
     if (sessionFromStorage) {
-      setStatus("authenticated");
       setSession({ jwt: sessionFromStorage.jwt, user: sessionFromStorage.user });
-      return;
+      setStatus("authenticated");
+      return
     }
     // ถ้าไม่มี ก็คือยังไม่ได้เข้าสู่ระบบ
     setStatus("unauthenticated");
+
   };
 
   useEffect(() => {
-    setStatus("loading");
     setSessionFromStorage();
   }, []);
+
+  // console.log(status, "👌");
+  // console.log(session?.jwt, "😂");
+
 
   const signIn = (identifier: string, password: string) => {
     mutate(

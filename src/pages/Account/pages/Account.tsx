@@ -13,9 +13,9 @@ import Loading from "../../../core/components/Loading";
 const Account = () => {
   const auth = useAuthen();
   const navigation = useNavigation<NavigationProp<AccountStackRouterType>>();
-  if (auth.status == "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
   if (auth.status == "loading") return <Loading />;
-
+  if (auth.status == "unauthenticated") throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+ 
   const { data, isLoading, error } = useGetProfile(auth.session.user.id.toString())!;
   const profile = useMemo(() => data?.data, [data?.data]);
 
