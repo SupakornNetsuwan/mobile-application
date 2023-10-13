@@ -17,10 +17,10 @@ const AddEventSchema = z
       .string()
       .datetime()
       .nonempty({ message: "โปรดกรอกวันสิ้นสุดกิจกรรม" }),
-    categories: z.string().array().nonempty({
+    categories: z.number().array().nonempty({
       message: "กรุณาเลือกประเภทของกิจกรรม",
     }),
-    studentAccessYears: z.string().array().nonempty({
+    studentAccessYears: z.number().array().nonempty({
       message: "กรุณาเลือกชั้นปีสำหรับกิจกรรม",
     }),
     cover: z.string().optional()

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   StyledView,
   StyledText,
@@ -19,6 +19,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import { EventsStackRouterType } from "../routers/EventsStackRouter";
 import UploadEventCover from "../components/UploadEventCover";
+import useGetCategories from "../../../core/hooks/Events/Category/useGetCategories";
+import useGetStudentYears from "../../../core/hooks/Events/StudentYear/useGetStudentYear";
 
 const AddEvent = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
@@ -48,26 +50,46 @@ const AddEvent = () => {
     });
   };
 
+  const {
+    data: categoriesData,
+    isLoading: categoriesLoading,
+    error: categoriesError,
+  } = useGetCategories()!;
+  const categories = useMemo(
+    () => categoriesData?.data.data,
+    [categoriesData?.data.data]
+  )!;
+
+  const {
+    data: studentYearsData,
+    isLoading: studentYearsLoading,
+    error: studentYearsError,
+  } = useGetStudentYears()!;
+  const studentYears = useMemo(
+    () => studentYearsData?.data.data,
+    [studentYearsData?.data.data]
+  )!;
+
   const categories_chip = {
     icon: "tag-outline",
-    title: ["วิชาการ", "สันทนาการ", "วิชาชีพ", "งานอดิเรก", "อื่น ๆ"],
+    items: categories,
   };
 
   const studentyears_chip = {
     icon: "school-outline",
-    title: ["ปี 1", "ปี 2", "ปี 3", "ปี 4"],
+    items: studentYears,
   };
 
-  const [categoriesSelected, setCategoriesSelected] = useState<string[]>([]);
-  const [studentYearsSelected, setStudentYearsSelected] = useState<string[]>(
+  const [categoriesSelected, setCategoriesSelected] = useState<number[]>([]);
+  const [studentYearsSelected, setStudentYearsSelected] = useState<number[]>(
     []
   );
 
-  const handleCategoriesSelected = (newSelectedChips: string[]) => {
+  const handleCategoriesSelected = (newSelectedChips: number[]) => {
     setCategoriesSelected(newSelectedChips);
   };
 
-  const handleStudentYearsSelected = (newSelectedChips: string[]) => {
+  const handleStudentYearsSelected = (newSelectedChips: number[]) => {
     setStudentYearsSelected(newSelectedChips);
   };
 
