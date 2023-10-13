@@ -24,7 +24,6 @@ const EventDetails = () => {
     return <EmptyData label="No event found"/>
   }
   const postInEvent = posts?.data
-  console.log(postInEvent)
   return (
     <StyledView className="flex-1"> 
       <ScrollView nestedScrollEnabled={true} decelerationRate={0.2} contentContainerStyle={{flexGrow: 1}}>
