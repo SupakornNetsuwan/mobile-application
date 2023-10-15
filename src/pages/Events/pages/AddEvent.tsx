@@ -1,10 +1,5 @@
 import React, { useState, useMemo } from "react";
-import {
-  StyledView,
-  StyledText,
-  StyledTextInput,
-  StyledTouchableOpacity,
-} from "../../../core/components/styled";
+import { StyledView, StyledText, StyledTextInput, StyledTouchableOpacity } from "../../../core/components/styled";
 import { ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFormContext, Controller, SubmitHandler } from "react-hook-form";
@@ -27,7 +22,7 @@ const AddEvent = () => {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
   const queryClient = useQueryClient();
-  const addEvent = useAddEvent();
+  const addEvent = useAddEvent()!;
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>();
 
   const {
@@ -37,12 +32,13 @@ const AddEvent = () => {
     handleSubmit,
   } = useFormContext<AddEventSchemaType>();
 
+  // เมื่อทำการสร้าง event
   const onSubmit: SubmitHandler<AddEventSchemaType> = (data) => {
-    addEvent?.mutate(data, {
+    addEvent.mutate(data, {
       onSuccess(data, variables, context) {
         Toast.show({ text1: "สร้างกิจกรรมสำเร็จ" });
         queryClient.invalidateQueries(["getEvents"]);
-        navigation.navigate("Events");
+        navigation.navigate("EventTabRouter");
       },
       onError(error, variables, context) {
         console.log(error.response?.data.error);
@@ -50,25 +46,11 @@ const AddEvent = () => {
     });
   };
 
-  const {
-    data: categoriesData,
-    isLoading: categoriesLoading,
-    error: categoriesError,
-  } = useGetCategories()!;
-  const categories = useMemo(
-    () => categoriesData?.data.data,
-    [categoriesData?.data.data]
-  )!;
+  const { data: categoriesData, isLoading: categoriesLoading, error: categoriesError } = useGetCategories()!;
+  const categories = useMemo(() => categoriesData?.data.data, [categoriesData?.data.data])!;
 
-  const {
-    data: studentYearsData,
-    isLoading: studentYearsLoading,
-    error: studentYearsError,
-  } = useGetStudentYears()!;
-  const studentYears = useMemo(
-    () => studentYearsData?.data.data,
-    [studentYearsData?.data.data]
-  )!;
+  const { data: studentYearsData, isLoading: studentYearsLoading, error: studentYearsError } = useGetStudentYears()!;
+  const studentYears = useMemo(() => studentYearsData?.data.data, [studentYearsData?.data.data])!;
 
   const categories_chip = {
     icon: "tag-outline",
@@ -81,9 +63,7 @@ const AddEvent = () => {
   };
 
   const [categoriesSelected, setCategoriesSelected] = useState<number[]>([]);
-  const [studentYearsSelected, setStudentYearsSelected] = useState<number[]>(
-    []
-  );
+  const [studentYearsSelected, setStudentYearsSelected] = useState<number[]>([]);
 
   const handleCategoriesSelected = (newSelectedChips: number[]) => {
     setCategoriesSelected(newSelectedChips);
@@ -96,9 +76,7 @@ const AddEvent = () => {
   return (
     <ScrollView className="px-8">
       <StyledView>
-        <StyledText className="text-lg color-purple-primary font-noto-semibold mt-6">
-          รายละเอียดกิจกรรม
-        </StyledText>
+        <StyledText className="text-lg color-purple-primary font-noto-semibold mt-6">รายละเอียดกิจกรรม</StyledText>
         <StyledView className="my-2">
           <Controller
             control={control}
@@ -129,11 +107,7 @@ const AddEvent = () => {
               );
             }}
           />
-          {errors.name && (
-            <StyledText className="text-red-500 text-xs mt-2">
-              {errors.name?.message}
-            </StyledText>
-          )}
+          {errors.name && <StyledText className="text-red-500 text-xs mt-2">{errors.name?.message}</StyledText>}
         </StyledView>
 
         <StyledView>
@@ -175,9 +149,7 @@ const AddEvent = () => {
       </StyledView>
 
       <StyledView className="pt-6">
-        <StyledText className="text-lg color-purple-primary font-noto-semibold">
-          วันที่ของกิจกรรม
-        </StyledText>
+        <StyledText className="text-lg color-purple-primary font-noto-semibold">วันที่ของกิจกรรม</StyledText>
         <StyledView className="flex-row space-x-2 items-center mt-2">
           <StyledView className="flex-1 h-full bg-white relative items-center rounded-lg">
             <MaterialCommunityIcons
@@ -192,19 +164,12 @@ const AddEvent = () => {
               }}
             />
             <StyledText className="mt-2 font-noto-semibold text-purple-primary">
-              {!watch("start")
-                ? "ยังไม่กำหนด"
-                : dayjs(watch("start")).format("DD/MM/YYYY")}
+              {!watch("start") ? "ยังไม่กำหนด" : dayjs(watch("start")).format("DD/MM/YYYY")}
             </StyledText>
           </StyledView>
           <StyledView style={{ flex: 0.5 }}>
-            <StyledTouchableOpacity
-              intent="secondary"
-              onPress={() => setShowStartDatePicker(true)}
-            >
-              <StyledText className="text-purple-primary text-center">
-                ตั้งวันเริ่ม
-              </StyledText>
+            <StyledTouchableOpacity intent="secondary" onPress={() => setShowStartDatePicker(true)}>
+              <StyledText className="text-purple-primary text-center">ตั้งวันเริ่ม</StyledText>
             </StyledTouchableOpacity>
           </StyledView>
           {showStartDatePicker && (
@@ -219,11 +184,7 @@ const AddEvent = () => {
                     is24Hour={true}
                     onChange={(e, selectedDate) => {
                       if (selectedDate) {
-                        onChange(
-                          new Date(
-                            e.nativeEvent.timestamp as number
-                          ).toISOString()
-                        );
+                        onChange(new Date(e.nativeEvent.timestamp as number).toISOString());
                       }
                       setShowStartDatePicker(false);
                     }}
@@ -247,19 +208,12 @@ const AddEvent = () => {
               }}
             />
             <StyledText className="mt-2 font-noto-semibold text-purple-primary">
-              {!watch("end")
-                ? "ยังไม่กำหนด"
-                : dayjs(watch("end")).format("DD/MM/YYYY")}
+              {!watch("end") ? "ยังไม่กำหนด" : dayjs(watch("end")).format("DD/MM/YYYY")}
             </StyledText>
           </StyledView>
           <StyledView style={{ flex: 0.5 }}>
-            <StyledTouchableOpacity
-              intent="secondary"
-              onPress={() => setShowEndDatePicker(true)}
-            >
-              <StyledText className="text-purple-primary text-center">
-                ตั้งวันสิ้นสุด
-              </StyledText>
+            <StyledTouchableOpacity intent="secondary" onPress={() => setShowEndDatePicker(true)}>
+              <StyledText className="text-purple-primary text-center">ตั้งวันสิ้นสุด</StyledText>
             </StyledTouchableOpacity>
           </StyledView>
           {showEndDatePicker && (
@@ -274,11 +228,7 @@ const AddEvent = () => {
                     is24Hour={true}
                     onChange={(e, selectedDate) => {
                       if (selectedDate) {
-                        onChange(
-                          new Date(
-                            e.nativeEvent.timestamp as number
-                          ).toISOString()
-                        );
+                        onChange(new Date(e.nativeEvent.timestamp as number).toISOString());
                       }
                       setShowEndDatePicker(false);
                     }}
@@ -288,17 +238,11 @@ const AddEvent = () => {
             />
           )}
         </StyledView>
-        {errors.end && (
-          <StyledText className="text-red-500 text-xs mt-2">
-            {errors.end?.message}
-          </StyledText>
-        )}
+        {errors.end && <StyledText className="text-red-500 text-xs mt-2">{errors.end?.message}</StyledText>}
       </StyledView>
 
       <StyledView className="pt-6">
-        <StyledText className="text-lg color-purple-primary font-noto-semibold">
-          ประเภท
-        </StyledText>
+        <StyledText className="text-lg color-purple-primary font-noto-semibold">ประเภท</StyledText>
         <Controller
           control={control}
           name="categories"
@@ -314,16 +258,12 @@ const AddEvent = () => {
           )}
         />
         {errors.categories && (
-          <StyledText className="text-red-500 text-xs mt-2">
-            {errors.categories?.message}
-          </StyledText>
+          <StyledText className="text-red-500 text-xs mt-2">{errors.categories?.message}</StyledText>
         )}
       </StyledView>
 
       <StyledView className="pt-6">
-        <StyledText className="text-lg color-purple-primary font-noto-semibold">
-          สำหรับชั้นปี
-        </StyledText>
+        <StyledText className="text-lg color-purple-primary font-noto-semibold">สำหรับชั้นปี</StyledText>
         <Controller
           control={control}
           name="studentAccessYears"
@@ -339,9 +279,7 @@ const AddEvent = () => {
           )}
         />
         {errors.studentAccessYears && (
-          <StyledText className="text-red-500 text-xs mt-2">
-            {errors.studentAccessYears?.message}
-          </StyledText>
+          <StyledText className="text-red-500 text-xs mt-2">{errors.studentAccessYears?.message}</StyledText>
         )}
       </StyledView>
 
@@ -353,9 +291,7 @@ const AddEvent = () => {
         className="flex-row justify-center items-center my-6 space-x-2"
       >
         <MaterialCommunityIcons name="plus-circle" size={20} color="white" />
-        <StyledText className="text-white text-lg font-noto-semibold">
-          สร้าง
-        </StyledText>
+        <StyledText className="text-white text-lg font-noto-semibold">สร้าง</StyledText>
       </StyledTouchableOpacity>
     </ScrollView>
   );

@@ -1,12 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import useGetEvents from "../../../core/hooks/Events/useGetEvents";
-import {
-  StyledText,
-  StyledView,
-  StyledTextInput,
-  StyledTouchableOpacity,
-} from "../../../core/components/styled";
+import { StyledText, StyledView, StyledTextInput, StyledTouchableOpacity } from "../../../core/components/styled";
 import { ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EventCard from "../components/EventCard";
@@ -61,17 +56,14 @@ const Events = () => {
         <EventCard events={filteredEvents} />
       </ScrollView>
 
+      {/* ส้่วนของการเพิ่มกิจกรรม */}
       <StyledTouchableOpacity
-        className="bottom-0 right-0 m-2 p-4 absolute rounded-full"
+        className="bottom-0 right-0 absolute rounded-full items-center p-3 m-0 text-center"
         onPress={navigateToAddEvent}
       >
-        <StyledTouchableOpacity
-          intent="plain"
-          className="bg-white rounded-full"
-          onPress={navigateToAddEvent}
-        >
-          <StyledText className="text-purple-primary font-noto-semibold">+</StyledText>
-        </StyledTouchableOpacity>
+        <StyledText className="text-purple-primary text-2xl font-noto-semibold bg-white block aspect-square text-center leading-10 rounded-full">
+          +
+        </StyledText>
       </StyledTouchableOpacity>
     </StyledView>
   );

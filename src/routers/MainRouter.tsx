@@ -1,27 +1,26 @@
 import React from "react";
-import Events from "../pages/Events";
-import AccountStackRouter from "../pages/Account";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StyledText } from "../core/components/styled";
 import { twMerge } from "tailwind-merge";
-import Loading from "../core/components/Loading";
 import useAuthen from "../core/hooks/useAuthen";
+// pages
+import Events from "../pages/Events";
+import AccountStackRouter from "../pages/Account";
+import Loading from "../core/components/Loading";
 import SignIn from "../pages/SignIn";
-import EventTabRouter from "../pages/Event/"
-
+// import EventTabRouter from "../pages/Event/";
 
 export type MainRouterType = {
-  Landing: undefined;
+  Events: undefined;
   AccountStackRouter: undefined;
-  EventTabRouter:undefined
+  // EventTabRouter: undefined;
 };
 
 const BottomStack = createBottomTabNavigator<MainRouterType>();
 
 const MainRouter = () => {
-  
   const auth = useAuthen();
 
   if (auth.status === "loading") return <Loading />;
@@ -29,7 +28,7 @@ const MainRouter = () => {
 
   return (
     <BottomStack.Navigator
-      initialRouteName="Landing"
+      initialRouteName="Events"
       screenOptions={({ navigation, route }: BottomTabScreenProps<MainRouterType>) => {
         return {
           headerShown: false,
@@ -44,7 +43,7 @@ const MainRouter = () => {
     >
       <BottomStack.Screen
         component={Events}
-        name="Landing"
+        name="Events"
         options={{
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
@@ -70,7 +69,7 @@ const MainRouter = () => {
           },
         }}
       />
-      <BottomStack.Screen
+      {/* <BottomStack.Screen
         component={EventTabRouter}
         name="EventTabRouter"
         options={{
@@ -83,7 +82,7 @@ const MainRouter = () => {
             return <MaterialCommunityIcons name="account" {...props} />;
           },
         }}
-      />
+      /> */}
     </BottomStack.Navigator>
   );
 };
