@@ -20,7 +20,7 @@ const AccountStackRouter = () => {
         headerTitleStyle: { fontFamily: "noto", color: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
       }}
     >
-      <Stack.Screen name="Account" component={Account} options={{ headerShown: false }} />
+     <Stack.Screen name="Account" component={Account} options={{ headerShown: false }} /> 
       <Stack.Screen name="EditProfile" component={EditProfile} options={{ title: "แก้ไขโปรไฟล์" }} />
     </Stack.Navigator>
   );
