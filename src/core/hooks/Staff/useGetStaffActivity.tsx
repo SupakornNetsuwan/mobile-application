@@ -1,10 +1,10 @@
-// 😸 ดูว่า user คนนี้ได้เข้าร่วมกิจกรรมที่ eventId นี้หรือไม่ ดู duty และ position ในกิจกรรมนั้น ๆ ได้
-
 import useAuthen from "../useAuthen";
 import { useQuery } from "@tanstack/react-query";
 import type { AxiosResponse, AxiosError } from "axios";
 import { ResponseErrorType } from "../../../types/app";
 import axios from "../../../utils/axios";
+
+// 😸 ดูว่า user คนนี้ได้เข้าร่วมกิจกรรมที่ eventId นี้หรือไม่ ดู duty และ position ของ user ในกิจกรรมนั้น ๆ ได้
 
 interface StaffActivity {
   id: number
@@ -34,7 +34,7 @@ const useGetStaffActivity = (eventId: number) => {
   >({
     queryFn: async () => {
       return axios.get(
-        `/staffs?populate[0]=staff&filters[staff][id][$eq]=${auth.session.user.id}&populate[1]=event&filters[event][id][$eq]=${eventId}`,
+        `/staffs?populate[staff][filters][id]=${auth.session.user.id}&filters[event]=${eventId}`,
         {
           headers: {
             Authorization: `Bearer ${auth.session.jwt}`,
