@@ -1,11 +1,10 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import Events from "../pages/Events";
-import Following from "../pages/Following";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TabBar from "../components/TabBar";
-import withSafeArea from "../../../core/components/HOC/withSafeArea";
-import EventsStackRouter from "./EventsStackRouter";
+// Pages
+import Events from "../pages/Events";
+import Following from "../pages/Following";
 
 export type EventTabRouterType = {
   EventsTab: undefined;
@@ -18,14 +17,8 @@ const EventTabRouter = () => {
   return (
     <EventTab.Navigator
       initialRouteName="EventsTab"
-      screenOptions={{
-        tabBarStyle: { backgroundColor: "#FAFAFA" },
-        tabBarIndicatorContainerStyle: {},
-        tabBarLabelStyle: { fontFamily: "noto" },
-        tabBarIndicatorStyle: { backgroundColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
-        tabBarPressColor: "#f7e3fa",
-      }}
       tabBar={(props) => {
+        // เราไม่จำเป็นต้องใช้ screenOptions แล้วเพราะ render entirely custom component
         return <TabBar {...props} />;
       }}
       sceneContainerStyle={{ backgroundColor: "white", padding: 12 }}

@@ -1,21 +1,23 @@
 import React from "react";
-import {
-  StyledText,
-  StyledView,
-  StyledTouchableOpacity,
-  StyledImage,
-} from "../../../core/components/styled";
+import { StyledText, StyledView, StyledTouchableOpacity, StyledImage } from "../../../core/components/styled";
 import { Event } from "../../../core/hooks/Events/useGetEvents";
-import { Text } from "react-native";
+import { GestureResponderEvent, Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Line from "./Line";
 import JoinButton from "./JoinButton";
+import { useNavigation, type NavigationProp } from "@react-navigation/core";
+import type { EventsStackRouterType } from "../routers/EventsStackRouter";
 
 const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
+  const navigate = useNavigation<NavigationProp<EventsStackRouterType>>();
+  const goToEvent = (e: GestureResponderEvent) => {
+    console.log(navigate.navigate("Event"));
+  };
+  
   return (
     <StyledView>
       {events.map((event) => (
-        <StyledTouchableOpacity intent="plain" key={event.id}>
+        <StyledTouchableOpacity onPress={goToEvent} intent="plain" key={event.id}>
           {/* รูปปกกิจกรรม */}
           <StyledView className="flex-row justify-center w-full my-2">
             {event.attributes.cover?.data ? (
@@ -35,22 +37,16 @@ const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
 
           {/* ชื่อกิจกรรม */}
           <StyledView className="flex-row justify-between items-center">
-            <StyledText className="font-noto-semibold text-xl">
-              {event.attributes.name}
-            </StyledText>
+            <StyledText className="font-noto-semibold text-xl">{event.attributes.name}</StyledText>
 
             {/* ปุ่มเข้าร่วม */}
-            <JoinButton eventName={event.attributes.name} eventId={event.id}/>
+            <JoinButton eventName={event.attributes.name} eventId={event.id} />
           </StyledView>
 
           {/* คำอธิบายกิจกรรม */}
           <StyledView className="mb-2">
             {event.attributes.description && (
-              <Text
-                style={{ fontFamily: "noto" }}
-                numberOfLines={2}
-                className="text-gray-500"
-              >
+              <Text style={{ fontFamily: "noto" }} numberOfLines={2} className="text-gray-500">
                 {event.attributes.description}
               </Text>
             )}

@@ -3,7 +3,7 @@ import { StyledImage, StyledView, StyledText, StyledTouchableOpacity } from "../
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import ProfileImage from "../components/ProfileImage";
 import ProfileStatistic from "../components/ProfileStatistic";
-import AccountTabRouter from "../routers/ProfiletabRouter";
+import ProfileTabRouter from "../routers/ProfiletabRouter";
 import useAuthen from "../../../core/hooks/useAuthen";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import type { AccountStackRouterType } from "../routers/AccountStackRouter";
@@ -65,7 +65,7 @@ const Account = () => {
           </StyledView>
         </StyledView>
       </StyledView>
-      <AccountTabRouter />
+      <ProfileTabRouter />
     </>
   );
 };
