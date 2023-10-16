@@ -41,80 +41,37 @@ const TopPostViewComponent:React.FC<TopPostViewComponentProps>= ({owner}) =>{
         </>
     )
 }
-type DetailPostProps = {
-    title :string,
-    contents:string,
-    medias: MediaType,
+
+
+type CommentProp ={
+    contents: string
     owner:OwnerType
 }
-const PostDetailViewComponent:React.FC<DetailPostProps>= ({title, contents, medias}) =>{
-    let url = true
-    let imageUrl = ""
-    if(medias.data != null && medias.data[0].attributes) {
-        console.log(medias.data[0].attributes.url)
-        url  = true
-        imageUrl = medias.data[0].attributes.url
-    }else{
-        url = false
-    }
-    
+const Comment = ({contents, owner}:CommentProp)=>{
+    console.log(owner.data.attributes.activities)
     return(
-        <>
-            <StyledView className="p-2 border-b  border-gray-300 h-20">
-                <StyledView className="h-20">
-                    <StyledText className="text-lg font-bold mb-1">{title}</StyledText>
-                    <StyledText className="text-sm text-gray-500">{contents}</StyledText>
-                            <StyledView className="h-20">
-                                <StyledImage
-                                    source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${imageUrl}`}}
-                                    className="aspect-square w-full h-22"
-                                    style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
-                                />
-                            </StyledView>
-                </StyledView>
-            </StyledView>
-        </>
-    )
-
-}
-const CommentsViewComponent = () =>{
-    const numberOfComments = 4;
-    return(
-        <>
-            <StyledView className="">
-
-                    <StyledView className="flex flex-row items-center w-full h-10 p-2">
-                        < MaterialCommunityIcons name="comment-outline" size={28} color="black" />
-                        <StyledText className="ml-3">Comment</StyledText>
-                    </StyledView>
-                    <ScrollView style={{marginHorizontal: 20, height:200}} nestedScrollEnabled={true} decelerationRate={0.1}>
-                        {Array.from({ length: numberOfComments }, (_, index) => (
-                            <Comment />
-                            ))}
-                    </ScrollView>
-                    <StyledView className="border-t border-gray-300 pl-4 pr-4 pb-4">
-                        <StyledTextInput className="border h-9 mt-5 border-gray-300 rounded-3xl"></StyledTextInput>
-                    </StyledView>
-            </StyledView>
-        </>
-    )
-}
-const Comment = ()=>{
-    return(
-        <StyledView className="mb-2">
+        <StyledView className="mb-2 border-b border-gray-300 pb-2">
             <StyledView className="flex flex-row gap-3 p-2 ">
-                <StyledImage
-                            source={{ uri:"https://cdn.discordapp.com/attachments/1019966926014910516/1149367750121242764/IMG_1576.png?ex=65314d21&is=651ed821&hm=3ee19ac28f5d7bd361ea5b1575cc94584a4a13a905ca09402ae17b2cee5c4c35&"}}
+                {owner.data.attributes.picture.data != null ? <StyledImage
+                            source={{ uri:`${process.env.EXPO_PUBLIC_BACKEND_URL}${owner.data.attributes.picture.data.attributes.url}`}}
                             className="h-12 aspect-square rounded-full"
                             style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
+                    /> :   <StyledImage
+                    source={require("../../../../assets/empty-box.png")}
+                    className="h-10 aspect-square rounded-full w-10"
+                    style={{
+                            borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+                            borderWidth: 2,
+                     }}
                     />
+                }
                 <StyledView className=" p-1">
-                    <StyledText className="text-sm font-bold m-1">นายปันจ์ วะชังเงิน</StyledText>
-                    <StyledText className="text-xs text-gray-500">ประธานค่าย | 11/9/2023 13.25</StyledText>
+                    <StyledText className="text-sm font-bold m-1">{owner.data.attributes.username}</StyledText>
+                    <StyledText className="text-xs text-gray-500">{owner.data.attributes.activities.data.length > 0 && owner.data.attributes.activities.data[0].attributes.position != null ?owner.data.attributes.activities.data[0].attributes.position : "ผู้เข้าร่วม" }</StyledText>
                 </StyledView>
             </StyledView>
             <StyledText>
-                <StyledText className="text-xs text-gray-500">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididuntLorem ipsum dolor sit amet, consectetur adipiscing elit,</StyledText>
+                <StyledText className="text-sm text-gray-500">{contents}</StyledText>
             </StyledText>
         </StyledView>
     )
@@ -123,39 +80,87 @@ const Comment = ()=>{
 
 const PostComponent: React.FC<PostType> = ({attributes, id, }) =>{
     const postDetails = attributes
-    let url = true
-    let imageUrl = ""
-    if(postDetails.medias != null && postDetails.medias.data) {
-        console.log("data",postDetails.medias.data)
-        if(postDetails.medias.data)
-        url  = true
-        imageUrl = postDetails.medias.data[0].attributes.url
-    }else{
-        url = false
-    }
+    const createAt= new Date(postDetails.createdAt)
+    const options = { timeZone: 'Asia/Bangkok', hour12: false };
+    const createAtBKK = createAt.toLocaleString('en-US', options).replace(/, /g, ':')
     return (
-        <>
-            <StyledView className="mb-5 p-2  border border-gray-300 rounded-xl "
-                   style={{
-                    shadowColor: "#E0E0E0",
-                    shadowOffset: {
-                      width: 2,
-                      height: 2,
-                    },
-                    shadowOpacity: 0.5,
-                    shadowRadius: 3.84,
-                    elevation: 2,
-                  }}
-            >
-                <TopPostViewComponent owner={postDetails.owner}/>
-                <StyledText className="text-lg font-bold mb-1">{postDetails.title}</StyledText>
-                <StyledText className="text-sm text-gray-500">{postDetails.content}</StyledText>
-                <StyledView className="h-56 items-center">
-                    {url == true ? <StyledImage source={require("../../../../assets/empty-box.png")} className="h-48 w-48" />:<StyledView/>}
+        <StyledView
+            className="mb-5 p-2 border border-gray-300 rounded-xl"
+            style={{
+            shadowColor: "#E0E0E0",
+            shadowOffset: {
+                width: 2,
+                height: 2,
+            },
+            shadowOpacity: 0.5,
+            shadowRadius: 3.84,
+            elevation: 2,
+            }}
+        >
+            <StyledView className="border-b border-gray-300">
+                <StyledView className="flex flex-row gap-3 p-2">
+                    {postDetails.owner.data.attributes.picture.data != null ? (
+                        <StyledImage
+                            source={{
+                            uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${postDetails.owner.data.attributes.picture.data.attributes.url}`,
+                            }}
+                            className="h-16 aspect-square rounded-full w-16"
+                            style={{
+                            borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+                            borderWidth: 2,
+                            }}
+                        />
+                        ) : (
+                        <StyledImage
+                            source={require("../../../../assets/empty-box.png")}
+                            className="h-10 aspect-square rounded-full w-10"
+                            style={{
+                            borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+                            borderWidth: 2,
+                            }}
+                        />
+                        )
+                    }
+                    <StyledView className="p-1">
+                        <StyledText className="text-sm font-bold m-1">
+                            {postDetails.owner.data.attributes.username}
+                        </StyledText>
+                        <StyledText className="text-xs text-gray-500 ml-1">
+                            {postDetails.owner.data.attributes.activities.data[0].attributes.position == null ? "ผู้เข้าร่วม" :postDetails.owner.data.attributes.activities.data[0].attributes.position}  | {createAtBKK}
+                        </StyledText>
+                    </StyledView>
                 </StyledView>
-                <CommentsViewComponent/>
             </StyledView>
-        </>
+            <StyledView className="mt-2 border-b border-gray-300">
+                <StyledText className="text-lg font-bold mb-1 ml-2">{postDetails.title}</StyledText>
+                <StyledText className="text-sm text-gray-500 ml-2">{postDetails.title}</StyledText>
+                {postDetails.medias && postDetails.medias.data && postDetails.medias.data[0] ? (
+                    <StyledImage
+                        source={{
+                            uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${postDetails.medias.data[0].attributes.url}`,
+                        }}
+                        className="aspect-square w-full h-22 rounded-lg"
+                    />
+                    ) : (
+                        <StyledView />
+                    )
+                }
+                <StyledView className="mt-2  border-t border-gray-300">
+                    <ScrollView style={{marginHorizontal: 20, height:200}} nestedScrollEnabled={true} decelerationRate={0.1}>
+                        {Array.from({ length: postDetails.comments.data.length }, (_, index) => (
+                                    <Comment 
+                                        contents={postDetails.comments.data[index].attributes.content}   
+                                        owner={postDetails.comments.data[index].attributes.owner}
+                                    />
+                                    ))}
+                    </ScrollView>
+                    <StyledView className="border-t border-gray-300 pl-4 pr-4 pb-4">
+                            <StyledTextInput className="border h-9 mt-5 border-gray-300 rounded-3xl"></StyledTextInput>
+                    </StyledView>
+                </StyledView>
+            </StyledView>
+            
+        </StyledView>
     )
 }
 

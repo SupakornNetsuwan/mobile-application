@@ -1,5 +1,6 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+
 //pages
 import EditStaff from "../pages/manage/EditStaff";
 import ManageEvent from "./tabs/ManageEvent";

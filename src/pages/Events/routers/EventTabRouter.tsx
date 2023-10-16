@@ -5,8 +5,6 @@ import Following from "../pages/Following";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TabBar from "../components/TabBar";
 import withSafeArea from "../../../core/components/HOC/withSafeArea";
-import EventsStackRouter from "./EventsStackRouter";
-
 export type EventTabRouterType = {
   EventsTab: undefined;
   Following: undefined;
@@ -15,6 +13,8 @@ export type EventTabRouterType = {
 const EventTab = createMaterialTopTabNavigator<EventTabRouterType>();
 
 const EventTabRouter = () => {
+
+
   return (
     <EventTab.Navigator
       initialRouteName="EventsTab"

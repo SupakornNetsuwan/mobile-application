@@ -5,6 +5,8 @@ import {
   StyledTouchableOpacity,
   StyledImage,
 } from "../../../core/components/styled";
+import { useNavigation, type NavigationProp } from "@react-navigation/core";
+import { RootEachEventDetailsTabRouterList } from "../../Event/routers/EachEventDetailsTabRouter";
 import { Event } from "../../../core/hooks/Events/useGetEvents";
 import { Text } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -12,10 +14,24 @@ import Line from "./Line";
 import JoinButton from "./JoinButton";
 
 const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
+  // add navigation to eachEventPage with params : gear
+  const navigation = useNavigation<NavigationProp<RootEachEventDetailsTabRouterList>>()
+  const navigateToEachEvent = (eventId : number, eventName : string, eventDescription:string, eventPicture:Object|undefined, eventStart:string, eventEnd:string) => 
+                              {navigation.navigate("EachEventDetails", {eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd})}
   return (
     <StyledView>
       {events.map((event) => (
-        <StyledTouchableOpacity intent="plain" key={event.id}>
+        <StyledTouchableOpacity 
+          intent="plain" 
+          key={event.id} 
+          onPress={()=>navigateToEachEvent(
+            event.id, 
+            event.attributes.name, 
+            event.attributes.description, 
+            event.attributes.cover?.data,
+            event.attributes.start,
+            event.attributes.end
+            )}>
           {/* รูปปกกิจกรรม */}
           <StyledView className="flex-row justify-center w-full my-2">
             {event.attributes.cover?.data ? (

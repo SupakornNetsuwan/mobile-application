@@ -50,7 +50,7 @@ const ManageEvent = () => {
         </StyledView>
         <StyledView className="p-2">
           {Array.from({ length: numberOfStaff }, (_, index) => (
-            <StaffDetailsComponent/>
+            <StaffDetailsComponent key={index}/>
           ))}
         </StyledView>
       </ScrollView>

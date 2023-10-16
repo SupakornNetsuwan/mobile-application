@@ -9,17 +9,12 @@ import { twMerge } from "tailwind-merge";
 import Loading from "../core/components/Loading";
 import useAuthen from "../core/hooks/useAuthen";
 import SignIn from "../pages/SignIn";
-import EventTabRouter from "../pages/Event/"
-
-
 export type MainRouterType = {
-  Landing: undefined;
+  EventsTab: undefined;
   AccountStackRouter: undefined;
-  EventTabRouter:undefined
 };
 
 const BottomStack = createBottomTabNavigator<MainRouterType>();
-
 const MainRouter = () => {
   
   const auth = useAuthen();
@@ -29,7 +24,7 @@ const MainRouter = () => {
 
   return (
     <BottomStack.Navigator
-      initialRouteName="Landing"
+      initialRouteName="EventsTab"
       screenOptions={({ navigation, route }: BottomTabScreenProps<MainRouterType>) => {
         return {
           headerShown: false,
@@ -43,8 +38,8 @@ const MainRouter = () => {
       }}
     >
       <BottomStack.Screen
+        name="EventsTab"
         component={Events}
-        name="Landing"
         options={{
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
@@ -55,7 +50,8 @@ const MainRouter = () => {
             return <MaterialCommunityIcons name="calendar" {...props} />;
           },
         }}
-      />
+      >
+      </BottomStack.Screen>
       <BottomStack.Screen
         component={AccountStackRouter}
         name="AccountStackRouter"
@@ -63,20 +59,6 @@ const MainRouter = () => {
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
               บัญชี
-            </StyledText>
-          ),
-          tabBarIcon(props) {
-            return <MaterialCommunityIcons name="account" {...props} />;
-          },
-        }}
-      />
-      <BottomStack.Screen
-        component={EventTabRouter}
-        name="EventTabRouter"
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
-              รายละเอียดกิจกรรม
             </StyledText>
           ),
           tabBarIcon(props) {

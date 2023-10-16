@@ -7,18 +7,37 @@ import EmptyData from "../../../Account/components/EmptyData";
 import PostComponent from "../../components/PostComponent";
 import { ScrollView } from "react-native";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
-
 import type { RootPostStackParamsList } from "../PostStackRouter";
+import { RouteProp } from '@react-navigation/native';
+import { MaterialTopTabNavigationProp } from "@react-navigation/material-top-tabs";
+import type { EventsStackRouterType } from "../../../Events/routers/EventsStackRouter";
 //hooks
 import useGetEvent from "../../../../core/hooks/useGetEvent";
 import useGetPost from "../../../../core/hooks/useGetPost";
 
+type Props = {
+  route: RouteProp<RootPostStackParamsList, 'InEventDetails'>; 
+  navigation: MaterialTopTabNavigationProp<EventsStackRouterType, 'EachEventDetails'>
 
-const EventDetails = () => {
+};
+type PictureType ={
+  attributes:{
+    url:string
+  }
+}
+const EventDetails = ({route , navigation}:Props) => {
   const navigate = useNavigation<NavigationProp<RootPostStackParamsList>>()
   const navigateToCreatePost = () => navigate.navigate("CreatePost")
-
-  const {data, isLoading, error} = useGetPost("1")!;
+  // ดึงรายละเอียดของโพสต์ จาก params
+  const eventId = route.params?.eventId
+  const eventName = route.params?.eventName
+  const eventDescription = route.params?.eventDescription
+  const eventPicture  = route.params?.eventPicture as PictureType
+  const eventStart = route.params?.eventStart
+  const eventEnd = route.params?.eventEnd
+  //ดึงโพส์
+  console.log('eventId: ' + eventId)
+  const {data, isLoading, error} = useGetPost(eventId.toString())!;
   const posts = useMemo(() => data?.data, [data?.data]);
   if(data == null){
     return <EmptyData label="No event found"/>
@@ -28,21 +47,26 @@ const EventDetails = () => {
     <StyledView className="flex-1"> 
       <ScrollView nestedScrollEnabled={true} decelerationRate={0.2} contentContainerStyle={{flexGrow: 1}}>
         <StyledView className="bg-white" >
-          <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full h-22" />
+          {eventPicture != null? <StyledImage 
+                                  source={{uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${eventPicture.attributes.url}`}}   
+                                  style={{ width: '100%', height: 220 }} 
+                                  onError={(error) => console.log('Image load error:', error)}
+                                  /> : 
+                                <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full h-22" />}
           <StyledView className="mt-2 ml-4 mr-4 mb-2">
-            <StyledText className="text-3xl  text-purple-primary font-bold mb-1"></StyledText>
-            <StyledText className="text-gray-500 text-sm"></StyledText>
+            <StyledText className="text-3xl  text-purple-primary font-bold mb-1">{eventName}</StyledText>
+            <StyledText className="text-gray-500 text-sm">{eventDescription}</StyledText>
           </StyledView>
           <StyledView className="justify-center pl-4 pr-4 pt-3 w-full border-t border-t-gray-300 ">
             <StyledView className="flex flex-row bg-green-100 rounded-lg p-1 text-center w-full h-8 items-center mb-5">
                 < MaterialCommunityIcons name="alarm" size={17} color="green" />
                 <StyledText className="ml-1 font-bold text-sm">
-                      
+                  {eventStart} ถึง {eventEnd}
                 </StyledText>
             </StyledView>
               {postInEvent && postInEvent.length > 0 ? (
                   Array.from({ length: postInEvent.length }, (_, index) => (
-                    <PostComponent attributes={postInEvent[index].attributes} id={postInEvent[index].id}/>
+                    <PostComponent attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index}/>
                   ))
                 ) : (
                 <>

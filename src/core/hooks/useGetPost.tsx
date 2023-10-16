@@ -21,7 +21,7 @@ export type PostType = {
       createdAt: string;
       updatedAt: string;
       owner: OwnerType;
-      comments: Comment[];
+      comments: CommentType;
       medias: MediaType;
     };
   };
@@ -66,12 +66,14 @@ export type ActivityType= {
     };
   };
   
-export  type CommenType = {
-    id: number;
-    attributes: {
-      content: string;
-      owner: OwnerType;
-    };
+export type CommentType = {
+  data: [{
+      id: number;
+      attributes: {
+        content: string;
+        owner: OwnerType;
+      };
+    }]
   };
   
 const useGetPost = (postId:string)=>{
@@ -80,7 +82,7 @@ const useGetPost = (postId:string)=>{
 
      return useQuery<AxiosResponse<GetPostResponseType>, AxiosError<GetPostResponseType>>({
         queryFn: async () => {
-          return axios.get(`/posts?filters[event]=${postId}&populate[owner][fields][0]=username&populate[owner][populate][picture][fields][0]=url&populate[owner][populate][activities][fields][0]=duty&populate[owner][populate][activities][fields][1]=position&populate[owner][populate][activities][filters][event]=1&populate[comments][fields][0]=content&populate[comments][fields][1]=createAt&populate[comments][populate][owner][fields][0]=username&populate[comments][populate][owner][populate][picture][fields][0]=url&populate[comments][populate][owner][populate][activities][fields][0]=duty&populate[comments][populate][owner][populate][activities][fields][1]=position&populate[comments][populate][owner][populate][activities][filters][event]=${postId}`, 
+          return axios.get(`/posts?filters[event]=${postId}&populate[owner][fields][0]=username&populate[medias][fields][0]=url&populate[owner][populate][picture][fields][0]=url&populate[owner][populate][activities][fields][0]=duty&populate[owner][populate][activities][fields][1]=position&populate[owner][populate][activities][filters][event]=1&populate[comments][fields][0]=content&populate[comments][fields][1]=createAt&populate[comments][populate][owner][fields][0]=username&populate[comments][populate][owner][populate][picture][fields][0]=url&populate[comments][populate][owner][populate][activities][fields][0]=duty&populate[comments][populate][owner][populate][activities][fields][1]=position&populate[comments][populate][owner][populate][activities][filters][event]=${postId}`, 
           {
             headers: {
               Authorization: `Bearer ${auth.session.jwt}`,
