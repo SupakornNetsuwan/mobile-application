@@ -16,7 +16,7 @@ import type { EventsStackRouterType } from "../routers/EventsStackRouter";
 
 const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
   // add navigation to eachEventPage with params : gear
-  const navigation = useNavigation<NavigationProp<RootEachEventDetailsTabRouterList>>()
+  const navigation = useNavigation<NavigationProp<EventsStackRouterType>>()
   const navigateToEachEvent = (eventId : number, eventName : string, eventDescription:string, eventPicture:Object|undefined, eventStart:string, eventEnd:string) => 
                               {navigation.navigate("EachEventDetails", {eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd})}
   return (

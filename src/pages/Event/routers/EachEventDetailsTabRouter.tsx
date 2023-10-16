@@ -1,3 +1,4 @@
+
 import { createMaterialTopTabNavigator, } from "@react-navigation/material-top-tabs";
 import {  RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -23,8 +24,8 @@ export type RootEachEventDetailsTabRouterList = {
 
 
 type Props = {
-    route : RouteProp<RootPostStackParamsList, 'InEventDetails'>;
-    navigation: StackNavigationProp<RootEachEventDetailsTabRouterList, 'InEventDetails'>
+    route : RouteProp<EventsStackRouterType ,'EachEventDetails'>;
+    navigation: StackNavigationProp<EventsStackRouterType, 'EachEventDetails'>
 }
 // type Props  = MaterialTopTabNavigationProp<RootEventDetailsTabRouterList, "PostStackRouter">
 const EventDetailsTab = createMaterialTopTabNavigator<RootEachEventDetailsTabRouterList>()
