@@ -26,8 +26,8 @@ export type RootPostStackParamsList = {
 // navigation ขอเป็น MaterialTobtab จะได้มี tabBarStye มาด้วย เวลาไปหน้า CreatePost เราจะSet ให้ Tab bar หายไป
 // รายละเอียดเกี่ยวกับ Event คิดว่าส่งมาเป็น params ได้ ไม่จำเป็นต้องมี แต่ route กับ navigate เอาไว้ลบ Tabbar
 type Props = {
-    route: RouteProp<RootPostStackParamsList, 'InEventDetails'>; // Adjust this line
-    navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
+    route: RouteProp<EventsStackRouterType, 'EachEventDetails'>; // Adjust this line
+    navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'InEventDetails'>
     eventId : number ,
     eventName:string
     eventDescription:string
@@ -40,9 +40,11 @@ const Stack = createStackNavigator<RootPostStackParamsList>()
 const PostStackRouter = ({route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd}:Props) =>{
     // Check ว่าตอนนี้อยุ่หน้าไหนแล้ว
     const routeName = getFocusedRouteNameFromRoute(route)
+    console.log(routeName)
     // หน้าส้รางโพสต์ไม่มี Tabbar
      React.useLayoutEffect(()=>{
         if(routeName === "CreatePost"){
+            console.log(routeName)
             navigation.setOptions({tabBarStyle:{display:'none'}}) 
         }else{
             navigation.setOptions({tabBarStyle:{display:'flex'}})

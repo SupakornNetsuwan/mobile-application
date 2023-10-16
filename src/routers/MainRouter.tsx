@@ -1,22 +1,22 @@
 import React from "react";
-import Events from "../pages/Events";
-import AccountStackRouter from "../pages/Account";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import type { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { StyledText } from "../core/components/styled";
 import { twMerge } from "tailwind-merge";
-import Loading from "../core/components/Loading";
 import useAuthen from "../core/hooks/useAuthen";
+// pages
+import Events from "../pages/Events";
+import AccountStackRouter from "../pages/Account";
+import Loading from "../core/components/Loading";
 import SignIn from "../pages/SignIn";
 export type MainRouterType = {
   EventsTab: undefined;
   AccountStackRouter: undefined;
-};
 
+};
 const BottomStack = createBottomTabNavigator<MainRouterType>();
 const MainRouter = () => {
-  
   const auth = useAuthen();
 
   if (auth.status === "loading") return <Loading />;
