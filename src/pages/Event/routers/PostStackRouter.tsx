@@ -40,11 +40,8 @@ const Stack = createStackNavigator<RootPostStackParamsList>()
 const PostStackRouter = ({route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd}:Props) =>{
     // Check ว่าตอนนี้อยุ่หน้าไหนแล้ว
     const routeName = getFocusedRouteNameFromRoute(route)
-    console.log(routeName)
-    // หน้าส้รางโพสต์ไม่มี Tabbar
-     React.useLayoutEffect(()=>{
+      React.useLayoutEffect(()=>{
         if(routeName === "CreatePost"){
-            console.log(routeName)
             navigation.setOptions({tabBarStyle:{display:'none'}}) 
         }else{
             navigation.setOptions({tabBarStyle:{display:'flex'}})

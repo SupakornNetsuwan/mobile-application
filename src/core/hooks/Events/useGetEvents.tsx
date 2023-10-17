@@ -21,6 +21,11 @@ export interface Event {
                 }
             }
         }
+        owner:{
+            data:{
+                id:number
+            }
+        }
     };
 }
 

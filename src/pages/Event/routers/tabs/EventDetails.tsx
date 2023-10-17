@@ -35,8 +35,8 @@ const EventDetails = ({route , navigation}:Props) => {
   const eventPicture  = route.params?.eventPicture as PictureType
   const eventStart = route.params?.eventStart
   const eventEnd = route.params?.eventEnd
+
   //ดึงโพส์
-  console.log('eventId: ' + eventId)
   const {data, isLoading, error} = useGetPost(eventId.toString())!;
   const posts = useMemo(() => data?.data, [data?.data]);
   if(data == null){

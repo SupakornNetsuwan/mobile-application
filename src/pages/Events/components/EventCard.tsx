@@ -13,12 +13,13 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Line from "./Line";
 import JoinButton from "./JoinButton";
 import type { EventsStackRouterType } from "../routers/EventsStackRouter";
-
+import useGetOwnerPost from "../../Event/hooks/useGetOwnerPost";
+import { useMemo } from "react";
 const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
   // add navigation to eachEventPage with params : gear
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>()
-  const navigateToEachEvent = (eventId : number, eventName : string, eventDescription:string, eventPicture:Object|undefined, eventStart:string, eventEnd:string) => 
-                              {navigation.navigate("EachEventDetails", {eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd})}
+  const navigateToEachEvent = (eventId : number, eventName : string, eventDescription:string, eventPicture:Object|undefined, eventStart:string, eventEnd:string, eventOwnerId:string) => 
+                              {navigation.navigate("EachEventDetails", {eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd, eventOwnerId })}
   return (
     <StyledView>
       {events.map((event) => (
@@ -31,7 +32,9 @@ const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
             event.attributes.description, 
             event.attributes.cover?.data,
             event.attributes.start,
-            event.attributes.end
+            event.attributes.end,
+            event.attributes.owner?.data.id.toString()
+          
             )}>
           {/* รูปปกกิจกรรม */}
           <StyledView className="flex-row justify-center w-full my-2">

@@ -18,7 +18,8 @@ export type EventsStackRouterType = {
     eventDescription:string
     eventPicture:Object|undefined
     eventStart:string,
-    eventEnd:string
+    eventEnd:string,
+    eventOwnerId:string
   },
   AddEvent: undefined;
 

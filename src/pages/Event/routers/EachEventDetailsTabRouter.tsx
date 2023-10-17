@@ -2,13 +2,14 @@
 import { createMaterialTopTabNavigator, } from "@react-navigation/material-top-tabs";
 import {  RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack";
-import { useRoute } from '@react-navigation/native';
 import React, { useEffect } from "react";
 //router
 import ManageStackRouter from "./ManageStackRouter";
 import PostStackRouter from "./PostStackRouter";
 import { EventsStackRouterType } from "../../Events/routers/EventsStackRouter";
-import { RootPostStackParamsList } from "./PostStackRouter";
+import useAuthen from "../../../core/hooks/useAuthen";
+import useGetOwnerPost from "../hooks/useGetOwnerPost";
+import { useMemo } from "react";
 export type RootEachEventDetailsTabRouterList = {
     // EachEventDetails รับ สองอย่างคือ eventId , กับเช็คว่าคนที่เข้าเป็น adminไหม
     InEventDetails : {
@@ -17,7 +18,8 @@ export type RootEachEventDetailsTabRouterList = {
         eventDescription:string,
         eventPicture:Object|undefined,
         eventStart:string,
-        eventEnd:string
+        eventEnd:string,
+        eventOwnerId:string,
     },
     ManageStackRouter : undefined,
 }
@@ -31,16 +33,25 @@ type Props = {
 const EventDetailsTab = createMaterialTopTabNavigator<RootEachEventDetailsTabRouterList>()
 
 const EachEventDetailsTabRouter = ({route, navigation}:Props) =>{
+    let ownerEvent = false
     const eventId = route.params.eventId
     const eventName = route.params.eventName
     const eventDescription = route.params.eventDescription
     const eventPicture = route.params.eventPicture
     const eventStart = route.params.eventStart
     const eventEnd = route.params.eventEnd
+    const eventOwnerId = route.params.eventOwnerId
+    const auth = useAuthen()
+    if(auth.status === "authenticated"){
+        if(auth.session.user.id.toString() == eventOwnerId){
+            console.log("auth",auth.session.user.id)
+            ownerEvent = true
+        }
+    }
+    console.log(eventOwnerId)
     useEffect(()=>{
         navigation.setOptions({headerTitle:eventName})
     }, [route])
-    const user = "admin"
     return (
         <>
             <EventDetailsTab.Navigator
@@ -48,7 +59,7 @@ const EachEventDetailsTabRouter = ({route, navigation}:Props) =>{
                 screenOptions={{
                     tabBarStyle: { backgroundColor: "#FAFAFA"},
                     tabBarItemStyle:{
-                        width: user == "admin"? 200 : "100%"},
+                        width: ownerEvent? 200 : "100%"},
                     tabBarLabelStyle: { fontFamily: "noto", textAlign:'center', flex:1 },
                     tabBarIndicatorStyle: { backgroundColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
                     tabBarBounces: true,
@@ -72,7 +83,7 @@ const EachEventDetailsTabRouter = ({route, navigation}:Props) =>{
                                         eventStart={eventStart}
                                         eventEnd={eventEnd}/>}
                 </EventDetailsTab.Screen>
-                {user === "admin" && (
+                {ownerEvent && (
                     <EventDetailsTab.Screen component={ManageStackRouter} name="ManageStackRouter" options={{ title: "จัดการ", tabBarLabelStyle:{fontSize:16 }}} />
                 )}
             </EventDetailsTab.Navigator>

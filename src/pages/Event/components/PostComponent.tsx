@@ -5,60 +5,23 @@ import { ScrollView } from "react-native";
 import useGetPost from "../../../core/hooks/useGetPost";
 //types
 import { PostType, OwnerType, MediaType} from "../../../core/hooks/useGetPost";
-type TopPostViewComponentProps = {
-    owner: OwnerType
-}
-const TopPostViewComponent:React.FC<TopPostViewComponentProps>= ({owner}) =>{
-    let url = false
-    let imageUrl = ""
-    if(owner!= null && owner.data) {
-        if(owner.data.attributes.picture.data){
-            url=true
-            imageUrl=owner.data.attributes.picture.data.attributes.url
-        }
-    }
-    return (
-        <>
-
-            <StyledView  className="border-b border-gray-300">
-                <StyledView className="flex flex-row gap-3 p-2">
-                    {url == true ? 
-                     <StyledImage
-                            source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${imageUrl}`}}
-                            className="h-14 aspect-square rounded-full w-14"
-                            style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
-                        /> :  <StyledImage
-                        source={require("../../../../assets/empty-box.png")}
-                        className="h-14 aspect-square rounded-full w-14"
-                        style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
-                        />}
-                    <StyledView className="p-1">
-                        <StyledText className="text-sm font-bold m-1">{owner.data.attributes.username}</StyledText>
-                        <StyledText className="text-xs text-gray-500">{owner.data.attributes.activities.data[0].attributes.position}</StyledText>
-                    </StyledView>
-                </StyledView>
-            </StyledView>
-        </>
-    )
-}
 
 
-type CommentProp ={
+type CommentProp = {
     contents: string
     owner:OwnerType
 }
 const Comment = ({contents, owner}:CommentProp)=>{
-    console.log(owner.data.attributes.activities)
     return(
         <StyledView className="mb-2 border-b border-gray-300 pb-2">
             <StyledView className="flex flex-row gap-3 p-2 ">
                 {owner.data.attributes.picture.data != null ? <StyledImage
                             source={{ uri:`${process.env.EXPO_PUBLIC_BACKEND_URL}${owner.data.attributes.picture.data.attributes.url}`}}
-                            className="h-12 aspect-square rounded-full"
+                            className="h-12 aspect-square rounded-full w-12"
                             style={{ borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR, borderWidth: 2 }}
                     /> :   <StyledImage
                     source={require("../../../../assets/empty-box.png")}
-                    className="h-10 aspect-square rounded-full w-10"
+                    className="h-12 aspect-square rounded-full w-12"
                     style={{
                             borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
                             borderWidth: 2,
@@ -67,7 +30,7 @@ const Comment = ({contents, owner}:CommentProp)=>{
                 }
                 <StyledView className=" p-1">
                     <StyledText className="text-sm font-bold m-1">{owner.data.attributes.username}</StyledText>
-                    <StyledText className="text-xs text-gray-500">{owner.data.attributes.activities.data.length > 0 && owner.data.attributes.activities.data[0].attributes.position != null ?owner.data.attributes.activities.data[0].attributes.position : "ผู้เข้าร่วม" }</StyledText>
+                    <StyledText className="text-xs text-gray-500 pl-1">{owner.data.attributes.activities.data.length > 0 && owner.data.attributes.activities.data[0].attributes.position != null ?owner.data.attributes.activities.data[0].attributes.position : "ผู้เข้าร่วม" }</StyledText>
                 </StyledView>
             </StyledView>
             <StyledText>
@@ -113,7 +76,7 @@ const PostComponent: React.FC<PostType> = ({attributes, id, }) =>{
                         ) : (
                         <StyledImage
                             source={require("../../../../assets/empty-box.png")}
-                            className="h-10 aspect-square rounded-full w-10"
+                            className="h-16 aspect-square rounded-full w-16"
                             style={{
                             borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
                             borderWidth: 2,
@@ -132,8 +95,8 @@ const PostComponent: React.FC<PostType> = ({attributes, id, }) =>{
                 </StyledView>
             </StyledView>
             <StyledView className="mt-2 border-b border-gray-300">
-                <StyledText className="text-lg font-bold mb-1 ml-2">{postDetails.title}</StyledText>
-                <StyledText className="text-sm text-gray-500 ml-2">{postDetails.title}</StyledText>
+                <StyledText className="text-lg font-bold mb-1 ml-2 mt-2">{postDetails.title}</StyledText>
+                <StyledText className="text-sm text-gray-500 ml-2 mb-5">{postDetails.title}</StyledText>
                 {postDetails.medias && postDetails.medias.data && postDetails.medias.data[0] ? (
                     <StyledImage
                         source={{
@@ -145,10 +108,15 @@ const PostComponent: React.FC<PostType> = ({attributes, id, }) =>{
                         <StyledView />
                     )
                 }
-                <StyledView className="mt-2  border-t border-gray-300">
-                    <ScrollView style={{marginHorizontal: 20, height:200}} nestedScrollEnabled={true} decelerationRate={0.1}>
+                <StyledView className="mt-2  border-t border-gray-300 pl-2 pt-4">
+                    <StyledView className="flex flex-row items-center mb-2">
+                        <MaterialCommunityIcons name={"comment-outline"} size={22} ></MaterialCommunityIcons>
+                        <StyledText className="ml-2 text-sm">Comments</StyledText>
+                    </StyledView>
+                    <ScrollView style={{marginHorizontal: 20}} nestedScrollEnabled={true} decelerationRate={0.1}>
                         {Array.from({ length: postDetails.comments.data.length }, (_, index) => (
                                     <Comment 
+                                        key={index}
                                         contents={postDetails.comments.data[index].attributes.content}   
                                         owner={postDetails.comments.data[index].attributes.owner}
                                     />
