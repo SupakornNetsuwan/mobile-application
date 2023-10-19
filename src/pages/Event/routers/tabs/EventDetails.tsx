@@ -78,11 +78,14 @@ const EventDetails = ({route , navigation}:Props) => {
           </StyledView>
         </StyledView>
       </ScrollView>
+      {/* เพิ่ม Post */}
       <StyledTouchableOpacity className=" border-opacity-20 flex items-center justify-center w-16 h-16 absolute bottom-10 right-5 rounded-full"
           style={{backgroundColor:"#B146C2"}}
           onPress={navigateToCreatePost}
         >
-          < MaterialCommunityIcons name="plus-circle-outline" size={30} color="white" />
+           <StyledText className="text-purple-primary text-2xl font-noto-semibold bg-white block aspect-square text-center leading-10 rounded-full">
+            +
+            </StyledText>
         </StyledTouchableOpacity>
     </StyledView>
   );

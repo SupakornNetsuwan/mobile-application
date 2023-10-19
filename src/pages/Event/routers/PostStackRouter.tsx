@@ -8,7 +8,7 @@ import { EventsStackRouterType } from "../../Events/routers/EventsStackRouter";
 import { RootEachEventDetailsTabRouterList } from "./EachEventDetailsTabRouter";
 //pages
 import EventDetails from "./tabs/EventDetails";
-import CreatePost from "../pages/CreatePost";
+import WrappedCreatePost from "../pages/CreatePost";
 // create an object type with mappings for route name to the params of the route.
 export type RootPostStackParamsList = {
     InEventDetails: {
@@ -56,13 +56,14 @@ const PostStackRouter = ({route, navigation, eventId, eventName, eventDescriptio
                 }}
             >
                 <Stack.Screen 
+
                     name="InEventDetails"  
                     options={{ headerShown: false }} 
                     initialParams={{eventId:eventId, eventName:eventName, eventDescription:eventDescription, eventPicture:eventPicture, eventStart:eventStart, eventEnd:eventEnd}}
                 >
                     {(props)=><EventDetails  {...props}/>}
                 </Stack.Screen>
-                <Stack.Screen name="CreatePost" component={CreatePost} options={{title:'สร้างโพสต์'}}></Stack.Screen>
+                <Stack.Screen name="CreatePost" component={WrappedCreatePost} options={{title:'สร้างโพสต์'}}></Stack.Screen>
             </Stack.Navigator>
     )
 

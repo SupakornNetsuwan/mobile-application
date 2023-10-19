@@ -8,8 +8,8 @@ import ManageStackRouter from "./ManageStackRouter";
 import PostStackRouter from "./PostStackRouter";
 import { EventsStackRouterType } from "../../Events/routers/EventsStackRouter";
 import useAuthen from "../../../core/hooks/useAuthen";
-import useGetOwnerPost from "../hooks/useGetOwnerPost";
 import { useMemo } from "react";
+import { ManageStackRouterType } from "./ManageStackRouter";
 export type RootEachEventDetailsTabRouterList = {
     // EachEventDetails รับ สองอย่างคือ eventId , กับเช็คว่าคนที่เข้าเป็น adminไหม
     InEventDetails : {
@@ -31,7 +31,8 @@ type Props = {
 }
 // type Props  = MaterialTopTabNavigationProp<RootEventDetailsTabRouterList, "PostStackRouter">
 const EventDetailsTab = createMaterialTopTabNavigator<RootEachEventDetailsTabRouterList>()
-
+type ManageStackRouterRouteType = RouteProp<ManageStackRouterType, 'ManageEvent'>;
+type ManageStackRouterNavigationType = StackNavigationProp<ManageStackRouterType,'ManageEvent'>
 const EachEventDetailsTabRouter = ({route, navigation}:Props) =>{
     let ownerEvent = false
     const eventId = route.params.eventId
@@ -44,11 +45,9 @@ const EachEventDetailsTabRouter = ({route, navigation}:Props) =>{
     const auth = useAuthen()
     if(auth.status === "authenticated"){
         if(auth.session.user.id.toString() == eventOwnerId){
-            console.log("auth",auth.session.user.id)
             ownerEvent = true
         }
     }
-    console.log(eventOwnerId)
     useEffect(()=>{
         navigation.setOptions({headerTitle:eventName})
     }, [route])
@@ -77,14 +76,25 @@ const EachEventDetailsTabRouter = ({route, navigation}:Props) =>{
                         {/* คิดว่าส่งเป็น params ได้ ไม่จำเป็นค้องใช้ props แต่ลองไว้เล่นเดียวแก้*/}
                         {(props) => <PostStackRouter {...props} 
                                         route={props.route}
-                                        navigation={props.navigation} eventId={eventId} 
+                                        navigation={props.navigation} 
+                                        eventId={eventId} 
                                         eventName={eventName} eventPicture={eventPicture} 
                                         eventDescription={eventDescription} 
                                         eventStart={eventStart}
                                         eventEnd={eventEnd}/>}
                 </EventDetailsTab.Screen>
                 {ownerEvent && (
-                    <EventDetailsTab.Screen component={ManageStackRouter} name="ManageStackRouter" options={{ title: "จัดการ", tabBarLabelStyle:{fontSize:16 }}} />
+                    <EventDetailsTab.Screen   name="ManageStackRouter" options={{ title: "จัดการ", tabBarLabelStyle:{fontSize:16 }}} >
+                        {(props)=><ManageStackRouter {...props as unknown as ManageStackRouterRouteType}  
+                        route={props.route as unknown as ManageStackRouterRouteType} 
+                        navigation={props.route as unknown as  ManageStackRouterNavigationType} 
+                        eventId={eventId} 
+                        eventName={eventName} eventPicture={eventPicture} 
+                        eventDescription={eventDescription} 
+                        eventStart={eventStart}
+                        eventEnd={eventEnd}
+                        />}
+                    </EventDetailsTab.Screen>
                 )}
             </EventDetailsTab.Navigator>
         </>

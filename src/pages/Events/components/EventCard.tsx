@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyledText,
   StyledView,
@@ -13,29 +13,61 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Line from "./Line";
 import JoinButton from "./JoinButton";
 import type { EventsStackRouterType } from "../routers/EventsStackRouter";
-import useGetOwnerPost from "../../Event/hooks/useGetOwnerPost";
-import { useMemo } from "react";
+import useGetEvent from "../../../core/hooks/useGetEvent";
+import { useState } from "react";
+import useAuthen from "../../../core/hooks/useAuthen";
+import Toast from "react-native-toast-message";
+import axios from "axios";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 const EventCard: React.FC<{ events: Event[] }> = ({ events }) => {
+// emulates a fetch (useQuery expects a Promise)
+  const [userId, setUserId] = useState<number | null>(null);
+  const [eventList, setEventList] = useState<Event[]>(events); 
+  const [reFetch, setRefetch] = useState<boolean | null>(null);
+  const auth = useAuthen()
+
+  const queryClient = useQueryClient()
+  useEffect(()=>{
+    if(auth.status === "authenticated"){
+      setUserId(auth.session.user.id)
+    }
+  },[reFetch, auth])
+  // check user นั้นเป็น สต๊าฟ ของ event ไหม
+  const checkAccessToEvent = async (event:Event) =>{
+    queryClient.invalidateQueries(["getEvents"])
+    const staffs = event.attributes.staffs
+    let userIsStaff = false;
+    if(staffs.data.length > 0){
+        staffs.data.forEach((staff)=>{
+          if(staff.attributes.staff.data.id == userId){
+            userIsStaff = true
+            navigation.navigate("EachEventDetails", {eventId:event.id, 
+                                                      eventName:event.attributes.name, 
+                                                      eventDescription: event.attributes.description, 
+                                                      eventPicture: event.attributes.cover?.data, 
+                                                      eventStart: event.attributes.start, 
+                                                      eventEnd: event.attributes.end, 
+                                                      eventOwnerId:event.attributes.owner.data.id.toString() })
+          }
+        })
+        if (!userIsStaff) {
+          Toast.show({ text1: `คุณไม่ได้เข้าร่วมกิจกรรมนี้⚠️` });
+        }
+    }else{
+    Toast.show({ text1: `คุณไม่ได้เข้าร่วมกิจกรรมนี้⚠️` });
+    }
+  }
+
   // add navigation to eachEventPage with params : gear
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>()
-  const navigateToEachEvent = (eventId : number, eventName : string, eventDescription:string, eventPicture:Object|undefined, eventStart:string, eventEnd:string, eventOwnerId:string) => 
-                              {navigation.navigate("EachEventDetails", {eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd, eventOwnerId })}
   return (
     <StyledView>
       {events.map((event) => (
         <StyledTouchableOpacity 
           intent="plain" 
           key={event.id} 
-          onPress={()=>navigateToEachEvent(
-            event.id, 
-            event.attributes.name, 
-            event.attributes.description, 
-            event.attributes.cover?.data,
-            event.attributes.start,
-            event.attributes.end,
-            event.attributes.owner?.data.id.toString()
-          
-            )}>
+          onPress={()=>checkAccessToEvent(event)}
+          >
           {/* รูปปกกิจกรรม */}
           <StyledView className="flex-row justify-center w-full my-2">
             {event.attributes.cover?.data ? (

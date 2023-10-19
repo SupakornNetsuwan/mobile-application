@@ -1,12 +1,11 @@
-import React, { useMemo } from "react";
+import React, { useState, useRef} from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { StyledText, StyledView, StyledTextInput, StyledImage, } from "../../../core/components/styled";
+import { StyledText, StyledView, StyledTextInput, StyledImage, StyledTouchableOpacity, } from "../../../core/components/styled";
 import { ScrollView } from "react-native";
-import useGetPost from "../../../core/hooks/useGetPost";
 //types
 import { PostType, OwnerType, MediaType} from "../../../core/hooks/useGetPost";
-
-
+import { Placement } from "react-native-popover-view/dist/Types";
+import { Button, Popover } from "native-base";
 type CommentProp = {
     contents: string
     owner:OwnerType
@@ -46,6 +45,8 @@ const PostComponent: React.FC<PostType> = ({attributes, id, }) =>{
     const createAt= new Date(postDetails.createdAt)
     const options = { timeZone: 'Asia/Bangkok', hour12: false };
     const createAtBKK = createAt.toLocaleString('en-US', options).replace(/, /g, ':')
+    const touchable = useRef(null);
+    const [showPostPopOver, setShowPostPopOver] = useState<boolean>(false)
     return (
         <StyledView
             className="mb-5 p-2 border border-gray-300 rounded-xl"
@@ -61,37 +62,70 @@ const PostComponent: React.FC<PostType> = ({attributes, id, }) =>{
             }}
         >
             <StyledView className="border-b border-gray-300">
-                <StyledView className="flex flex-row gap-3 p-2">
-                    {postDetails.owner.data.attributes.picture.data != null ? (
-                        <StyledImage
-                            source={{
-                            uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${postDetails.owner.data.attributes.picture.data.attributes.url}`,
-                            }}
-                            className="h-16 aspect-square rounded-full w-16"
-                            style={{
-                            borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
-                            borderWidth: 2,
-                            }}
-                        />
-                        ) : (
-                        <StyledImage
-                            source={require("../../../../assets/empty-box.png")}
-                            className="h-16 aspect-square rounded-full w-16"
-                            style={{
-                            borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
-                            borderWidth: 2,
-                            }}
-                        />
-                        )
-                    }
-                    <StyledView className="p-1">
-                        <StyledText className="text-sm font-bold m-1">
-                            {postDetails.owner.data.attributes.username}
-                        </StyledText>
-                        <StyledText className="text-xs text-gray-500 ml-1">
-                            {postDetails.owner.data.attributes.activities.data[0].attributes.position == null ? "ผู้เข้าร่วม" :postDetails.owner.data.attributes.activities.data[0].attributes.position}  | {createAtBKK}
-                        </StyledText>
+                <StyledView className="flex flex-row justify-between">
+                    <StyledView className="flex flex-row gap-3 p-2">
+                        {postDetails.owner.data.attributes.picture.data != null ? (
+                            <StyledImage
+                                source={{
+                                uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${postDetails.owner.data.attributes.picture.data.attributes.url}`,
+                                }}
+                                className="h-16 aspect-square rounded-full w-16"
+                                style={{
+                                borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+                                borderWidth: 2,
+                                }}
+                            />
+                            ) : (
+                            <StyledImage
+                                source={require("../../../../assets/empty-box.png")}
+                                className="h-16 aspect-square rounded-full w-16"
+                                style={{
+                                borderColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+                                borderWidth: 2,
+                                }}
+                            />
+                            )
+                        }
+                        <StyledView className="p-1">
+                            <StyledText className="text-sm font-bold m-1">
+                                {postDetails.owner.data.attributes.username}
+                            </StyledText>
+                            <StyledText className="text-xs text-gray-500 ml-1">
+                                {postDetails.owner.data.attributes.activities.data[0].attributes.position == null ? "ผู้เข้าร่วม" :postDetails.owner.data.attributes.activities.data[0].attributes.position}  | {createAtBKK}
+                            </StyledText>
+                        </StyledView>
                     </StyledView>
+                    {/* editPost */}
+                    <StyledTouchableOpacity className="bg-white" ref={touchable} onPress={()=>setShowPostPopOver(true)}>
+                        <Popover  trigger={triggerProps => {
+                            return <Button {...triggerProps}   style={{backgroundColor:"white"}}>
+                                        <MaterialCommunityIcons name="dots-horizontal" size={20}></MaterialCommunityIcons>
+                                    </Button>;
+                            }}>
+                                <Popover.Content accessibilityLabel="Manage" w="56">
+                                <Popover.Arrow />
+                                <Popover.CloseButton />
+                               
+                                <Popover.Body >
+                                    <StyledView className="items-center mb-3">
+                                        <StyledText>จัดการ</StyledText>
+                                    </StyledView>
+                                    <StyledTouchableOpacity className="flex flex-row items-center bg-white border-">
+                                        <MaterialCommunityIcons name="pencil" size={20}></MaterialCommunityIcons>
+                                        <StyledText className="text-sm ml-2">แก้ไข</StyledText>
+                                    </StyledTouchableOpacity>
+                                    <StyledTouchableOpacity className="flex flex-row items-center bg-white =">
+                                        <MaterialCommunityIcons name="delete-off" size={20}></MaterialCommunityIcons>
+                                        <StyledText className="text-sm ml-2">ลบ</StyledText>
+                                    </StyledTouchableOpacity>
+                                    <StyledTouchableOpacity className="flex flex-row items-center bg-white">
+                                        <MaterialCommunityIcons name="share" size={20}></MaterialCommunityIcons>
+                                        <StyledText className="text-sm ml-2">แชร์</StyledText>
+                                    </StyledTouchableOpacity>
+                                </Popover.Body>
+                                </Popover.Content>
+                        </Popover>
+                    </StyledTouchableOpacity>
                 </StyledView>
             </StyledView>
             <StyledView className="mt-2 border-b border-gray-300">
