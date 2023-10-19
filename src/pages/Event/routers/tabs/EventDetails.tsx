@@ -4,7 +4,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyledImage, StyledText, StyledView,StyledTouchableOpacity } from "../../../../core/components/styled";
 import EmptyData from "../../../Account/components/EmptyData";
 // componets
-import PostComponent from "../../components/PostComponent";
 import { ScrollView } from "react-native";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import type { RootPostStackParamsList } from "../PostStackRouter";
@@ -12,8 +11,8 @@ import { RouteProp } from '@react-navigation/native';
 import { MaterialTopTabNavigationProp } from "@react-navigation/material-top-tabs";
 import type { EventsStackRouterType } from "../../../Events/routers/EventsStackRouter";
 //hooks
-import useGetEvent from "../../../../core/hooks/useGetEvent";
-import useGetPost from "../../../../core/hooks/useGetPost";
+import useGetPosts from "../../../../core/hooks/useGetPosts";
+import WrappedCreateComment from "../../components/WrappedCreateComment";
 
 type Props = {
   route: RouteProp<RootPostStackParamsList, 'InEventDetails'>; 
@@ -27,7 +26,7 @@ type PictureType ={
 }
 const EventDetails = ({route , navigation}:Props) => {
   const navigate = useNavigation<NavigationProp<RootPostStackParamsList>>()
-  const navigateToCreatePost = () => navigate.navigate("CreatePost")
+  const navigateToCreatePost = () => navigate.navigate("CreatePost", {eventId: eventId, isEdit:false, postId:""})
   // ดึงรายละเอียดของโพสต์ จาก params
   const eventId = route.params?.eventId
   const eventName = route.params?.eventName
@@ -37,7 +36,7 @@ const EventDetails = ({route , navigation}:Props) => {
   const eventEnd = route.params?.eventEnd
 
   //ดึงโพส์
-  const {data, isLoading, error} = useGetPost(eventId.toString())!;
+  const {data, isLoading, error} = useGetPosts(eventId.toString())!;
   const posts = useMemo(() => data?.data, [data?.data]);
   if(data == null){
     return <EmptyData label="No event found"/>
@@ -66,7 +65,7 @@ const EventDetails = ({route , navigation}:Props) => {
             </StyledView>
               {postInEvent && postInEvent.length > 0 ? (
                   Array.from({ length: postInEvent.length }, (_, index) => (
-                    <PostComponent attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index}/>
+                        <WrappedCreateComment attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index} eventId={eventId}/>
                   ))
                 ) : (
                 <>
@@ -79,7 +78,7 @@ const EventDetails = ({route , navigation}:Props) => {
         </StyledView>
       </ScrollView>
       {/* เพิ่ม Post */}
-      <StyledTouchableOpacity className=" border-opacity-20 flex items-center justify-center w-16 h-16 absolute bottom-10 right-5 rounded-full"
+      <StyledTouchableOpacity className=" border-opacity-20 flex items-center justify-center w-16 h-16 absolute bottom-8 right-5 rounded-full"
           style={{backgroundColor:"#B146C2"}}
           onPress={navigateToCreatePost}
         >

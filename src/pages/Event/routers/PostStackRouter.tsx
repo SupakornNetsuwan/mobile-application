@@ -8,7 +8,9 @@ import { EventsStackRouterType } from "../../Events/routers/EventsStackRouter";
 import { RootEachEventDetailsTabRouterList } from "./EachEventDetailsTabRouter";
 //pages
 import EventDetails from "./tabs/EventDetails";
-import WrappedCreatePost from "../pages/CreatePost";
+import WrappedCreatePost from "../pages/WrappedCreatePost";
+
+import { util } from "zod";
 // create an object type with mappings for route name to the params of the route.
 export type RootPostStackParamsList = {
     InEventDetails: {
@@ -19,9 +21,13 @@ export type RootPostStackParamsList = {
         eventStart:string,
         eventEnd:string
     },
-    CreatePost: undefined
-}
+    CreatePost: {
+        eventId:number|undefined,
+        isEdit:boolean,
+        postId:string
+    }
 
+}
 // route RouteProp ปกติ
 // navigation ขอเป็น MaterialTobtab จะได้มี tabBarStye มาด้วย เวลาไปหน้า CreatePost เราจะSet ให้ Tab bar หายไป
 // รายละเอียดเกี่ยวกับ Event คิดว่าส่งมาเป็น params ได้ ไม่จำเป็นต้องมี แต่ route กับ navigate เอาไว้ลบ Tabbar
@@ -35,6 +41,7 @@ type Props = {
     eventStart:string,
     eventEnd:string
   };
+type CreatePostRouteProp = RouteProp<RootPostStackParamsList, 'CreatePost'>
 const Stack = createStackNavigator<RootPostStackParamsList>()
 
 const PostStackRouter = ({route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd}:Props) =>{
@@ -63,7 +70,9 @@ const PostStackRouter = ({route, navigation, eventId, eventName, eventDescriptio
                 >
                     {(props)=><EventDetails  {...props}/>}
                 </Stack.Screen>
-                <Stack.Screen name="CreatePost" component={WrappedCreatePost} options={{title:'สร้างโพสต์'}}></Stack.Screen>
+                <Stack.Screen name="CreatePost"   options={{title:'สร้างโพสต์'}} >
+                    {(props)=><WrappedCreatePost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as CreatePostRouteProp  } navigation={props.navigation}/>}
+                </Stack.Screen>
             </Stack.Navigator>
     )
 

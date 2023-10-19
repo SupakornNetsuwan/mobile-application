@@ -32,7 +32,8 @@ const StaffDetailsComponent = ({staff, eventName, eventDescription, eventPicture
       staffPosition: staff?.attributes.position || undefined,
       staffPicture: staff?.attributes.staff.data?.attributes.picture.data || undefined,
       staffUsername: staff?.attributes.staff.data?.attributes.username || undefined,
-      staffStudentId : staff?.attributes.staff.data.attributes.email.split("@")[0]
+      staffStudentId : staff?.attributes.staff.data.attributes.email.split("@")[0],
+      staffId: staff?.id
     };
     navigate.navigate("EditStaff", staffData);
   };

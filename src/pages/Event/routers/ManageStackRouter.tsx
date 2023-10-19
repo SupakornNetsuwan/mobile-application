@@ -2,7 +2,7 @@ import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { StackNavigationProp } from "@react-navigation/stack"
 //pages
-import EditStaff from "../pages/manage/EditStaff";
+import WrappedEditStaff from "../pages/manage/EditStaff";
 import ManageEvent from "./tabs/ManageEvent";
 import { NavigationContainer} from '@react-navigation/native';
 import {  RouteProp } from '@react-navigation/native';
@@ -34,7 +34,8 @@ export type ManageStackRouterType  = {
         staffPosition: string | undefined,
         staffPicture: staffType |undefined
         staffUsername: string | undefined,
-        staffStudentId:string | undefined
+        staffStudentId:string | undefined,
+        staffId:string | undefined
     },
 }
 const Stack = createStackNavigator<ManageStackRouterType>()
@@ -63,7 +64,9 @@ const ManageStackRouter = ({route, navigation, eventId, eventName, eventDescript
                 <Stack.Screen name="ManageEvent"  options={{ headerShown: false }} initialParams={{eventId:eventId, eventName:eventName, eventDescription:eventDescription, eventPicture:eventPicture, eventStart:eventStart, eventEnd:eventEnd}}>
                     {(props)=><ManageEvent  route={props.route} navigation={props.navigation}/>}
                 </Stack.Screen> 
-                <Stack.Screen name="EditStaff" component={EditStaff} options={{headerShown:false}}></Stack.Screen>
+                <Stack.Screen name="EditStaff"  options={{headerShown:false}}>
+                    {(props)=><WrappedEditStaff route={props.route} navigation={props.navigation}/>}
+                </Stack.Screen>
             </Stack.Navigator>
     )
 

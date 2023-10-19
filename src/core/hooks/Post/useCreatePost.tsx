@@ -1,5 +1,4 @@
-import type { GetPostResponseType } from "../useGetPost";
-import { AddEventSchemaType } from "../../../pages/Events/providers/AddEventFormProvider";
+import type { GetPostsResponseType } from "../useGetPosts";
 import { useMutation, type MutationOptions } from "@tanstack/react-query";
 import { AxiosResponse, AxiosError } from "axios";
 import axios from "../../../utils/axios";
@@ -8,8 +7,8 @@ import useAuthen from "../useAuthen";
 import type { PostFormSchemaType } from "../../../pages/Event/providers/PostFormProvider";
 const useCreatePost = (
     options?: MutationOptions<
-    AxiosResponse<GetPostResponseType>, 
-    AxiosError<GetPostResponseType>, 
+    AxiosResponse<GetPostsResponseType>, 
+    AxiosError<GetPostsResponseType>, 
     PostFormSchemaType
     >
 ) =>{
@@ -19,14 +18,15 @@ const useCreatePost = (
     
       return useMutation({
         mutationFn: async (payload) => {
+          console.log(payload)
           return axios.post(
             `/posts`,
             {
               data: {
-               title: payload.title,
-               content: payload.content,
-               cover:payload.cover,
-               owner: auth.session.user.id.toString(),
+               title: payload.title||"" ,
+               content: payload.content||"",
+               medias:payload.cover || [],
+               owner: auth.session.user.id.toString() ,
                event: payload.event
               },
             },
