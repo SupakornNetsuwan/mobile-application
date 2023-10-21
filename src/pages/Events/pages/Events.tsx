@@ -53,7 +53,7 @@ const Events = () => {
           placeholder="ค้นหากิจกรรม"
           className="text-lg bg-gray-100"
         />
-        <EventCard events={filteredEvents} />
+          <EventCard events={filteredEvents} />
       </ScrollView>
 
       {/* ส้่วนของการเพิ่มกิจกรรม */}

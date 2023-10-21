@@ -23,7 +23,6 @@ const EditProfileFormProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const { data, isStale } = useGetProfile(authen.session.user.id.toString())!;
   const profile = useMemo(() => data?.data, [data]);
-
   const methods = useForm<EditProfileSchemaType>({
     resolver: zodResolver(EditProfileSchema),
     values: {

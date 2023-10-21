@@ -4,7 +4,7 @@ import EventsStackRouter from "./routers/EventsStackRouter";
 const Events = () => {
   return (
     <>
-      <EventsStackRouter />
+      <EventsStackRouter/>
     </>
   );
 };

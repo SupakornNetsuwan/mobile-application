@@ -48,7 +48,9 @@ const JoinButton: React.FC<{ eventName: string; eventId: number }> = ({
       deleteStaff?.mutate(
         { staffId: activity[0]?.id },
         {
+          
           onSuccess() {
+            queryClient.invalidateQueries(["getEvents"])
             Toast.show({ text1: `ออกจากกิจกรรม ${eventName} แล้ว 😿` });
             queryClient.invalidateQueries(["getStaffActivities", auth.session.user.id, eventId]);
             queryClient.invalidateQueries(["getPostsFromEventsJoined"])
@@ -60,6 +62,7 @@ const JoinButton: React.FC<{ eventName: string; eventId: number }> = ({
         { eventId: eventId },
         {
           onSuccess() {
+            queryClient.invalidateQueries(["getEvents"])
             Toast.show({ text1: `เข้าร่วมกิจกรรม ${eventName} แล้ว ✨` });
             queryClient.invalidateQueries(["getStaffActivities", auth.session.user.id, eventId]);
             queryClient.invalidateQueries(["getPostsFromEventsJoined"])

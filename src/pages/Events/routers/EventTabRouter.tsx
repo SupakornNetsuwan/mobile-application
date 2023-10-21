@@ -2,10 +2,9 @@ import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TabBar from "../components/TabBar";
-// Pages
+import withSafeArea from "../../../core/components/HOC/withSafeArea";
 import Events from "../pages/Events";
 import Following from "../pages/Following";
-
 export type EventTabRouterType = {
   EventsTab: undefined;
   Following: undefined;
@@ -14,6 +13,8 @@ export type EventTabRouterType = {
 const EventTab = createMaterialTopTabNavigator<EventTabRouterType>();
 
 const EventTabRouter = () => {
+
+
   return (
     <EventTab.Navigator
       initialRouteName="EventsTab"

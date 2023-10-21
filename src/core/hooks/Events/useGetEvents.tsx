@@ -5,6 +5,7 @@ import type { AxiosResponse, AxiosError } from "axios";
 import { ResponseErrorType } from "../../../types/app";
 import useAuthen from "../useAuthen";
 
+// เกียร์เพิ่ม owner กับ staff เข้ามาด้วย owner เอาไว้เช็คว่า event นี้มีเจ้าของคือใคร
 export interface Event {
     id: number;
     attributes: {
@@ -20,6 +21,25 @@ export interface Event {
                     height: number
                 }
             }
+        }
+        owner:{
+            data:{
+                id:number
+            }
+        }
+        staffs:{
+            data:[
+                {
+                    id:number,
+                    attributes:{
+                        staff:{
+                            data:{
+                                id:number
+                            }
+                        }
+                    }
+                }
+            ]
         }
     };
 }

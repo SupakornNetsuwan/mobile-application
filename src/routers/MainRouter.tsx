@@ -10,16 +10,12 @@ import Events from "../pages/Events";
 import AccountStackRouter from "../pages/Account";
 import Loading from "../core/components/Loading";
 import SignIn from "../pages/SignIn";
-// import EventTabRouter from "../pages/Event/";
-
 export type MainRouterType = {
-  Events: undefined;
+  EventsTab: undefined;
   AccountStackRouter: undefined;
-  // EventTabRouter: undefined;
+
 };
-
 const BottomStack = createBottomTabNavigator<MainRouterType>();
-
 const MainRouter = () => {
   const auth = useAuthen();
 
@@ -28,7 +24,7 @@ const MainRouter = () => {
 
   return (
     <BottomStack.Navigator
-      initialRouteName="Events"
+      initialRouteName="EventsTab"
       screenOptions={({ navigation, route }: BottomTabScreenProps<MainRouterType>) => {
         return {
           headerShown: false,
@@ -42,8 +38,8 @@ const MainRouter = () => {
       }}
     >
       <BottomStack.Screen
+        name="EventsTab"
         component={Events}
-        name="Events"
         options={{
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
@@ -54,7 +50,8 @@ const MainRouter = () => {
             return <MaterialCommunityIcons name="calendar" {...props} />;
           },
         }}
-      />
+      >
+      </BottomStack.Screen>
       <BottomStack.Screen
         component={AccountStackRouter}
         name="AccountStackRouter"
@@ -69,20 +66,6 @@ const MainRouter = () => {
           },
         }}
       />
-      {/* <BottomStack.Screen
-        component={EventTabRouter}
-        name="EventTabRouter"
-        options={{
-          tabBarLabel: ({ focused }) => (
-            <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
-              รายละเอียดกิจกรรม
-            </StyledText>
-          ),
-          tabBarIcon(props) {
-            return <MaterialCommunityIcons name="account" {...props} />;
-          },
-        }}
-      /> */}
     </BottomStack.Navigator>
   );
 };
