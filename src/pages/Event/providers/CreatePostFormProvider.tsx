@@ -8,7 +8,7 @@ import Loading from "../../../core/components/Loading";
 import useGetPost from "../../../core/hooks/useGetPost";
 import { useState } from "react";
 import type { GetPostResponseType } from "../../../core/hooks/useGetPost";
-const PostFormSchema = z.object({
+const CreatePostFormSchema = z.object({
     title: z.string().nonempty("ระบุขื่อโพสต์"),
     content: z.string().nonempty("ระบุคอนเทนต์ของโพสต์"),
     cover:z.string().optional(),
@@ -16,28 +16,16 @@ const PostFormSchema = z.object({
     id:z.string().optional()
 })
 
-export type PostFormSchemaType = z.infer<typeof PostFormSchema>
+export type CreatePostFormSchemaType = z.infer<typeof CreatePostFormSchema>
 
-const PostFormProvider: React.FC<{ children: React.ReactNode, postId:string, eventIdParam:string | undefined, isEdit:boolean }> = ({
-    children,postId,eventIdParam,isEdit
-  }) => {
+const CreatePostFormProvider: React.FC<{ children: React.ReactNode}> = ({
+    children  }) => {
     const authen = useAuthen();
     if (authen.status === "loading") return <Loading />;
     if (authen.status === "unauthenticated") 
       throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
-    const { data, isLoading, error } = useGetPost({postId:postId})!;
-    if(error){
-      console.log(error)
-    }
-    const post = useMemo(() => data?.data, [data?.data, postId]);
-    const methods = useForm<PostFormSchemaType>({
-      resolver: zodResolver(PostFormSchema),
-      values: {
-        title:post?.data.attributes.title || "",
-        content:post?.data.attributes.content||"",
-        cover:"",
-        event:post?.data.id.toString()|| ""
-      },
+    const methods = useForm<CreatePostFormSchemaType>({
+      resolver: zodResolver(CreatePostFormSchema),
       defaultValues: {
         title:"",
         content: "",
@@ -48,5 +36,5 @@ const PostFormProvider: React.FC<{ children: React.ReactNode, postId:string, eve
     return <FormProvider {...methods}>{children}</FormProvider>;
   };
   
-  export default PostFormProvider;
+  export default CreatePostFormProvider;
   

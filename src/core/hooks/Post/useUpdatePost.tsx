@@ -4,13 +4,22 @@ import axios from "axios";
 import { AxiosResponse, AxiosError } from "axios";
 import useAuthen from "../useAuthen";
 import type { GetPostsResponseType } from "../useGetPosts";
-import type { PostFormSchemaType } from "../../../pages/Event/providers/PostFormProvider";
+import { EditPostFormSchemaType } from "../../../pages/Event/providers/EditPostFormProvider";
+type UpdatePostType = {
+  data:{
+      id:number
+      attributes:{
+          title:string
+          content:string
+      }
+  }
+}
 const useUpdatePost = (
     postId: string,
     options?: MutationOptions<
-    AxiosResponse<GetPostsResponseType>,
-    AxiosError<GetPostsResponseType>,
-    PostFormSchemaType>
+    AxiosResponse<UpdatePostType>,
+    AxiosError<UpdatePostType>,
+    EditPostFormSchemaType>
 ) =>{
     const auth = useAuthen();
     if (auth.status === "loading" || auth.status === "unauthenticated") return null;
@@ -21,10 +30,9 @@ const useUpdatePost = (
       return axios.put(
         `/posts/${postId}`,
         {
-        data:{
+            data:{
                 title: payload.title,
                 content: payload.content,
-                medias:payload.cover||[] 
             }
         },
         {

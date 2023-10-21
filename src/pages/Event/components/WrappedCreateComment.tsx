@@ -19,8 +19,6 @@ type CommentProp = {
 }
 import { useFormContext, Controller, SubmitHandler } from "react-hook-form";
 import useCreateComment from "../../../core/hooks/Comment/useCreateComment";
-import { PostFormSchemaType } from "../providers/PostFormProvider";
-import useCreatePost from "../../../core/hooks/Post/useCreatePost";
 
 const Comment = ({contents, owner}:CommentProp)=>{
     if(!owner) return <ScrollView/>
@@ -59,6 +57,7 @@ const PostComponent: React.FC<PostType> = ({attributes, id, eventId}) =>{
     const auth = useAuthen()
     const postDetails = attributes
     const postId = id
+    const navigateToEditPost = () => navigate.navigate("EditPost", {postId: postId as number})
     const createAt= new Date(postDetails.createdAt)
     const options = { timeZone: 'Asia/Bangkok', hour12: false };
     const createAtBKK = createAt.toLocaleString('en-US', options).replace(/, /g, ':')
@@ -167,7 +166,7 @@ const PostComponent: React.FC<PostType> = ({attributes, id, eventId}) =>{
                                         {auth.session.user.id === postDetails.owner.data.id ? 
                                             <StyledTouchableOpacity 
                                                 className="flex flex-row items-center bg-white"
-                                                onPress={()=>navigate.navigate("CreatePost", {eventId: eventId && eventId, isEdit:true, postId:postId.toString()})}
+                                                onPress={navigateToEditPost}
                                             >
                                                 <MaterialCommunityIcons name="pencil" size={20}></MaterialCommunityIcons>
                                                 <StyledText className="text-sm ml-2">แก้ไข</StyledText>

@@ -9,6 +9,7 @@ import { RootEachEventDetailsTabRouterList } from "./EachEventDetailsTabRouter";
 //pages
 import EventDetails from "./tabs/EventDetails";
 import WrappedCreatePost from "../pages/WrappedCreatePost";
+import WrappedEditPost from "../pages/WrappedEditPoste";
 
 import { util } from "zod";
 // create an object type with mappings for route name to the params of the route.
@@ -23,8 +24,9 @@ export type RootPostStackParamsList = {
     },
     CreatePost: {
         eventId:number|undefined,
-        isEdit:boolean,
-        postId:string
+    },
+    EditPost:{
+        postId:number
     }
 
 }
@@ -43,7 +45,7 @@ type Props = {
   };
 type CreatePostRouteProp = RouteProp<RootPostStackParamsList, 'CreatePost'>
 const Stack = createStackNavigator<RootPostStackParamsList>()
-
+type EditPostRouteProp = RouteProp<RootPostStackParamsList, 'EditPost'>
 const PostStackRouter = ({route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd}:Props) =>{
     // Check ว่าตอนนี้อยุ่หน้าไหนแล้ว
     const routeName = getFocusedRouteNameFromRoute(route)
@@ -72,6 +74,9 @@ const PostStackRouter = ({route, navigation, eventId, eventName, eventDescriptio
                 </Stack.Screen>
                 <Stack.Screen name="CreatePost"   options={{title:'สร้างโพสต์'}} >
                     {(props)=><WrappedCreatePost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as CreatePostRouteProp  } navigation={props.navigation}/>}
+                </Stack.Screen>
+                <Stack.Screen name="EditPost" options={{title:"แก้ไขโพสต์"}}>
+                    {(props)=><WrappedEditPost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as EditPostRouteProp  } navigation={props.navigation}/>}
                 </Stack.Screen>
             </Stack.Navigator>
     )

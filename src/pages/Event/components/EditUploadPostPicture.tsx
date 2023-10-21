@@ -4,16 +4,29 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useUploadFile from "../../../core/hooks/useUploadFile";
 import { useFormContext } from "react-hook-form";
 import pickImage from "../../../utils/pickImage";
-import type { CreatePostFormSchemaType } from "../providers/CreatePostFormProvider";
+import type {EditPostFormSchemaType} from "../providers/EditPostFormProvider";
+import useGetPost from "../../../core/hooks/useGetPost";
 
-const UploadPostPicture = () => {
-    const { setValue, getValues } = useFormContext<CreatePostFormSchemaType>();
+type EditUploadPostPictureProp ={
+    postId:string
+}
+const EditUploadPostPicture = ({postId}:EditUploadPostPictureProp) => {
+    const { setValue, getValues } = useFormContext<EditPostFormSchemaType>();
+    const [postPicture, setPostPicture] = useState<string>("")
     const uploadFile = useUploadFile();
     const [tempImageUri, setTempImageUri] = useState<string>("");
     const clearPicture = ()=> {
       setTempImageUri("")
+      setPostPicture("")
     }
     
+    const {data, isLoading, error} = useGetPost({postId})!
+    const postDetails = useMemo(() => data?.data, [data?.data]);
+    useEffect(()=>{
+        if(postDetails?.data.attributes.medias.data != null){
+            setPostPicture(postDetails?.data.attributes.medias.data[0].attributes.url)
+        }
+    }, [postDetails])
     const uploadPostPostPicture = async () => {
         const receive = await pickImage();
         if (!receive) return;
@@ -28,7 +41,7 @@ const UploadPostPicture = () => {
     
         uploadFile.mutate(formData, {
           onSuccess(data, variables, context) {
-            setValue("cover", data.data[0].id.toString());
+            setValue("medias", data.data[0].id.toString());
             setTempImageUri(imageUri);
           },
           onError(error, variables, context) {
@@ -39,12 +52,12 @@ const UploadPostPicture = () => {
       };
       return (
         <StyledView className="mt-2"> 
-          {(tempImageUri ) &&
+          {(tempImageUri || postPicture) &&
             <StyledView className="mt-6 mb-4 flex-row items-center justify-center bg-pink-primary w-full h-40 rounded-md">
-              {(tempImageUri ) &&
+              {(tempImageUri || postPicture) &&
                 <StyledImage
                   source={{
-                    uri: tempImageUri 
+                    uri: tempImageUri || `${process.env.EXPO_PUBLIC_BACKEND_URL}${postPicture}`
                   }}
                   className="w-full aspect-video"
                 />
@@ -64,7 +77,7 @@ const UploadPostPicture = () => {
                 className="flex-row justify-center absolute rounded-full py-2 right-3 bottom-0"
               ></StyledTouchableOpacity>
             </StyledView>}
-          {(tempImageUri == "")
+          {(tempImageUri == "" || postPicture != "")
           &&<StyledTouchableOpacity
             intent="secondary"
             onPress={uploadPostPostPicture}
@@ -86,4 +99,4 @@ const UploadPostPicture = () => {
         </StyledView>
       );
 }
-export default UploadPostPicture
+export default EditUploadPostPicture

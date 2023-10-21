@@ -26,7 +26,7 @@ type PictureType ={
 }
 const EventDetails = ({route , navigation}:Props) => {
   const navigate = useNavigation<NavigationProp<RootPostStackParamsList>>()
-  const navigateToCreatePost = () => navigate.navigate("CreatePost", {eventId: eventId, isEdit:false, postId:""})
+  const navigateToCreatePost = () => navigate.navigate("CreatePost", {eventId: eventId})
   // ดึงรายละเอียดของโพสต์ จาก params
   const eventId = route.params?.eventId
   const eventName = route.params?.eventName

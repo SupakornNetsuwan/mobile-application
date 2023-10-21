@@ -2,41 +2,41 @@ import { StyledView, StyledImage, StyledTextInput, StyledTouchableOpacity, Style
 import { useFormContext, Controller, SubmitHandler } from "react-hook-form";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { ScrollView } from "react-native";
-import UploadPostPicture from "../components/UploadPostPicture";
-import CreatePostFormProvider from "../providers/CreatePostFormProvider";
-import type { CreatePostFormSchemaType } from "../providers/CreatePostFormProvider";
+import EditUploadPostPicture from "../components/EditUploadPostPicture";
 import { useQueryClient } from "@tanstack/react-query";
+import useCreatePost from "../../../core/hooks/Post/useCreatePost";
 import Toast from "react-native-toast-message";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import type { RootPostStackParamsList } from "../routers/PostStackRouter";
 import { useRoute } from "@react-navigation/native";
 import { RouteProp } from '@react-navigation/native';
 import { MaterialTopTabNavigationProp } from "@react-navigation/material-top-tabs";
-import useCreatePost from "../../../core/hooks/Post/useCreatePost";
+import useUpdatePost from "../../../core/hooks/Post/useUpdatePost";
 type Props ={
-    eventId:string|undefined,
+    postId:string|undefined,
 }
-const CreatePost = ({eventId}:Props) =>{
-    const createPost = useCreatePost()!
+import EditPostFormProvider from "../providers/EditPostFormProvider";
+import { EditPostFormSchemaType } from "../providers/EditPostFormProvider";
+const EdidtPost = ({postId}:Props) =>{
     const queryClient = useQueryClient();
     const navigation = useNavigation<NavigationProp<RootPostStackParamsList>>();
+    const updatePost = useUpdatePost(postId as string)!
     const {
         control,
         formState: { errors },
         watch,
         handleSubmit,
-      } = useFormContext<CreatePostFormSchemaType>();
+      } = useFormContext<EditPostFormSchemaType>();
     
-    const onSubmitCreate: SubmitHandler<CreatePostFormSchemaType> = (data) => {
-        data.event = eventId;
-        createPost.mutate(data, {
+    const onSubmitEdit: SubmitHandler<EditPostFormSchemaType> = (data) => {
+        updatePost.mutate(data, {
             onSuccess(data, variables, context) {
-                Toast.show({ text1: "สร้างโพสต์สำเร็จ" });
+                Toast.show({ text1: "แก้ไขโพสสำเร็จ" });
                 queryClient.invalidateQueries(["getPosts"]);
                 navigation.navigate('InEventDetails');
           },
           onError(error, variables, context) {
-            console.log(error.response?.data);
+            console.log("err",error.response?.data);
           },
         });
     };
@@ -65,7 +65,7 @@ const CreatePost = ({eventId}:Props) =>{
                                 />
                     </StyledView>   
                     <StyledView>
-                        <UploadPostPicture />
+                        <EditUploadPostPicture postId={postId as string} />
                      </StyledView>
                      <StyledView className="mt-5">
                          <Controller
@@ -86,14 +86,14 @@ const CreatePost = ({eventId}:Props) =>{
                      </StyledView>
                 </StyledView>
                 <StyledTouchableOpacity
-                        onPress={handleSubmit(onSubmitCreate)}
+                        onPress={handleSubmit(onSubmitEdit)}
                         hasIcon={true}
                         intent="primary"
                         size="medium"
                         className="flex-row justify-center items-center my-6 space-x-2"
                         icon={<MaterialCommunityIcons name="plus-circle" size={20} color="white" />}
                     >
-                    <StyledText className="text-white text-lg font-noto-semibold"> {"สร้างโพสต์"}</StyledText>
+                    <StyledText className="text-white text-lg font-noto-semibold"> {"แก้ไขโพสต์"}</StyledText>
                 </StyledTouchableOpacity>
             </ScrollView>
         </>
@@ -101,15 +101,16 @@ const CreatePost = ({eventId}:Props) =>{
 }
 
 type CreatePostProp = {
-    route: RouteProp<RootPostStackParamsList,'CreatePost'>; // Adjust this line
+    route: RouteProp<RootPostStackParamsList, 'EditPost'>; // Adjust this line
     navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
 }
-const WrappedCreatePost= ({route, navigation}:CreatePostProp) => {
-    const eventId = route.params.eventId
+const WrappedEditPost= ({route, navigation}:CreatePostProp) => {
+    const postId= route.params.postId.toString()
+
     return (
-      <CreatePostFormProvider >
-        <CreatePost  eventId={eventId?.toString()}/>
-      </CreatePostFormProvider>
+      <EditPostFormProvider postId={postId} >
+        <EdidtPost  postId={postId}/>
+      </EditPostFormProvider>
     );
   };
-export default WrappedCreatePost
+export default WrappedEditPost
