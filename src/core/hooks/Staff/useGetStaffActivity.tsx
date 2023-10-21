@@ -7,7 +7,7 @@ import axios from "../../../utils/axios";
 // 😸 ดูว่า user คนนี้ได้เข้าร่วมกิจกรรมที่ eventId นี้หรือไม่ ดู duty และ position ของ user ในกิจกรรมนั้น ๆ ได้
 
 interface StaffActivity {
-  id: number
+  id: number;
   attributes: {
     duty: string;
     position: string;
@@ -23,7 +23,17 @@ interface StaffActivities {
   data?: StaffActivity[];
 }
 
-const useGetStaffActivity = (eventId: number) => {
+export interface Post {
+  id: number;
+  title: string;
+  content: string;
+  createdAt: string;
+  owner: {
+    id: number
+  }
+}
+
+const useGetStaffActivity = (userId: number, eventId: number) => {
   const auth = useAuthen();
   if (auth.status === "loading" || auth.status === "unauthenticated")
     return null;
@@ -34,7 +44,7 @@ const useGetStaffActivity = (eventId: number) => {
   >({
     queryFn: async () => {
       return axios.get(
-        `/staffs?populate[staff][filters][id]=${auth.session.user.id}&filters[event]=${eventId}`,
+        `/staffs?filters[staff]=${userId}&filters[event]=${eventId}`,
         {
           headers: {
             Authorization: `Bearer ${auth.session.jwt}`,
@@ -42,7 +52,7 @@ const useGetStaffActivity = (eventId: number) => {
         }
       );
     },
-    queryKey: ["getStaffActivities", eventId],
+    queryKey: ["getStaffActivities", userId, eventId],
   });
 };
 
