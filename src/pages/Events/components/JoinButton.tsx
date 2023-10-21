@@ -10,12 +10,28 @@ import useAddStaffActivity from "../../../core/hooks/Staff/useAddStaffActivity";
 import Toast from "react-native-toast-message";
 import { useQueryClient } from "@tanstack/react-query";
 import useDeleteStaffActivity from "../../../core/hooks/Staff/useDeleteStaffActivity";
+import useAuthen from "../../../core/hooks/useAuthen";
 
 const JoinButton: React.FC<{ eventName: string; eventId: number }> = ({
   eventName,
   eventId,
 }) => {
-  const { data, isLoading, error } = useGetStaffActivity(eventId)!;
+  const auth = useAuthen();
+  if (auth.status == "loading")
+    return (
+      <StyledView>
+        <StyledText>Loading...</StyledText>
+      </StyledView>
+    );
+
+  if (auth.status == "unauthenticated")
+    throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+
+  const { data, isLoading, error } = useGetStaffActivity(
+    auth.session.user.id,
+    eventId
+  )!;
+
   const activity = useMemo(() => data?.data.data, [data?.data.data])!;
 
   const joined = activity?.length > 0;
@@ -34,7 +50,8 @@ const JoinButton: React.FC<{ eventName: string; eventId: number }> = ({
         {
           onSuccess() {
             Toast.show({ text1: `ออกจากกิจกรรม ${eventName} แล้ว 😿` });
-            queryClient.invalidateQueries(["getStaffActivities", eventId]);
+            queryClient.invalidateQueries(["getStaffActivities", auth.session.user.id, eventId]);
+            queryClient.invalidateQueries(["getPostsFromEventsJoined"])
           },
         }
       );
@@ -44,7 +61,8 @@ const JoinButton: React.FC<{ eventName: string; eventId: number }> = ({
         {
           onSuccess() {
             Toast.show({ text1: `เข้าร่วมกิจกรรม ${eventName} แล้ว ✨` });
-            queryClient.invalidateQueries(["getStaffActivities", eventId]);
+            queryClient.invalidateQueries(["getStaffActivities", auth.session.user.id, eventId]);
+            queryClient.invalidateQueries(["getPostsFromEventsJoined"])
           },
         }
       );
