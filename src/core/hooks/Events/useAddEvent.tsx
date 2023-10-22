@@ -1,5 +1,5 @@
 import { Event } from "./useGetEvents";
-import { AddEventSchemaType } from "../../../pages/Events/providers/AddEventFormProvider";
+import { EventSchemaType } from "../../../pages/Events/providers/AddEventFormProvider";
 import { useMutation, type MutationOptions } from "@tanstack/react-query";
 import { AxiosResponse, AxiosError } from "axios";
 import axios from "../../../utils/axios";
@@ -10,7 +10,7 @@ const useAddEvent = (
   options?: MutationOptions<
     AxiosResponse<Event>,
     AxiosError<ResponseErrorType>,
-    AddEventSchemaType
+    EventSchemaType
   >
 ) => {
   const auth = useAuthen();
