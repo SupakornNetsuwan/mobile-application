@@ -16,11 +16,6 @@ import { util } from "zod";
 export type RootPostStackParamsList = {
     InEventDetails: {
         eventId: number,
-        eventName: string
-        eventDescription: string
-        eventPicture: Object | undefined,
-        eventStart: string,
-        eventEnd: string
     },
     CreatePost: {
         eventId: number | undefined,
@@ -37,24 +32,26 @@ type Props = {
     route: RouteProp<RootPostStackParamsList, 'InEventDetails'>; // Adjust this line
     navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
     eventId: number,
-    eventName: string
-    eventDescription: string
-    eventPicture: Object | undefined
-    eventStart: string,
-    eventEnd: string
+    // eventName: string
+    // eventDescription: string
+    // eventPicture: Object | undefined
+    // eventStart: string,
+    // eventEnd: string
 };
 type CreatePostRouteProp = RouteProp<RootPostStackParamsList, 'CreatePost'>
 const Stack = createStackNavigator<RootPostStackParamsList>()
 type EditPostRouteProp = RouteProp<RootPostStackParamsList, 'EditPost'>
-const PostStackRouter = ({ route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd }: Props) => {
+const PostStackRouter = ({ route, navigation, eventId }: Props) => {
     // Check ว่าตอนนี้อยุ่หน้าไหนแล้ว
     const routeName = getFocusedRouteNameFromRoute(route)
 
     React.useLayoutEffect(() => {
         if (routeName === "CreatePost") {
             navigation.setOptions({ tabBarStyle: { display: 'none' } })
+            navigation.getParent()?.setOptions({headerShown:false})
         } else {
             navigation.setOptions({ tabBarStyle: { display: 'flex' } })
+            navigation.getParent()?.setOptions({headerShown:true})
         }
     })
 
@@ -72,7 +69,7 @@ const PostStackRouter = ({ route, navigation, eventId, eventName, eventDescripti
         >
             <Stack.Screen
                 name="InEventDetails"
-                initialParams={{ eventId: eventId, eventName: eventName, eventDescription: eventDescription, eventPicture: eventPicture, eventStart: eventStart, eventEnd: eventEnd }}
+                initialParams={{ eventId: eventId }}
             >
                 {(props) => <EventDetails  {...props} />}
             </Stack.Screen>

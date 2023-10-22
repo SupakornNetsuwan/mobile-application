@@ -68,11 +68,6 @@ const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) =
       navigation.navigate("EachEventDetails", {
         eventId: event.id,
         eventName: event.attributes.name,
-        eventDescription: event.attributes.description,
-        eventPicture: event.attributes.cover?.data,
-        eventStart: event.attributes.start,
-        eventEnd: event.attributes.end,
-        eventOwnerId: event.attributes.owner.data.id.toString()
       })
     }
     else if (!joined) {

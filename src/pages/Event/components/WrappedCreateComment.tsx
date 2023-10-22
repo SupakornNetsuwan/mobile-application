@@ -108,6 +108,7 @@ const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
             }
         )
     }
+    
     return (
         <StyledView
             id={id.toString()}
@@ -158,7 +159,7 @@ const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
                                 {postDetails.owner.data.attributes.username}
                             </StyledText>
                             <StyledText className="text-gray-500">
-                                {postDetails.owner.data.attributes.activities ? postDetails.owner.data.attributes.activities.data[0].attributes.position : "ประธานค่าย"} | {convertISOToCustomFormat(postDetails.createdAt)}
+                                {postDetails.owner.data.attributes.activities.data[0] ? postDetails.owner.data.attributes.activities.data[0].attributes.position : "ประธานค่าย"} | {convertISOToCustomFormat(postDetails.createdAt)}
                             </StyledText>
                         </StyledView>
 

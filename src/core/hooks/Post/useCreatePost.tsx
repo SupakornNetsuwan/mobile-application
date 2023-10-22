@@ -4,12 +4,12 @@ import { AxiosResponse, AxiosError } from "axios";
 import axios from "../../../utils/axios";
 import { ResponseErrorType } from "../../../types/app";
 import useAuthen from "../useAuthen";
-import type { PostFormSchemaType } from "../../../pages/Event/providers/CreatePostFormProvider";
+import type { CreatePostFormSchemaType } from "../../../pages/Event/providers/CreatePostFormProvider";
 const useCreatePost = (
     options?: MutationOptions<
     AxiosResponse<GetPostsResponseType>, 
     AxiosError<GetPostsResponseType>, 
-    PostFormSchemaType
+    CreatePostFormSchemaType
     >
 ) =>{
     const auth = useAuthen();

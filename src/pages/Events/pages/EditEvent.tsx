@@ -21,6 +21,7 @@ import useUpdateEvent from "../../../core/hooks/Events/useUpdateEvent";
 import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
+import useAuthen from "../../../core/hooks/useAuthen";
 
 type EditStaffProps = {
     route: RouteProp<ManageStackRouterType, 'EditEvent'>
@@ -28,6 +29,18 @@ type EditStaffProps = {
 }
 
 const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
+    const auth = useAuthen();
+
+    if (auth.status == "loading")
+      return (
+        <StyledView>
+          <StyledText>Loading...</StyledText>
+        </StyledView>
+      );
+  
+    if (auth.status == "unauthenticated")
+      throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+
     const { data, isLoading, isError } = useGetEvent(eventId)!
     const event = useMemo(() => data?.data.data, [data?.data.data])!;
 
@@ -96,6 +109,9 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
         editEvent.mutate(data, {
             onSuccess(data, variables, context) {
               Toast.show({ text1: "แก้ไขกิจกรรมสำเร็จ" });
+              queryClient.invalidateQueries(["getEvents"])
+              queryClient.invalidateQueries(["getEvent", eventId])
+              queryClient.invalidateQueries(["getPostsFromEventsJoined"])
               navigation.goBack()
             },
             onError(error, variables, context) {

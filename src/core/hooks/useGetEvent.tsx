@@ -61,7 +61,7 @@ const useGetEvent = (eventId?: number) => {
   if (auth.status === "loading" || auth.status === "unauthenticated") return null;
   return useQuery<AxiosResponse<GetEventResponseType>, AxiosError<GetEventResponseType>>({
     queryFn: async () => {
-      return axios.get(`/events/${eventId}?populate[0]=categories&populate[1]=studentAccessYears&populate[2]=cover&populate[3]=posts&populate[4]=owner`, {
+      return axios.get(`/events/${eventId}?populate[0]=categories&populate[1]=studentAccessYears&populate[2]=cover&populate[3]=owner`, {
         headers: {
           Authorization: `Bearer ${auth.session.jwt}`,
         },

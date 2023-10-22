@@ -20,12 +20,12 @@ type staffType = {
 export type ManageStackRouterType = {
     ManageEvent: {
         eventId: number,
-        eventName: string,
-        eventDescription: string,
-        eventPicture: Object | undefined,
-        eventStart: string,
-        eventEnd: string,
-        eventOwnerId: string,
+        // eventName: string,
+        // eventDescription: string,
+        // eventPicture: Object | undefined,
+        // eventStart: string,
+        // eventEnd: string,
+        // eventOwnerId: string,
     }
     EditStaff: {
         eventName: string | undefined,
@@ -48,14 +48,14 @@ type ManageStackRouterProp = {
     route: RouteProp<ManageStackRouterType, 'ManageEvent'>
     navigation: StackNavigationProp<ManageStackRouterType, 'ManageEvent'>
     eventId: number,
-    eventName: string
-    eventDescription: string
-    eventPicture: Object | undefined
-    eventStart: string,
-    eventEnd: string
+    // eventName: string
+    // eventDescription: string
+    // eventPicture: Object | undefined
+    // eventStart: string,
+    // eventEnd: string
 }
 
-const ManageStackRouter = ({ route, navigation, eventId, eventName, eventDescription, eventEnd, eventPicture, eventStart }: ManageStackRouterProp) => {
+const ManageStackRouter = ({ route, navigation, eventId }: ManageStackRouterProp) => {
     const routeName = getFocusedRouteNameFromRoute(route)
     React.useLayoutEffect(() => {
         if (routeName === "EditEvent") {
@@ -77,7 +77,7 @@ const ManageStackRouter = ({ route, navigation, eventId, eventName, eventDescrip
                 headerTitleAlign: "center"
             }}
         >
-            <Stack.Screen name="ManageEvent" options={{ headerShown: false }} initialParams={{ eventId: eventId, eventName: eventName, eventDescription: eventDescription, eventPicture: eventPicture, eventStart: eventStart, eventEnd: eventEnd }}>
+            <Stack.Screen name="ManageEvent" options={{ headerShown: false }} initialParams={{ eventId: eventId }}>
                 {(props) => <ManageEvent route={props.route} navigation={props.navigation} />}
             </Stack.Screen>
             <Stack.Screen name="EditStaff" options={{ headerShown: false }}>

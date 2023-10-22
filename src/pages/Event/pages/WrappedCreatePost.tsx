@@ -31,11 +31,12 @@ const CreatePost = ({ eventId }: Props) => {
 
     const onSubmitCreate: SubmitHandler<CreatePostFormSchemaType> = (data) => {
         data.event = eventId;
+
         createPost.mutate(data, {
             onSuccess(data, variables, context) {
                 Toast.show({ text1: "สร้างโพสต์สำเร็จ" });
                 queryClient.invalidateQueries(["getPosts"]);
-                navigation.navigate('InEventDetails');
+                navigation.goBack();
             },
             onError(error, variables, context) {
                 console.log(error.response?.data);
