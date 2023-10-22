@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import useUploadFile from "../../../core/hooks/useUploadFile";
 import { useFormContext } from "react-hook-form";
-import { AddEventSchemaType } from "../providers/AddEventFormProvider";
+import { EventSchemaType } from "../providers/AddEventFormProvider";
 import pickImage from "../../../utils/pickImage";
 import {
   StyledView,
@@ -10,12 +10,26 @@ import {
   StyledImage,
 } from "../../../core/components/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import useGetEvent from "../../../core/hooks/useGetEvent";
 
-const UploadEventCover = () => {
-  const { setValue, getValues } = useFormContext<AddEventSchemaType>();
+const UploadEventCover: React.FC<{ eventId?: number }> = ({ eventId }) => {
+  const { data, isLoading, isError } = useGetEvent(eventId)!;
+  const event = useMemo(() => data?.data.data, [data?.data.data]);
+
+  const { setValue, getValues } = useFormContext<EventSchemaType>();
   const uploadFile = useUploadFile();
-  const [tempImageUri, setTempImageUri] = useState("");
+
+  if (isLoading && eventId) {
+    return <StyledText>Loading...</StyledText>
+  }
+
+  // const [tempImageUri, setTempImageUri] = useState(`${process.env.EXPO_PUBLIC_BACKEND_URL}${event?.attributes.cover.data.attributes.url}`);
+  const [tempImageUri, setTempImageUri] = useState(() => {
+    if (!event || !event.attributes.cover.data.attributes.url) {
+      return null;
+    }
+    return `${process.env.EXPO_PUBLIC_BACKEND_URL}${event.attributes.cover.data.attributes.url}`;
+  });
 
   const uploadEventCover = async () => {
     const receive = await pickImage();
@@ -65,12 +79,12 @@ const UploadEventCover = () => {
         </StyledText>
       </StyledTouchableOpacity>
       {tempImageUri && (
-        <StyledView className="mt-6 mb-4 flex-row items-center justify-center bg-pink-primary w-full h-40 rounded-md">
+        <StyledView className="mt-6 mb-4 flex-row items-center justify-center bg-pink-primary w-full h-40">
           <StyledImage
             source={{
               uri: tempImageUri,
             }}
-            className="w-full aspect-video"
+            className="w-full aspect-video rounded-lg"
           />
           <StyledTouchableOpacity
             intent="primary"
@@ -84,7 +98,8 @@ const UploadEventCover = () => {
               />
             }
             hasIcon={true}
-            className="flex-row justify-center absolute rounded-full py-2 right-3 bottom-0"
+            className="absolute rounded-full py-2 bottom-0 right-3"
+            style={{ transform: [{ translateY: 2 }] }}
           ></StyledTouchableOpacity>
         </StyledView>
       )}
