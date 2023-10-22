@@ -15,18 +15,18 @@ import { util } from "zod";
 // create an object type with mappings for route name to the params of the route.
 export type RootPostStackParamsList = {
     InEventDetails: {
-        eventId: number, 
-        eventName:string
-        eventDescription:string
-        eventPicture:Object|undefined,
-        eventStart:string,
-        eventEnd:string
+        eventId: number,
+        eventName: string
+        eventDescription: string
+        eventPicture: Object | undefined,
+        eventStart: string,
+        eventEnd: string
     },
     CreatePost: {
-        eventId:number|undefined,
+        eventId: number | undefined,
     },
-    EditPost:{
-        postId:number
+    EditPost: {
+        postId: number
     }
 
 }
@@ -36,49 +36,53 @@ export type RootPostStackParamsList = {
 type Props = {
     route: RouteProp<RootPostStackParamsList, 'InEventDetails'>; // Adjust this line
     navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
-    eventId : number ,
-    eventName:string
-    eventDescription:string
-    eventPicture:Object|undefined
-    eventStart:string,
-    eventEnd:string
-  };
+    eventId: number,
+    eventName: string
+    eventDescription: string
+    eventPicture: Object | undefined
+    eventStart: string,
+    eventEnd: string
+};
 type CreatePostRouteProp = RouteProp<RootPostStackParamsList, 'CreatePost'>
 const Stack = createStackNavigator<RootPostStackParamsList>()
 type EditPostRouteProp = RouteProp<RootPostStackParamsList, 'EditPost'>
-const PostStackRouter = ({route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd}:Props) =>{
+const PostStackRouter = ({ route, navigation, eventId, eventName, eventDescription, eventPicture, eventStart, eventEnd }: Props) => {
     // Check ว่าตอนนี้อยุ่หน้าไหนแล้ว
     const routeName = getFocusedRouteNameFromRoute(route)
-      React.useLayoutEffect(()=>{
-        if(routeName === "CreatePost"){
-            navigation.setOptions({tabBarStyle:{display:'none'}}) 
-        }else{
-            navigation.setOptions({tabBarStyle:{display:'flex'}})
-        }
-     })
-    return(
-            <Stack.Navigator
-                initialRouteName="InEventDetails"
-                screenOptions={{
-                    headerStyle: { backgroundColor: "white" },
-                    headerTitleStyle: { fontFamily: "noto", color: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
-                }}
-            >
-                <Stack.Screen 
 
-                    name="InEventDetails"  
-                    options={{ headerShown: false }} 
-                    initialParams={{eventId:eventId, eventName:eventName, eventDescription:eventDescription, eventPicture:eventPicture, eventStart:eventStart, eventEnd:eventEnd}}
-                >
-                    {(props)=><EventDetails  {...props}/>}
-                </Stack.Screen>
-                <Stack.Screen name="CreatePost"   options={{title:'สร้างโพสต์'}} >
-                    {(props)=><WrappedCreatePost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as CreatePostRouteProp  } navigation={props.navigation}/>}
-                </Stack.Screen>
-                <Stack.Screen name="EditPost" options={{title:"แก้ไขโพสต์"}}>
-                    {(props)=><WrappedEditPost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as EditPostRouteProp  } navigation={props.navigation}/>}
-                </Stack.Screen>
-            </Stack.Navigator>
+    React.useLayoutEffect(() => {
+        if (routeName === "CreatePost") {
+            navigation.setOptions({ tabBarStyle: { display: 'none' } })
+        } else {
+            navigation.setOptions({ tabBarStyle: { display: 'flex' } })
+        }
+    })
+
+    return (
+        <Stack.Navigator
+            initialRouteName="InEventDetails"
+            screenOptions={{
+                headerStyle: { backgroundColor: "white" },
+                headerTitleStyle: { fontFamily: "noto-semibold", color: "#000" },
+                headerTitleAlign: "center",
+                headerShown: false,
+                headerBackTitleVisible: false,
+                headerTintColor: "black"
+            }}
+        >
+            <Stack.Screen
+                name="InEventDetails"
+                initialParams={{ eventId: eventId, eventName: eventName, eventDescription: eventDescription, eventPicture: eventPicture, eventStart: eventStart, eventEnd: eventEnd }}
+            >
+                {(props) => <EventDetails  {...props} />}
+            </Stack.Screen>
+            <Stack.Screen name="CreatePost" options={{ title: 'สร้างโพสต์', headerShown: true }} >
+                {(props) => <WrappedCreatePost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as CreatePostRouteProp} navigation={props.navigation} />}
+            </Stack.Screen>
+            <Stack.Screen name="EditPost" options={{ title: "แก้ไขโพสต์" }}>
+                {(props) => <WrappedEditPost {...props as unknown as CreatePostRouteProp} route={props.route as unknown as EditPostRouteProp} navigation={props.navigation} />}
+            </Stack.Screen>
+        </Stack.Navigator>
     )
 
 }

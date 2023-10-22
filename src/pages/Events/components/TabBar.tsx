@@ -9,7 +9,7 @@ import { Platform, StatusBar } from "react-native";
 const TabBar = ({ state, descriptors, navigation, position }: MaterialTopTabBarProps) => {
   return (
     <StyledView className={twMerge("bg-white")}>
-      {Platform.OS === "ios" && <StyledView className="w-full h-16 bg-white mb-2"/>}
+      {Platform.OS === "ios" && <StyledView className="w-full h-10 bg-white"/>}
       <StyledView className="flex-row w-2/3 ml-4 ">
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
