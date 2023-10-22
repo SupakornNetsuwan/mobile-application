@@ -3,7 +3,7 @@ import { StyledView, StyledText, StyledTextInput, StyledTouchableOpacity } from 
 import { ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useFormContext, Controller, SubmitHandler } from "react-hook-form";
-import { AddEventSchemaType } from "../providers/AddEventFormProvider";
+import { EventSchemaType } from "../providers/AddEventFormProvider";
 import AddEventFormProvider from "../providers/AddEventFormProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
@@ -17,7 +17,7 @@ import UploadEventCover from "../components/UploadEventCover";
 import useGetCategories from "../../../core/hooks/Events/Category/useGetCategories";
 import useGetStudentYears from "../../../core/hooks/Events/StudentYear/useGetStudentYear";
 
-const AddEvent = () => {
+export const AddEvent = () => {
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
@@ -30,15 +30,17 @@ const AddEvent = () => {
     formState: { errors },
     watch,
     handleSubmit,
-  } = useFormContext<AddEventSchemaType>();
+  } = useFormContext<EventSchemaType>();
 
   // เมื่อทำการสร้าง event
-  const onSubmit: SubmitHandler<AddEventSchemaType> = (data) => {
+  const onSubmit: SubmitHandler<EventSchemaType> = (data) => {
+    if (!data.cover) delete data.cover;
+
     addEvent.mutate(data, {
       onSuccess(data, variables, context) {
         Toast.show({ text1: "สร้างกิจกรรมสำเร็จ" });
         queryClient.invalidateQueries(["getEvents"]);
-        navigation.navigate("EventTabRouter");
+        navigation.navigate("Events");
       },
       onError(error, variables, context) {
         console.log(error.response?.data.error);
@@ -72,6 +74,10 @@ const AddEvent = () => {
   const handleStudentYearsSelected = (newSelectedChips: number[]) => {
     setStudentYearsSelected(newSelectedChips);
   };
+
+  if (categoriesLoading || studentYearsLoading) {
+    return
+  }
 
   return (
     <ScrollView className="px-8">
