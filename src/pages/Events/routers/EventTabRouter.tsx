@@ -6,7 +6,7 @@ import withSafeArea from "../../../core/components/HOC/withSafeArea";
 import Events from "../pages/Events";
 import Following from "../pages/Following";
 export type EventTabRouterType = {
-  EventsTab: undefined;
+  EventsTopTab: undefined;
   Following: undefined;
 };
 
@@ -17,15 +17,15 @@ const EventTabRouter = () => {
 
   return (
     <EventTab.Navigator
-      initialRouteName="EventsTab"
+      initialRouteName="EventsTopTab"
       tabBar={(props) => {
         // เราไม่จำเป็นต้องใช้ screenOptions แล้วเพราะ render entirely custom component
         return <TabBar {...props} />;
       }}
-      sceneContainerStyle={{ backgroundColor: "white", padding: 12 }}
+      sceneContainerStyle={{ backgroundColor: "white" }}
     >
       <EventTab.Screen
-        name="EventsTab"
+        name="EventsTopTab"
         key="Events"
         component={Events}
         options={({ navigation, route }) => ({

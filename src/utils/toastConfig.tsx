@@ -15,6 +15,10 @@ const toastConfig: ToastConfig = {
         fontSize: 15,
         fontWeight: "400",
       }}
+      text2Style={{
+        fontSize: 12,
+        fontFamily: "noto",
+      }}
     />
   ),
   /*

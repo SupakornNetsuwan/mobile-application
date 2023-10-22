@@ -10,10 +10,11 @@ import Events from "../pages/Events";
 import AccountStackRouter from "../pages/Account";
 import Loading from "../core/components/Loading";
 import SignIn from "../pages/SignIn";
-export type MainRouterType = {
-  EventsTab: undefined;
-  AccountStackRouter: undefined;
+import EventsStackRouter from "../pages/Events/routers/EventsStackRouter";
 
+export type MainRouterType = {
+  EventBottomTab: undefined;
+  AccountStackRouter: undefined;
 };
 const BottomStack = createBottomTabNavigator<MainRouterType>();
 const MainRouter = () => {
@@ -24,22 +25,19 @@ const MainRouter = () => {
 
   return (
     <BottomStack.Navigator
-      initialRouteName="EventsTab"
+      initialRouteName="EventBottomTab"
       screenOptions={({ navigation, route }: BottomTabScreenProps<MainRouterType>) => {
         return {
           headerShown: false,
           tabBarActiveTintColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
-          tabBarStyle: {},
-          tabBarLabelStyle: {
-            paddingTop: 0,
-            paddingBottom: 5,
-          },
+          tabBarHideOnKeyboard: true
         };
       }}
     >
+      {/* @ts-ignore */}
       <BottomStack.Screen
-        name="EventsTab"
-        component={Events}
+        name="EventBottomTab"
+        component={EventsStackRouter}
         options={{
           tabBarLabel: ({ focused }) => (
             <StyledText className={twMerge("text-sm p-0 m-0 text-gray-500", focused && "text-purple-primary")}>
