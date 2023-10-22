@@ -11,7 +11,7 @@ import toastConfig from "./src/utils/toastConfig";
 import ErrorBoundary from "react-native-error-boundary";
 import ErrorDisplay from "./src/core/components/ErrorDisplay";
 import ManageStackRouter from "./src/pages/Event/routers/ManageStackRouter";
-import { NativeBaseProvider } from 'native-base';
+// import { NativeBaseProvider } from 'native-base';
 SplashScreen.preventAutoHideAsync();
 
 // ฟังก์ชันสำหรับเอาหน้าโหลดออก
@@ -40,7 +40,7 @@ const App = () => {
   }
 
   return (
-    <NativeBaseProvider>
+    // <NativeBaseProvider>
       <NavigationContainer>
         <QueryClientProvider client={queryClient}>
           <AuthProvider>
@@ -51,7 +51,7 @@ const App = () => {
           </AuthProvider>
         </QueryClientProvider>
       </NavigationContainer>
-    </NativeBaseProvider>
+    // </NativeBaseProvider>
   );
 };
 
