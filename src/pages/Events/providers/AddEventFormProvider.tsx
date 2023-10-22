@@ -5,7 +5,7 @@ import { z } from "zod";
 import useAuthen from "../../../core/hooks/useAuthen";
 import Loading from "../../../core/components/Loading";
 
-const AddEventSchema = z
+export const EventSchema = z
   .object({
     name: z.string().nonempty({ message: "โปรดกรอกชื่อกิจกรรม" }),
     description: z.string().optional(),
@@ -30,7 +30,7 @@ const AddEventSchema = z
     path: ["end"],
   });
 
-export type AddEventSchemaType = z.infer<typeof AddEventSchema>;
+export type EventSchemaType = z.infer<typeof EventSchema>;
 
 const AddEventFormProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -44,8 +44,8 @@ const AddEventFormProvider: React.FC<{ children: React.ReactNode }> = ({
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
 
-  const methods = useForm<AddEventSchemaType>({
-    resolver: zodResolver(AddEventSchema),
+  const methods = useForm<EventSchemaType>({
+    resolver: zodResolver(EventSchema),
     defaultValues: {
       name: "",
       description: "",
