@@ -6,8 +6,12 @@ import { ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EventCard from "../components/EventCard";
 import { EventsStackRouterType } from "../routers/EventsStackRouter";
+import Modal from "../components/Modal";
 
 const Events = () => {
+  const [openingModal, setOpeningModal] = useState<boolean>(false);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
+
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>();
 
   const { data, isLoading, error } = useGetEvents()!;
@@ -33,7 +37,7 @@ const Events = () => {
 
   return (
     <StyledView style={{ flex: 1 }}>
-      <ScrollView>
+      <ScrollView className="px-4 pt-4">
         <StyledTextInput
           onChangeText={handleInputChange}
           hasIcon={true}
@@ -53,7 +57,11 @@ const Events = () => {
           placeholder="ค้นหากิจกรรม"
           className="text-lg bg-gray-100"
         />
-          <EventCard events={filteredEvents} />
+        <StyledView className="mb-8">
+          {filteredEvents.map((event) => (
+            <EventCard event={event} setOpeningModal={setOpeningModal} setIsOwner={setIsOwner} key={event.id} />
+          ))}
+        </StyledView>
       </ScrollView>
 
       {/* ส้่วนของการเพิ่มกิจกรรม */}
@@ -65,6 +73,9 @@ const Events = () => {
           +
         </StyledText>
       </StyledTouchableOpacity>
+
+      {/* Modal for Editing action */}
+      <Modal openingModal={openingModal} onOpeningModal={setOpeningModal} isOwner={isOwner} />
     </StyledView>
   );
 };
