@@ -38,15 +38,15 @@ const UploadPostPicture = () => {
         });
       };
       return (
-        <StyledView className="mt-2"> 
+        <StyledView className="w-full mb-3"> 
           {(tempImageUri ) &&
-            <StyledView className="mt-6 mb-4 flex-row items-center justify-center bg-pink-primary w-full h-40 rounded-md">
+            <StyledView className="mt-6 mb-6 flex-row items-center justify-center bg-pink-primary w-full h-40 rounded-md">
               {(tempImageUri ) &&
                 <StyledImage
                   source={{
                     uri: tempImageUri 
                   }}
-                  className="w-full aspect-video"
+                  className="w-full aspect-video rounded-lg"
                 />
               }
               <StyledTouchableOpacity
@@ -61,7 +61,8 @@ const UploadPostPicture = () => {
                   />
                 }
                 hasIcon={true}
-                className="flex-row justify-center absolute rounded-full py-2 right-3 bottom-0"
+                className="absolute rounded-full py-2 bottom-0 right-3"
+                style={{transform: [{ translateY: 12 }]}}
               ></StyledTouchableOpacity>
             </StyledView>}
           {(tempImageUri == "")
@@ -76,7 +77,7 @@ const UploadPostPicture = () => {
               />
             }
             hasIcon={true}
-            className="flex-row justify-center mb-5"
+            className="flex-row justify-center"
           >
             <StyledText className="text-purple-primary">
               เพิ่มรูปโพสต์

@@ -9,24 +9,26 @@ import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import type { RootPostStackParamsList } from "../routers/PostStackRouter";
-import { useRoute } from "@react-navigation/native";
 import { RouteProp } from '@react-navigation/native';
 import { MaterialTopTabNavigationProp } from "@react-navigation/material-top-tabs";
 import useCreatePost from "../../../core/hooks/Post/useCreatePost";
-type Props ={
-    eventId:string|undefined,
+
+type Props = {
+    eventId: string | undefined,
 }
-const CreatePost = ({eventId}:Props) =>{
+
+const CreatePost = ({ eventId }: Props) => {
     const createPost = useCreatePost()!
     const queryClient = useQueryClient();
     const navigation = useNavigation<NavigationProp<RootPostStackParamsList>>();
+
     const {
         control,
         formState: { errors },
         watch,
         handleSubmit,
-      } = useFormContext<CreatePostFormSchemaType>();
-    
+    } = useFormContext<CreatePostFormSchemaType>();
+
     const onSubmitCreate: SubmitHandler<CreatePostFormSchemaType> = (data) => {
         data.event = eventId;
         createPost.mutate(data, {
@@ -34,82 +36,86 @@ const CreatePost = ({eventId}:Props) =>{
                 Toast.show({ text1: "สร้างโพสต์สำเร็จ" });
                 queryClient.invalidateQueries(["getPosts"]);
                 navigation.navigate('InEventDetails');
-          },
-          onError(error, variables, context) {
-            console.log(error.response?.data);
-          },
+            },
+            onError(error, variables, context) {
+                console.log(error.response?.data);
+            },
         });
     };
     return (
         <>
-            <ScrollView >
-               <StyledView className="bg-white">
-                    <StyledView className="bg-2 pl-4 mb-4">
-                        <StyledText className="text-lg">รายละเอียดของโพสต์</StyledText>
-                    </StyledView>
-                    <StyledView className="w-full">
-                        <StyledText className="text-sm text-gray-500 pl-4">หัวข้อ</StyledText>
-                        <Controller
-                            control={control}
-                            name="title"
-                            render={({ field: { onChange, onBlur, value, ref } }) => {
-                            return (
-                                    <StyledTextInput
-                                        onChangeText={onChange}
-                                        value={value}
-                                        ref={ref}
-                                        className="border-b border-gray-300"
-                                        placeholder="กรุณาเพิ่มหัวข้อ"
-                                        />
-                                )}}
-                                />
-                    </StyledView>   
+            <StyledView style={{ flex: 1 }} className="bg-white">
+                <ScrollView className="px-8 bg-white">
                     <StyledView>
-                        <UploadPostPicture />
-                     </StyledView>
-                     <StyledView className="mt-5">
-                         <Controller
-                            control={control}
-                            name="content"
-                            render={({ field: { onChange, onBlur, value, ref } }) => {
-                                return (
+                        <StyledView className="px-0 mt-6">
+                            <Controller
+                                control={control}
+                                name="title"
+                                render={({ field: { onChange, onBlur, value, ref } }) => {
+                                    return (
                                         <StyledTextInput
-                                        onChangeText={onChange}
-                                        value={value}
-                                        ref={ref}
-                                        textAlignVertical="top"
-                                        multiline={true}
-                                        placeholder="กรุณากรอกข้อความ"
+                                            onChangeText={onChange}
+                                            value={value}
+                                            ref={ref}
+                                            className="px-0 rounded-none font-noto-semibold text-xl text-black"
+                                            placeholder="กรุณาเพิ่มหัวข้อ"
                                         />
-                                        )}}
-                        />
-                     </StyledView>
-                </StyledView>
-                <StyledTouchableOpacity
+                                    )
+                                }}
+                            />
+                        </StyledView>
+                        <StyledView className="border-b border-gray-300 my-2"></StyledView>
+                        <StyledView>
+                            <Controller
+                                control={control}
+                                name="content"
+                                render={({ field: { onChange, onBlur, value, ref } }) => {
+                                    return (
+                                        <StyledTextInput
+                                            onChangeText={onChange}
+                                            value={value}
+                                            ref={ref}
+                                            textAlignVertical="top"
+                                            multiline={true}
+                                            placeholder="กรุณากรอกข้อความ"
+                                            className="rounded-none px-0"
+                                            style={{ minHeight: 500 }}
+                                        />
+                                    )
+                                }}
+                            />
+                        </StyledView>
+                    </StyledView>
+                </ScrollView>
+                <StyledView className="m-4">
+                    <UploadPostPicture />
+                    <StyledTouchableOpacity
                         onPress={handleSubmit(onSubmitCreate)}
                         hasIcon={true}
                         intent="primary"
                         size="medium"
-                        className="flex-row justify-center items-center my-6 space-x-2"
+                        className="relative w-full flex-row justify-center items-center space-x-2"
                         icon={<MaterialCommunityIcons name="plus-circle" size={20} color="white" />}
                     >
-                    <StyledText className="text-white text-lg font-noto-semibold"> {"สร้างโพสต์"}</StyledText>
-                </StyledTouchableOpacity>
-            </ScrollView>
+                        <StyledText className="text-white text-lg font-noto-semibold"> {"สร้างโพสต์"}</StyledText>
+                    </StyledTouchableOpacity>
+                </StyledView>
+            </StyledView>
+            {/* </StyledView> */}
         </>
     )
 }
 
 type CreatePostProp = {
-    route: RouteProp<RootPostStackParamsList,'CreatePost'>; // Adjust this line
+    route: RouteProp<RootPostStackParamsList, 'CreatePost'>; // Adjust this line
     navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
 }
-const WrappedCreatePost= ({route, navigation}:CreatePostProp) => {
+const WrappedCreatePost = ({ route, navigation }: CreatePostProp) => {
     const eventId = route.params.eventId
     return (
-      <CreatePostFormProvider >
-        <CreatePost  eventId={eventId?.toString()}/>
-      </CreatePostFormProvider>
+        <CreatePostFormProvider >
+            <CreatePost eventId={eventId?.toString()} />
+        </CreatePostFormProvider>
     );
-  };
+};
 export default WrappedCreatePost
