@@ -6,11 +6,10 @@ const Loading = () => {
   return (
     <ImageBackground
       source={require("../../../assets/signin-bg.png")}
-      className="w-full h-screen items-center justify-start pt-24"
+      className="w-full h-screen items-center justify-center"
+      style={{flex:1}}
     >
-      <StyledView className="space-y-8 w-full px-12">
-        <StyledImage source={require("../../../assets/signin-logo.png")} className="self-center scale-[0.35]" />
-      </StyledView>
+      <StyledImage source={require("../../../assets/signin-logo.png")} className="self-center scale-[0.35]" />
     </ImageBackground>
   );
 };
