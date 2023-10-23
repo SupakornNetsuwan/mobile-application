@@ -6,11 +6,11 @@ import { ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EventCard from "../components/EventCard";
 import { EventsStackRouterType } from "../routers/EventsStackRouter";
-import Modal from "../components/EventModal";
+import EventModal from "../components/EventModal";
 import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const Events = () => {
-  const [openingModal, setOpeningModal] = useState<boolean>(false);
+  const [openingEventModal, setOpeningEventModal] = useState<boolean>(false);
   const [event, setEvent] = useState<Event>();
 
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>();
@@ -56,7 +56,7 @@ const Events = () => {
         />
         <StyledView className="mb-8">
           {filteredEvents.map((event) => (
-            <EventCard event={event} setOpeningModal={setOpeningModal} setEvent={setEvent} key={event.id} />
+            <EventCard event={event} setOpeningEventModal={setOpeningEventModal} setEvent={setEvent} key={event.id} />
           ))}
         </StyledView>
       </ScrollView>
@@ -72,7 +72,7 @@ const Events = () => {
       </StyledTouchableOpacity>
 
       {/* Modal for Editing action */}
-      <Modal openingModal={openingModal} onOpeningModal={setOpeningModal} event={event} />
+      <EventModal openingEventModal={openingEventModal} setOpeningEventModal={setOpeningEventModal} event={event} />
     </StyledView>
   );
 };

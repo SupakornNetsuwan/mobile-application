@@ -20,7 +20,7 @@ import useAddStaffActivity from "../../../core/hooks/Staff/useAddStaffActivity";
 import useGetStaffActivity from "../../../core/hooks/Staff/useGetStaffActivity";
 import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
-const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) => void, setEvent?: (newType: Event) => void }> = ({ event, setOpeningModal, setEvent }) => {
+const EventCard: React.FC<{ event: Event, setOpeningEventModal?: (newType: boolean) => void, setEvent?: (newType: Event) => void }> = ({ event, setOpeningEventModal, setEvent }) => {
   // emulates a fetch (useQuery expects a Promise)
   // const [userId, setUserId] = useState<number | null>(null);
   // const [reFetch, setRefetch] = useState<boolean | null>(null);
@@ -129,7 +129,7 @@ const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) =
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>()
 
   const handleModal = () => {
-    setOpeningModal?.(true)
+    setOpeningEventModal?.(true)
     setEvent?.(event)
   }
 
