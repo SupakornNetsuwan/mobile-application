@@ -18,12 +18,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import useDeleteStaffActivity from "../../../core/hooks/Staff/useDeleteStaffActivity";
 import useAddStaffActivity from "../../../core/hooks/Staff/useAddStaffActivity";
 import useGetStaffActivity from "../../../core/hooks/Staff/useGetStaffActivity";
-import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
 
-const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) => void, setIsOwner?: (newType: boolean) => void }> = ({ event, setOpeningModal, setIsOwner }) => {
+const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) => void, setEvent?: (newType: Event) => void }> = ({ event, setOpeningModal, setEvent }) => {
   // emulates a fetch (useQuery expects a Promise)
   // const [userId, setUserId] = useState<number | null>(null);
   // const [reFetch, setRefetch] = useState<boolean | null>(null);
@@ -135,7 +131,7 @@ const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) =
 
   const handleModal = () => {
     setOpeningModal?.(true)
-    setIsOwner?.(event.attributes.owner.data.id == auth.session.user.id)
+    setEvent?.(event)
   }
 
   return (

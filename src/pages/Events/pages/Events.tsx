@@ -1,16 +1,16 @@
 import React, { useMemo, useState, useEffect } from "react";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
-import useGetEvents from "../../../core/hooks/Events/useGetEvents";
+import useGetEvents, { Event } from "../../../core/hooks/Events/useGetEvents";
 import { StyledText, StyledView, StyledTextInput, StyledTouchableOpacity } from "../../../core/components/styled";
 import { ScrollView } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EventCard from "../components/EventCard";
 import { EventsStackRouterType } from "../routers/EventsStackRouter";
-import Modal from "../components/Modal";
+import Modal from "../components/EventModal";
 
 const Events = () => {
   const [openingModal, setOpeningModal] = useState<boolean>(false);
-  const [isOwner, setIsOwner] = useState<boolean>(false);
+  const [event, setEvent] = useState<Event>();
 
   const navigation = useNavigation<NavigationProp<EventsStackRouterType>>();
 
@@ -59,7 +59,7 @@ const Events = () => {
         />
         <StyledView className="mb-8">
           {filteredEvents.map((event) => (
-            <EventCard event={event} setOpeningModal={setOpeningModal} setIsOwner={setIsOwner} key={event.id} />
+            <EventCard event={event} setOpeningModal={setOpeningModal} setEvent={setEvent} key={event.id} />
           ))}
         </StyledView>
       </ScrollView>
@@ -75,7 +75,7 @@ const Events = () => {
       </StyledTouchableOpacity>
 
       {/* Modal for Editing action */}
-      <Modal openingModal={openingModal} onOpeningModal={setOpeningModal} isOwner={isOwner} />
+      <Modal openingModal={openingModal} onOpeningModal={setOpeningModal} event={event} />
     </StyledView>
   );
 };
