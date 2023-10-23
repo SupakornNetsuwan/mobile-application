@@ -13,6 +13,9 @@ import { Event } from '../../../core/hooks/Events/useGetEvents';
 import LoadingActivityindicator from '../../../core/components/LoadingActivityindicator';
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import { EventsStackRouterType } from '../routers/EventsStackRouter';
+import useDeleteEvent from '../../../core/hooks/Events/useDeleteEvent';
+import Toast from "react-native-toast-message";
+import { useQueryClient } from '@tanstack/react-query';
 
 const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: (newType: boolean) => void, event?: Event }> = ({ openingEventModal, setOpeningEventModal, event }) => {
     const auth = useAuthen();
@@ -71,9 +74,29 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
         navigation.navigate("EditEvent", { eventId: eventId });
     }
 
-    const handleDeleteEvent = (eventId: number) => {
+    const handleDeleteEvent = () => {
         setOpeningEventModal?.(false);
         setOpeningDeleteEventModal?.(true);
+    }
+
+    const deleteEvent = useDeleteEvent();
+    const queryClient = useQueryClient();
+
+    const handleConfirmDelete = (eventId?: number) => {
+        deleteEvent?.mutate(
+            { eventId: eventId },
+            {
+                onSuccess() {
+                    Toast.show({ text1: "ลบกิจกรรมสำเร็จ 🗑️" });
+                    queryClient.invalidateQueries(["getEvents"]);
+                    deleteEventModalRef.current?.close();
+                    setOpeningDeleteEventModal?.(false);
+                },
+                onError(error, variables, context) {
+                    console.log(error.response?.data);
+                },
+            }
+        );
     }
 
     // renders
@@ -102,7 +125,7 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
                                             <StyledText className='text-lg font-noto-semibold text-purple-primary'>แก้ไขกิจกรรม</StyledText>
                                         </TouchableOpacity>
 
-                                        <TouchableOpacity onPress={() => handleDeleteEvent(event.id)} className='bg-gray-100 items-center flex-row space-x-2 py-2'>
+                                        <TouchableOpacity onPress={handleDeleteEvent} className='bg-gray-100 items-center flex-row space-x-2 py-2'>
                                             <MaterialCommunityIcons name="trash-can" size={24} color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} />
                                             <StyledText className='text-lg font-noto-semibold text-purple-primary'>ลบกิจกรรม</StyledText>
                                         </TouchableOpacity>
@@ -129,6 +152,7 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
                                     <StyledText className="px-12 text-center text-base text-red-500">เมื่อคุณลบกิจกรรมนี้แล้ว จะไม่มีทางกลับมาได้อีก กรุณาตรวจสอบก่อนที่จะดำเนินการลบ 🗑️</StyledText>
 
                                     <StyledTouchableOpacity
+                                        onPress={() => handleConfirmDelete(event?.id)}
                                         intent="primary"
                                         size="medium"
                                         className="flex-row justify-center items-center space-x-2 mt-6 w-80"
