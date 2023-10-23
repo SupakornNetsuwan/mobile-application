@@ -12,9 +12,19 @@ const convertISOToCustomFormat = (inputDate: string) => {
   };
 
   const thaiTimeFormatter = new Intl.DateTimeFormat("th-TH", options);
-  const formattedDate = thaiTimeFormatter.format(date);
 
-  return formattedDate;
+  if (inputDate.split(":").length > 1) {
+    const formattedDate = thaiTimeFormatter.format(date);
+    return formattedDate;
+  } else {
+    const dateOptions: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    };
+    const thaiDateFormatter = new Intl.DateTimeFormat("th-TH", dateOptions);
+    return thaiDateFormatter.format(date);
+  }
 };
 
 export default convertISOToCustomFormat;
