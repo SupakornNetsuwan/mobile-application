@@ -42,7 +42,7 @@ const EventDetails = ({ route, navigation }: Props) => {
 
   const eventName = event.attributes.name
   const eventDescription = event.attributes.description
-  const eventPicture = event.attributes.cover.data.attributes.url
+  const eventPicture = event.attributes.cover.data?.attributes.url || null
   const eventStart = event.attributes.start
   const eventEnd = event.attributes.end
 
