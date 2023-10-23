@@ -6,8 +6,9 @@ import Loading from "../../../core/components/Loading";
 import useGetEvent from "../../../core/hooks/useGetEvent";
 import { useMemo } from "react";
 import { EventSchema, EventSchemaType } from "./AddEventFormProvider";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
-const EditEventFromProvider: React.FC<{ children: React.ReactNode, eventId?: number }> = ({
+const EditEventFromProvider: React.FC<{ children: React.ReactNode, eventId: number }> = ({
     children,
     eventId
 }) => {
@@ -32,7 +33,7 @@ const EditEventFromProvider: React.FC<{ children: React.ReactNode, eventId?: num
             categories: categories,
             // @ts-ignore
             studentAccessYears: studentYears,
-            cover: event?.attributes.cover.data.id.toString()
+            cover: event?.attributes.cover.data ? event?.attributes.cover.data.id.toString() : ""
         },
         defaultValues: {
             name: "",

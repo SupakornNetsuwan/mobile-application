@@ -26,7 +26,7 @@ const UploadEventCover: React.FC<{ eventId?: number }> = ({ eventId }) => {
 
   // const [tempImageUri, setTempImageUri] = useState(`${process.env.EXPO_PUBLIC_BACKEND_URL}${event?.attributes.cover.data.attributes.url}`);
   const [tempImageUri, setTempImageUri] = useState(() => {
-    if (!event || !event.attributes.cover.data.attributes.url) {
+    if (!event || !event.attributes.cover.data) {
       return null;
     }
     return `${process.env.EXPO_PUBLIC_BACKEND_URL}${event.attributes.cover.data.attributes.url}`;
