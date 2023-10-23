@@ -36,6 +36,7 @@ const CreatePost = ({ eventId }: Props) => {
             onSuccess(data, variables, context) {
                 Toast.show({ text1: "สร้างโพสต์สำเร็จ" });
                 queryClient.invalidateQueries(["getPosts"]);
+                queryClient.invalidateQueries(["getPostsFromEventsJoined"])
                 navigation.goBack();
             },
             onError(error, variables, context) {
