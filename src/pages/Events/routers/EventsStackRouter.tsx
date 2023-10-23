@@ -1,16 +1,20 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import EventTabRouter from "./EventTabRouter";
-
 import WrappedAddEvent from "../pages/AddEvent";
 import EachEventDetailsTabRouter from "../../Event/routers/EachEventDetailsTabRouter";
+import WrappedEditEvent from "../pages/EditEvent";
+
 export type EventsStackRouterType = {
   Events: undefined;
   EachEventDetails: {
     eventId: number,
     eventName: string,
   },
-  AddEvent: undefined;
+  AddEvent: undefined,
+  EditEvent: {
+    eventId?: number
+  }
 };
 
 const Stack = createStackNavigator<EventsStackRouterType>();
@@ -30,6 +34,8 @@ const EventsStackRouter = () => {
           title: route.params.eventName,
         })} />
       <Stack.Screen name="AddEvent" component={WrappedAddEvent} options={{ title: "เพิ่มกิจกรรม" }}></Stack.Screen>
+      {/* @ts-ignore */}
+      <Stack.Screen name="EditEvent" component={WrappedEditEvent} options={{ title: "แก้ไขกิจกรรม" }}></Stack.Screen>
     </Stack.Navigator>
   );
 };
