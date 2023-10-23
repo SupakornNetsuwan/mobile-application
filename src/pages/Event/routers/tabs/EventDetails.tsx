@@ -14,6 +14,8 @@ import type { EventsStackRouterType } from "../../../Events/routers/EventsStackR
 import useGetPosts from "../../../../core/hooks/useGetPosts";
 import WrappedCreateComment from "../../components/WrappedCreateComment";
 import useGetEvent from "../../../../core/hooks/useGetEvent";
+import { ActivityIndicator } from "react-native";
+import convertISOToCustomFormat from "../../../../utils/convertISOToCustomFormat";
 
 type Props = {
   route: RouteProp<RootPostStackParamsList, 'InEventDetails'>;
@@ -35,9 +37,13 @@ const EventDetails = ({ route, navigation }: Props) => {
 
   const { data: postsData, isLoading: postsIsLoading, error: postsError } = useGetPosts(eventId.toString())!;
   const posts = useMemo(() => postsData?.data, [postsData?.data])!;
+  
+  const categories = event.attributes.categories.data.map(item => item.attributes.name);
+
+  const studentYears = event.attributes.studentAccessYears.data.map(item => item.attributes.name).sort()
 
   if (eventIsLoading || postsIsLoading) {
-    return <StyledText>Loading...</StyledText>
+    return <StyledView style={{ flex: 1 }} className="items-center justify-center"><ActivityIndicator size="large" color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} /></StyledView>
   }
 
   const eventName = event.attributes.name
@@ -50,32 +56,42 @@ const EventDetails = ({ route, navigation }: Props) => {
     return <EmptyData label="No event found" />
   }
   const postInEvent = posts?.data
-  
+
   return (
     <StyledView className="flex-1">
       <ScrollView nestedScrollEnabled={true} decelerationRate={0.2} contentContainerStyle={{ flexGrow: 1 }}>
         <StyledView className="bg-white">
 
-            {eventPicture != null ? <StyledImage
-              className="w-full aspect-video"
-              source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${eventPicture}` }}
-              onError={(error) => console.log('Image load error:', error)}
-            /> :
-              <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "40%" }} />}
+          {eventPicture != null ? <StyledImage
+            className="w-full aspect-video"
+            source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${eventPicture}` }}
+            onError={(error) => console.log('Image load error:', error)}
+          /> :
+            <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "40%" }} />}
 
           <StyledView className="p-4">
             <StyledText className="text-3xl text-purple-primary font-noto-bold">{eventName}</StyledText>
             <StyledText className="text-gray-500 text-sm">{eventDescription}</StyledText>
           </StyledView>
-          
+
           <StyledView className="justify-center pl-4 pr-4 pt-3 w-full border-t border-t-gray-300 ">
 
-            <StyledTouchableOpacity intent="plain" className="bg-green-100 flex-row items-center space-x-1 p-1 rounded-md mb-3">
+          <StyledView className="bg-green-100 flex-row items-center space-x-2 p-1 rounded-md mb-2">
               <MaterialCommunityIcons name="calendar" size={24} color="#5CC98C" />
               <StyledText className="font-noto-semibold">
-                {eventStart} ถึง {eventEnd}
+                {convertISOToCustomFormat(eventStart)} ถึง {convertISOToCustomFormat(eventEnd)}
               </StyledText>
-            </StyledTouchableOpacity>
+            </StyledView>
+
+            <StyledView className="bg-gray-100 flex-row items-center space-x-2 p-1 rounded-md mb-3">
+              <MaterialCommunityIcons name="tag-multiple-outline" size={24} color="#787878" />
+              <StyledText className="font-noto-semibold">{categories.join(", ")}</StyledText>
+            </StyledView>
+
+            <StyledView className="bg-gray-100 flex-row items-center space-x-2 p-1 rounded-md mb-3">
+              <MaterialCommunityIcons name="school-outline" size={24} color="#787878" />
+              <StyledText className="font-noto-semibold">{studentYears.join(", ")}</StyledText>
+            </StyledView>
 
             {postInEvent && postInEvent.length > 0 ? (
               Array.from({ length: postInEvent.length }, (_, index) => (
