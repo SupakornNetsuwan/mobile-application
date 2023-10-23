@@ -18,12 +18,18 @@ export interface GetEventResponseType {
       publishedAt: string,
       categories: {
         data: {
-          id: number
+          id: number,
+          attributes: {
+            name: string
+          }
         }[]
       },
       studentAccessYears: {
         data: {
-          id: number
+          id: number,
+          attributes: {
+            name: string
+          }
         }[]
       },
       posts: {

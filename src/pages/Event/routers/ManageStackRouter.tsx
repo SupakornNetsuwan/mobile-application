@@ -20,14 +20,15 @@ type staffType = {
 export type ManageStackRouterType = {
     ManageEvent: {
         eventId: number,
-        // eventName: string,
-        // eventDescription: string,
-        // eventPicture: Object | undefined,
-        // eventStart: string,
-        // eventEnd: string,
-        // eventOwnerId: string,
+        eventName: string,
+        eventDescription: string,
+        eventPicture: Object | undefined,
+        eventStart: string,
+        eventEnd: string,
+        eventOwnerId: string,
     }
     EditStaff: {
+        eventId: number | undefined,
         eventName: string | undefined,
         eventDescription: string | undefined,
         eventPicture: PictureType | undefined,
