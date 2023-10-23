@@ -16,10 +16,11 @@ import { EventsStackRouterType } from "../routers/EventsStackRouter";
 import UploadEventCover from "../components/UploadEventCover";
 import useGetCategories from "../../../core/hooks/Events/Category/useGetCategories";
 import useGetStudentYears from "../../../core/hooks/Events/StudentYear/useGetStudentYear";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 export const AddEvent = () => {
-  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
-  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [showStartDatePicker, setShowStartDatePicker] = useState<boolean>(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState<boolean>(false);
 
   const queryClient = useQueryClient();
   const addEvent = useAddEvent()!;
@@ -76,7 +77,7 @@ export const AddEvent = () => {
   };
 
   if (categoriesLoading || studentYearsLoading) {
-    return
+    return <LoadingActivityindicator />
   }
 
   return (
@@ -291,7 +292,7 @@ export const AddEvent = () => {
 
       <StyledTouchableOpacity
         onPress={handleSubmit(onSubmit)}
-        hasIcon={false}
+        hasIcon={true}
         intent="primary"
         size="medium"
         className="flex-row justify-center items-center my-6 space-x-2"

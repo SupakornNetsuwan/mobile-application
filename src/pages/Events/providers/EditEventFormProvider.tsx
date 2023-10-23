@@ -8,7 +8,7 @@ import { useMemo } from "react";
 import { EventSchema, EventSchemaType } from "./AddEventFormProvider";
 import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
-const EditEventFromProvider: React.FC<{ children: React.ReactNode, eventId: number }> = ({
+const EditEventFromProvider: React.FC<{ children: React.ReactNode, eventId?: number }> = ({
     children,
     eventId
 }) => {

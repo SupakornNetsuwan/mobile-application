@@ -14,7 +14,7 @@ import useGetEvent from "../../../core/hooks/useGetEvent";
 import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const UploadEventCover: React.FC<{ eventId?: number }> = ({ eventId }) => {
-  const { data, isLoading, isError } = useGetEvent(eventId)!;
+  const { data, isLoading, isError } = eventId ? useGetEvent(eventId)! : { data: null, isLoading: false, isError: false };
   const event = useMemo(() => data?.data.data, [data?.data.data]);
 
   const { setValue, getValues } = useFormContext<EventSchemaType>();
@@ -24,7 +24,6 @@ const UploadEventCover: React.FC<{ eventId?: number }> = ({ eventId }) => {
     return <LoadingActivityindicator />
   }
 
-  // const [tempImageUri, setTempImageUri] = useState(`${process.env.EXPO_PUBLIC_BACKEND_URL}${event?.attributes.cover.data.attributes.url}`);
   const [tempImageUri, setTempImageUri] = useState(() => {
     if (!event || !event.attributes.cover.data) {
       return null;
