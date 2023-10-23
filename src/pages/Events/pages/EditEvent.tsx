@@ -22,6 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import Toast from "react-native-toast-message";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import useAuthen from "../../../core/hooks/useAuthen";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 type EditStaffProps = {
     route: RouteProp<ManageStackRouterType, 'EditEvent'>
@@ -32,11 +33,7 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
     const auth = useAuthen();
 
     if (auth.status == "loading")
-      return (
-        <StyledView>
-          <StyledText>Loading...</StyledText>
-        </StyledView>
-      );
+      return (<LoadingActivityindicator />);
   
     if (auth.status == "unauthenticated")
       throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
@@ -100,7 +97,7 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
         throw isError
     }
     if (isLoading || categoriesLoading || studentYearsLoading) {
-        return <StyledText>Loading...</StyledText>
+        return <LoadingActivityindicator />
     }
 
     const onSubmit: SubmitHandler<EventSchemaType> = (data) => {

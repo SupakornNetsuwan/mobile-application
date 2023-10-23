@@ -48,12 +48,12 @@ const PostStackRouter = ({ route, navigation, eventId }: Props) => {
     React.useLayoutEffect(() => {
         if (routeName === "CreatePost") {
             navigation.setOptions({ tabBarStyle: { display: 'none' } })
-            navigation.getParent()?.setOptions({headerShown:false})
+            navigation.getParent()?.setOptions({ headerShown: false })
         } else {
             navigation.setOptions({ tabBarStyle: { display: 'flex' } })
-            navigation.getParent()?.setOptions({headerShown:true})
+            navigation.getParent()?.setOptions({ headerShown: true })
         }
-    })
+    }, [routeName]);
 
     return (
         <Stack.Navigator

@@ -15,11 +15,7 @@ const Modal: React.FC<{ openingModal: boolean, onOpeningModal?: (newType: boolea
     const auth = useAuthen();
 
     if (auth.status == "loading")
-        return (
-            <StyledView>
-                <StyledText>Loading...</StyledText>
-            </StyledView>
-        );
+        return (<LoadingActivityindicator />);
 
     if (auth.status == "unauthenticated")
         throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");

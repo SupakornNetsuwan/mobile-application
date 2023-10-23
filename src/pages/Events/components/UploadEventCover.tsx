@@ -11,6 +11,7 @@ import {
 } from "../../../core/components/styled";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useGetEvent from "../../../core/hooks/useGetEvent";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const UploadEventCover: React.FC<{ eventId?: number }> = ({ eventId }) => {
   const { data, isLoading, isError } = useGetEvent(eventId)!;
@@ -20,7 +21,7 @@ const UploadEventCover: React.FC<{ eventId?: number }> = ({ eventId }) => {
   const uploadFile = useUploadFile();
 
   if (isLoading && eventId) {
-    return <StyledText>Loading...</StyledText>
+    return <LoadingActivityindicator />
   }
 
   // const [tempImageUri, setTempImageUri] = useState(`${process.env.EXPO_PUBLIC_BACKEND_URL}${event?.attributes.cover.data.attributes.url}`);

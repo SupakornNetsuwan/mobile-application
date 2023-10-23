@@ -67,7 +67,7 @@ const EventDetails = ({ route, navigation }: Props) => {
             source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${eventPicture}` }}
             onError={(error) => console.log('Image load error:', error)}
           /> :
-            <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "40%" }} />}
+            <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "36%" }} />}
 
           <StyledView className="p-4">
             <StyledText className="text-3xl text-purple-primary font-noto-bold">{eventName}</StyledText>
@@ -83,7 +83,7 @@ const EventDetails = ({ route, navigation }: Props) => {
               </StyledText>
             </StyledView>
 
-            <StyledView className="bg-gray-100 flex-row items-center space-x-2 p-1 rounded-md mb-3">
+            <StyledView className="bg-gray-100 flex-row items-center space-x-2 p-1 rounded-md mb-2">
               <MaterialCommunityIcons name="tag-multiple-outline" size={24} color="#787878" />
               <StyledText className="font-noto-semibold">{categories.join(", ")}</StyledText>
             </StyledView>

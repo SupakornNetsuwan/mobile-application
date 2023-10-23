@@ -18,6 +18,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import useDeleteStaffActivity from "../../../core/hooks/Staff/useDeleteStaffActivity";
 import useAddStaffActivity from "../../../core/hooks/Staff/useAddStaffActivity";
 import useGetStaffActivity from "../../../core/hooks/Staff/useGetStaffActivity";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) => void, setEvent?: (newType: Event) => void }> = ({ event, setOpeningModal, setEvent }) => {
   // emulates a fetch (useQuery expects a Promise)
@@ -28,9 +29,7 @@ const EventCard: React.FC<{ event: Event, setOpeningModal?: (newType: boolean) =
 
   if (auth.status == "loading")
     return (
-      <StyledView>
-        <StyledText>Loading...</StyledText>
-      </StyledView>
+      <LoadingActivityindicator />
     );
 
   if (auth.status == "unauthenticated")

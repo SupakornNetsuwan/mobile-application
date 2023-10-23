@@ -7,6 +7,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import EventCard from "../components/EventCard";
 import { EventsStackRouterType } from "../routers/EventsStackRouter";
 import Modal from "../components/EventModal";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const Events = () => {
   const [openingModal, setOpeningModal] = useState<boolean>(false);
@@ -29,11 +30,7 @@ const Events = () => {
 
   if (error) throw error;
   if (isLoading)
-    return (
-      <StyledView>
-        <StyledText>Loading...</StyledText>
-      </StyledView>
-    );
+    return (<LoadingActivityindicator />);
 
   return (
     <StyledView style={{ flex: 1 }}>

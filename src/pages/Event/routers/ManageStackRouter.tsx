@@ -58,6 +58,7 @@ type ManageStackRouterProp = {
 
 const ManageStackRouter = ({ route, navigation, eventId }: ManageStackRouterProp) => {
     const routeName = getFocusedRouteNameFromRoute(route)
+    
     React.useLayoutEffect(() => {
         if (routeName === "EditEvent") {
             // @ts-ignore
@@ -68,7 +69,8 @@ const ManageStackRouter = ({ route, navigation, eventId }: ManageStackRouterProp
             navigation.setOptions({ tabBarStyle: { display: 'flex' } })
             navigation.getParent()?.setOptions({ headerShown: true })
         }
-    })
+    }, [routeName]);
+
     return (
         <Stack.Navigator
             initialRouteName="ManageEvent"

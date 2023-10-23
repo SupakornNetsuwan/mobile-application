@@ -67,7 +67,7 @@ const EditStaff = ({ route, navigation }: EditStaffProps) => {
                     source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${eventPicture.attributes.url}` }}
                     onError={(error) => console.log('Image load error:', error)}
                 /> :
-                    <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "44%" }} />}
+                    <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "40%" }} />}
                 <StyledTouchableOpacity onPress={() => (navigation.navigate("EditEvent", {eventId:eventId}))} hasIcon={true} intent="plain" className="absolute bg-white flex-row p-1 px-2 items-center justify-center right-4 top-5">
                     <MaterialCommunityIcons name="square-edit-outline" size={24} color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} />
                     <StyledText className="text-purple-primary text-base font-noto-semibold">แก้ไข</StyledText>

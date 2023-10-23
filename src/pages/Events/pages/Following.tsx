@@ -10,6 +10,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useGetPostsFromEventsJoined from "../../../core/hooks/Events/EventsJoined/useGetPostsFromEventsJoined";
 import PostContent from "../components/PostContent";
 import { ScrollView } from "react-native";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const Following = () => {
   const { data, isLoading, error } = useGetPostsFromEventsJoined()!;
@@ -20,11 +21,7 @@ const Following = () => {
 
   if (error) throw error;
   if (isLoading)
-    return (
-      <StyledView>
-        <StyledText>Loading...</StyledText>
-      </StyledView>
-    );
+    return <LoadingActivityindicator />;
 
   const activityPostsWithEvents = activities_events.activities.flatMap((activity) =>
     activity.event.posts.map((post) => ({

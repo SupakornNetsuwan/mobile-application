@@ -6,6 +6,7 @@ import {
 import { Post } from "../../../core/hooks/Staff/useGetStaffActivity";
 import convertISOToCustomFormat from "../../../utils/convertISOToCustomFormat";
 import useGetStaffActivity from "../../../core/hooks/Staff/useGetStaffActivity";
+import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 
 const PostContent: React.FC<{
   eventId: number;
@@ -20,11 +21,7 @@ const PostContent: React.FC<{
 
   if (error) throw error;
   if (isLoading)
-    return (
-      <StyledView>
-        <StyledText>Loading...</StyledText>
-      </StyledView>
-    );
+    return (<LoadingActivityindicator />);
 
   return (
     <StyledView className="mx-3 justify-center">
