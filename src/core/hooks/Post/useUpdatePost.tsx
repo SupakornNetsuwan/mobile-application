@@ -1,39 +1,37 @@
 import React from "react";
 import { useMutation, type MutationOptions } from "@tanstack/react-query";
-import axios from "axios";
+import axios from "../../../utils/axios";
 import { AxiosResponse, AxiosError } from "axios";
 import useAuthen from "../useAuthen";
-import type { GetPostsResponseType } from "../useGetPosts";
 import { EditPostFormSchemaType } from "../../../pages/Event/providers/EditPostFormProvider";
 type UpdatePostType = {
-  data:{
-      id:number
-      attributes:{
-          title:string
-          content:string
-      }
+  data: {
+    id: number
+    attributes: {
+      title: string
+      content: string
+    }
   }
 }
 const useUpdatePost = (
-    postId: string,
-    options?: MutationOptions<
+  postId: string,
+  options?: MutationOptions<
     AxiosResponse<UpdatePostType>,
     AxiosError<UpdatePostType>,
     EditPostFormSchemaType>
-) =>{
-    const auth = useAuthen();
-    if (auth.status === "loading" || auth.status === "unauthenticated") return null;
-  
+) => {
+  const auth = useAuthen();
+  if (auth.status === "loading" || auth.status === "unauthenticated") return null;
 
   return useMutation({
     mutationFn: async (payload) => {
       return axios.put(
         `/posts/${postId}`,
         {
-            data:{
-                title: payload.title,
-                content: payload.content,
-            }
+          data: {
+            title: payload.title,
+            content: payload.content,
+          }
         },
         {
           headers: {

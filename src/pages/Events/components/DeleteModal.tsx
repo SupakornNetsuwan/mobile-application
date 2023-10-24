@@ -6,8 +6,6 @@ import {
     BottomSheetView
 } from '@gorhom/bottom-sheet';
 import { StyledText, StyledView, StyledTouchableOpacity } from '../../../core/components/styled';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import useAuthen from '../../../core/hooks/useAuthen';
 import { Event } from '../../../core/hooks/Events/useGetEvents';
 import LoadingActivityindicator from '../../../core/components/LoadingActivityindicator';
@@ -16,9 +14,8 @@ import { EventsStackRouterType } from '../routers/EventsStackRouter';
 import useDeleteEvent from '../../../core/hooks/Events/useDeleteEvent';
 import Toast from "react-native-toast-message";
 import { useQueryClient } from '@tanstack/react-query';
-import { Share } from 'react-native';
 
-const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: (newType: boolean) => void, event?: Event }> = ({ openingEventModal, setOpeningEventModal, event }) => {
+const DeleteModal: React.FC<{ openingDeleteEventModal: boolean, setOpeningDeleteEventModal?: (newType: boolean) => void, event?: Event }> = ({ openingDeleteEventModal, setOpeningDeleteEventModal, event }) => {
     const auth = useAuthen();
 
     if (auth.status == "loading")
@@ -28,25 +25,14 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
         throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
 
     // ref
-    const eventModalRef = useRef<BottomSheetModal>(null);
     const deleteEventModalRef = useRef<BottomSheetModal>(null);
-    const [openingDeleteEventModal, setOpeningDeleteEventModal] = useState<boolean>(false);
 
     useEffect(() => {
-        if ((openingEventModal) && eventModalRef.current) {
-            eventModalRef.current.present();
-        }
         if ((openingDeleteEventModal) && deleteEventModalRef.current) {
             deleteEventModalRef.current?.present()
         }
-    }, [openingEventModal, openingDeleteEventModal]);
+    }, [openingDeleteEventModal]);
 
-    const handleEventModalChange = useCallback((index: number) => {
-        if (index < 0) {
-            eventModalRef.current?.close();
-            setOpeningEventModal?.(false);
-        }
-    }, []);
 
     const handleDeleteEventModalChange = useCallback((index: number) => {
         if (index < 0) {
@@ -69,17 +55,6 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
 
     const navigation = useNavigation<NavigationProp<EventsStackRouterType>>()
 
-    const handleEditEvent = (eventId?: number) => {
-        eventModalRef.current?.close();
-        setOpeningEventModal?.(false);
-        navigation.navigate("EditEvent", { eventId: eventId });
-    }
-
-    const handleDeleteEvent = () => {
-        setOpeningEventModal?.(false);
-        setOpeningDeleteEventModal?.(true);
-    }
-
     const deleteEvent = useDeleteEvent();
     const queryClient = useQueryClient();
 
@@ -92,6 +67,7 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
                     queryClient.invalidateQueries(["getEvents"]);
                     deleteEventModalRef.current?.close();
                     setOpeningDeleteEventModal?.(false);
+                    navigation.navigate("Events")
                 },
                 onError(error, variables, context) {
                     console.log(error.response?.data);
@@ -100,54 +76,9 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
         );
     }
 
-    const onShare = async () => {
-        try {
-            Share.share({
-                message:
-                    `กิจกรรม ${event?.attributes.name}\n\n${event?.attributes.description}\n\n📆 ${event?.attributes.start} ถึง ${event?.attributes.end}`,
-            });
-        } catch (error: any) {
-            console.log(error.message);
-        }
-    };
-
     // renders
     return (
         <BottomSheetModalProvider>
-            {openingEventModal && (
-                <StyledView>
-                    <BottomSheetModal
-                        ref={eventModalRef}
-                        enableDynamicSizing={true}
-                        backdropComponent={renderBackdrop}
-                        enableHandlePanningGesture
-                        onChange={handleEventModalChange}
-                    >
-                        <BottomSheetView>
-                            <StyledView className='m-5 p-2 rounded-xl bg-gray-100'>
-                                <TouchableOpacity onPress={onShare} className='bg-gray-100 items-center flex-row space-x-2 py-2'>
-                                    <MaterialCommunityIcons name="share" size={24} color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} />
-                                    <StyledText className='text-lg font-noto-semibold text-purple-primary'>แชร์</StyledText>
-                                </TouchableOpacity>
-
-                                {event?.attributes.owner.data.id == auth.session.user.id && (
-                                    <StyledView>
-                                        <TouchableOpacity onPress={() => handleEditEvent(event.id)} className='bg-gray-100 items-center flex-row space-x-2 py-2'>
-                                            <MaterialCommunityIcons name="cog" size={24} color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} />
-                                            <StyledText className='text-lg font-noto-semibold text-purple-primary'>แก้ไขกิจกรรม</StyledText>
-                                        </TouchableOpacity>
-
-                                        <TouchableOpacity onPress={handleDeleteEvent} className='bg-gray-100 items-center flex-row space-x-2 py-2'>
-                                            <MaterialCommunityIcons name="trash-can" size={24} color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} />
-                                            <StyledText className='text-lg font-noto-semibold text-purple-primary'>ลบกิจกรรม</StyledText>
-                                        </TouchableOpacity>
-                                    </StyledView>
-                                )}
-                            </StyledView>
-                        </BottomSheetView>
-                    </BottomSheetModal>
-                </StyledView>
-            )}
             {
                 openingDeleteEventModal && (
                     <StyledView>
@@ -176,7 +107,7 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
                                         intent="plain"
                                         size="medium"
                                         className="flex-row justify-center items-center space-x-2 mt-2 w-80"
-                                        onPress={() => { deleteEventModalRef.current?.close; setOpeningDeleteEventModal(false) }}
+                                        onPress={() => { deleteEventModalRef.current?.close; setOpeningDeleteEventModal?.(false) }}
                                     >
                                         <StyledText className="text-lg text-purple-primary">ยกเลิก</StyledText>
                                     </StyledTouchableOpacity>
@@ -190,4 +121,4 @@ const EventModal: React.FC<{ openingEventModal: boolean, setOpeningEventModal?: 
     )
 }
 
-export default EventModal
+export default DeleteModal;

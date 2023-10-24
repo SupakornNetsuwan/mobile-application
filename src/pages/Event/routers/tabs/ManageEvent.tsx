@@ -104,12 +104,14 @@ const ManageEvent = ({ route, navigation }: Props) => {
       <ScrollView nestedScrollEnabled={true} decelerationRate={0.2}>
         <StyledView className="bg-white border-b border-b-gray-300">
 
+          <StyledView>
           {eventPicture != null ? <StyledImage
             className="w-full aspect-video"
             source={{ uri: `${process.env.EXPO_PUBLIC_BACKEND_URL}${eventPicture.attributes.url}` }}
             onError={(error) => console.log('Image load error:', error)}
           /> :
-            <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: "40%" }} />}
+            <StyledImage source={require("../../../../../assets/profile-backdrop.png")} className="w-full" style={{ height: 215 }} />}
+          </StyledView>
 
           <StyledTouchableOpacity onPress={() => navigate.navigate("EditEvent", { eventId: eventId })} hasIcon={true} intent="plain" className="absolute bg-white flex-row p-1 px-2 items-center justify-center right-4 top-5">
             <MaterialCommunityIcons name="square-edit-outline" size={24} color={process.env.EXPO_PUBLIC_PRIMARY_COLOR} />

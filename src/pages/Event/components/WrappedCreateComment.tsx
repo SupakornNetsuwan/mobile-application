@@ -20,6 +20,8 @@ type CommentProp = {
 import { useFormContext, Controller, SubmitHandler } from "react-hook-form";
 import useCreateComment from "../../../core/hooks/Comment/useCreateComment";
 import convertISOToCustomFormat from "../../../utils/convertISOToCustomFormat";
+import { TouchableOpacity } from "@gorhom/bottom-sheet";
+import PostModal from "./PostModal";
 
 const Comment = ({ contents, owner }: CommentProp) => {
     if (!owner) return <ScrollView />
@@ -59,7 +61,7 @@ const Comment = ({ contents, owner }: CommentProp) => {
 
 
 
-const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
+const PostComponent: React.FC<PostType & { setOpeningPostModal?: (newType: boolean) => void, setPostId?: (newType: number) => void, setOwnerId?: (newType: number) => void }> = ({ attributes, id, eventId, setOpeningPostModal, setOwnerId, setPostId }) => {
     const navigate = useNavigation<NavigationProp<RootPostStackParamsList>>()
     const auth = useAuthen()
 
@@ -75,6 +77,7 @@ const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
     const queryClient = useQueryClient()
     const createComment = useCreateComment()!
     if (auth.status == 'loading' || auth.status == 'unauthenticated') return null
+
     const {
         control,
         formState: { errors },
@@ -97,18 +100,24 @@ const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
         });
     }
 
-    const handleDelatePost = () => {
-        deletePost?.mutate(
-            { postId: postId },
-            {
-                onSuccess() {
-                    Toast.show({ text1: `ลบโพสต์เรียบร้อยแล้ว 😿` });
-                    queryClient.invalidateQueries(["getPosts"]);
-                },
-            }
-        )
+    // const handleDelatePost = () => {
+    //     deletePost?.mutate(
+    //         { postId: postId },
+    //         {
+    //             onSuccess() {
+    //                 Toast.show({ text1: `ลบโพสต์เรียบร้อยแล้ว 😿` });
+    //                 queryClient.invalidateQueries(["getPosts"]);
+    //             },
+    //         }
+    //     )
+    // }
+
+    const handleModal = () => {
+        setOpeningPostModal?.(true)
+        setPostId?.(postId)
+        setOwnerId?.(postDetails.owner.data.id)
     }
-    
+
     return (
         <StyledView
             id={id.toString()}
@@ -154,10 +163,15 @@ const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
                             </StyledView>
                         )
                         }
-                        <StyledView className="p-1 justify-center">
-                            <StyledText className="text-base font-noto-semibold">
-                                {postDetails.owner.data.attributes.username}
-                            </StyledText>
+                        <StyledView className="p-1 justify-center" style={{ width: 284 }}>
+                            <StyledView className="flex-row w-full justify-between">
+                                <StyledText className="text-base font-noto-semibold">
+                                    {postDetails.owner.data.attributes.username}
+                                </StyledText>
+                                <TouchableOpacity onPress={handleModal}>
+                                    <MaterialCommunityIcons name="dots-horizontal" size={24} color="#777" />
+                                </TouchableOpacity>
+                            </StyledView>
                             <StyledText className="text-gray-500">
                                 {postDetails.owner.data.attributes.activities.data[0] ? postDetails.owner.data.attributes.activities.data[0].attributes.position : "ประธานค่าย"} | {convertISOToCustomFormat(postDetails.createdAt)}
                             </StyledText>
@@ -299,11 +313,14 @@ const PostComponent: React.FC<PostType> = ({ attributes, id, eventId }) => {
 
 
 
-const WrappedCreateComment: React.FC<PostType> = ({ attributes, id, eventId }) => {
+const WrappedCreateComment: React.FC<PostType & { setOpeningPostModal?: (newType: boolean) => void, setOwnerId?: (newType: number) => void, setPostId?: (newType: number) => void } > = ({ attributes, id, eventId, setOpeningPostModal, setOwnerId, setPostId }) => {
     return (
-        <CommentFormProvider>
-            <PostComponent attributes={attributes} id={id} eventId={eventId}></PostComponent>
-        </CommentFormProvider>
+        <>
+            <CommentFormProvider>
+                <PostComponent setOpeningPostModal={setOpeningPostModal} attributes={attributes} id={id} eventId={eventId} setOwnerId={setOwnerId} setPostId={setPostId}></PostComponent>
+            </CommentFormProvider>
+            {/* <PostModal openingPostModal={openingPostModal} setOpeningPostModal={setOpeningPostModal} owner={attributes.owner} postId={id} /> */}
+        </>
     )
 }
 export default WrappedCreateComment

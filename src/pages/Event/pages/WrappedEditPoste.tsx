@@ -29,11 +29,13 @@ const EdidtPost = ({postId}:Props) =>{
       } = useFormContext<EditPostFormSchemaType>();
     
     const onSubmitEdit: SubmitHandler<EditPostFormSchemaType> = (data) => {
+        if (!data.medias) delete data.medias;
+
         updatePost.mutate(data, {
             onSuccess(data, variables, context) {
                 Toast.show({ text1: "แก้ไขโพสสำเร็จ" });
                 queryClient.invalidateQueries(["getPosts"]);
-                navigation.navigate('InEventDetails');
+                navigation.goBack()
           },
           onError(error, variables, context) {
             console.log("err",error.response?.data);
@@ -105,7 +107,7 @@ type CreatePostProp = {
     navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
 }
 const WrappedEditPost= ({route, navigation}:CreatePostProp) => {
-    const postId= route.params.postId.toString()
+    const postId= route.params.postId?.toString()
 
     return (
       <EditPostFormProvider postId={postId} >

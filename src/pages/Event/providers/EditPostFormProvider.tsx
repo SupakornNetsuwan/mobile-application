@@ -16,7 +16,7 @@ const EditPostFormSchema = z.object({
 
 export type EditPostFormSchemaType = z.infer<typeof EditPostFormSchema>
 
-const EditPostFormProvider: React.FC<{ children: React.ReactNode, postId:string}> = ({
+const EditPostFormProvider: React.FC<{ children: React.ReactNode, postId?:string}> = ({
     children,postId }) => {
 
     const authen = useAuthen();

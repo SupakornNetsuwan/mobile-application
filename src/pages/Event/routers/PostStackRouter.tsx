@@ -21,7 +21,7 @@ export type RootPostStackParamsList = {
         eventId: number | undefined,
     },
     EditPost: {
-        postId: number
+        postId?: number
     }
 
 }

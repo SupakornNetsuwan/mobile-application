@@ -1,5 +1,3 @@
-import AddEventFormProvider from "../providers/AddEventFormProvider";
-import { AddEvent } from "./AddEvent";
 import { ManageStackRouterType } from "../../Event/routers/ManageStackRouter";
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from "@react-navigation/stack"
@@ -23,6 +21,7 @@ import Toast from "react-native-toast-message";
 import { useNavigation, type NavigationProp } from "@react-navigation/core";
 import useAuthen from "../../../core/hooks/useAuthen";
 import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
+import DeleteModal from "../components/DeleteModal";
 
 type EditStaffProps = {
     route: RouteProp<ManageStackRouterType, 'EditEvent'>
@@ -33,10 +32,10 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
     const auth = useAuthen();
 
     if (auth.status == "loading")
-      return (<LoadingActivityindicator />);
-  
+        return (<LoadingActivityindicator />);
+
     if (auth.status == "unauthenticated")
-      throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
+        throw new Error("คุณไม่มีสิทธิ์เข้าถึงข้อมูล");
 
     const { data, isLoading, isError } = useGetEvent(eventId)!
     const event = useMemo(() => data?.data.data, [data?.data.data])!;
@@ -89,6 +88,8 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
         setStudentYearsSelected(newSelectedChips);
     };
 
+    const [openingDeleteEventModal, setOpeningDeleteEventModal] = useState<boolean>(false);
+
     const queryClient = useQueryClient();
     const editEvent = useUpdateEvent(eventId)!;
     const navigation = useNavigation();
@@ -105,21 +106,21 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
 
         editEvent.mutate(data, {
             onSuccess(data, variables, context) {
-              Toast.show({ text1: "แก้ไขกิจกรรมสำเร็จ" });
-              queryClient.invalidateQueries(["getEvents"])
-              queryClient.invalidateQueries(["getEvent", eventId])
-              queryClient.invalidateQueries(["getPostsFromEventsJoined"])
-              navigation.goBack()
+                Toast.show({ text1: "แก้ไขกิจกรรมสำเร็จ" });
+                queryClient.invalidateQueries(["getEvents"])
+                queryClient.invalidateQueries(["getEvent", eventId])
+                queryClient.invalidateQueries(["getPostsFromEventsJoined"])
+                navigation.goBack()
             },
             onError(error, variables, context) {
-              console.log(error.response?.data.error);
+                console.log(error.response?.data.error);
             },
-          });
+        });
     };
 
     return (
-        <ScrollView className="px-8">
-            <StyledView>
+        <ScrollView>
+            <StyledView className="px-8">
                 <StyledText className="text-lg color-purple-primary font-noto-semibold mt-6">รายละเอียดกิจกรรม</StyledText>
                 <StyledView className="my-2">
                     <Controller
@@ -196,7 +197,7 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
                 </StyledView>
             </StyledView>
 
-            <StyledView className="pt-6">
+            <StyledView className="pt-6 px-8">
                 <StyledText className="text-lg color-purple-primary font-noto-semibold">วันที่ของกิจกรรม</StyledText>
                 <StyledView className="flex-row space-x-2 items-center mt-2">
                     <StyledView className="flex-1 h-full bg-white relative items-center rounded-lg">
@@ -289,7 +290,7 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
                 {errors.end && <StyledText className="text-red-500 text-xs mt-2">{errors.end?.message}</StyledText>}
             </StyledView>
 
-            <StyledView className="pt-6">
+            <StyledView className="pt-6 px-8">
                 <StyledText className="text-lg color-purple-primary font-noto-semibold">ประเภท</StyledText>
                 {categoriesSelected && (
                     <Controller
@@ -312,7 +313,7 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
                 )}
             </StyledView>
 
-            <StyledView className="pt-6">
+            <StyledView className="pt-6 px-8">
                 <StyledText className="text-lg color-purple-primary font-noto-semibold">สำหรับชั้นปี</StyledText>
                 {
                     studentYearsSelected && (
@@ -337,14 +338,31 @@ const EditEvent: React.FC<{ eventId?: number }> = ({ eventId }) => {
                 )}
             </StyledView>
 
-            <StyledTouchableOpacity
-                onPress={handleSubmit(onSubmit)}
-                intent="primary"
-                size="medium"
-                className="flex-row justify-center items-center my-6 space-x-2"
-            >
-                <StyledText className="text-white text-lg font-noto-semibold">แก้ไข</StyledText>
-            </StyledTouchableOpacity>
+            <StyledView className="px-8">
+                <StyledTouchableOpacity
+                    onPress={handleSubmit(onSubmit)}
+                    intent="primary"
+                    size="medium"
+                    className="flex-row justify-center items-center my-6 space-x-2"
+                >
+                    <StyledText className="text-white text-lg font-noto-semibold">แก้ไข</StyledText>
+                </StyledTouchableOpacity>
+            </StyledView>
+
+            <StyledView className="bg-red-100 border-t border-red-600 px-8 py-4">
+                <StyledView className="flex-row justify-between items-center">
+                    <StyledText className="text-red-600 text-lg font-noto-semibold">ลบกิจกรรมนี้</StyledText>
+                    <StyledTouchableOpacity onPress={() => setOpeningDeleteEventModal(true)} icon={<MaterialCommunityIcons name="trash-can-outline" size={22} color="#fff" />} hasIcon={true} intent="plain" className="bg-red-600">
+                        <StyledText className="text-white">ลบ</StyledText>
+                    </StyledTouchableOpacity>
+                </StyledView>
+                <StyledView>
+                    <StyledText className="text-red-600">กรุณาตรวจสอบก่อนที่จะดำเนินการลบ</StyledText>
+                </StyledView>
+            </StyledView>
+
+            {/* @ts-ignore */}
+            <DeleteModal openingDeleteEventModal={openingDeleteEventModal} setOpeningDeleteEventModal={setOpeningDeleteEventModal} event={event} />
         </ScrollView>
     )
 }

@@ -62,8 +62,8 @@ const Events = () => {
       </ScrollView>
 
       {/* ส้่วนของการเพิ่มกิจกรรม */}
-      <StyledTouchableOpacity
-        className="bottom-0 right-0 absolute rounded-full items-center p-3 m-0 text-center"
+      <StyledTouchableOpacity className=" border-opacity-20 flex items-center justify-center w-16 h-16 absolute bottom-8 right-5 rounded-full"
+        style={{ backgroundColor: "#B146C2" }}
         onPress={navigateToAddEvent}
       >
         <StyledText className="text-purple-primary text-2xl font-noto-semibold bg-white block aspect-square text-center leading-10 rounded-full">

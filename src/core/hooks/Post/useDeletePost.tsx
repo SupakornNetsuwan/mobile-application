@@ -10,7 +10,7 @@ type DeletePostResponseType = {
   };
 
 export type DeletePostSchemaType = {
-    postId: number;
+    postId?: number;
   };
 const useDeletePost = (
     options?: MutationOptions<
