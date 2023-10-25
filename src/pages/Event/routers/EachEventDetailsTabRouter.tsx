@@ -16,7 +16,7 @@ import LoadingActivityindicator from "../../../core/components/LoadingActivityin
 
 export type RootEachEventDetailsTabRouterList = {
     // EachEventDetails รับ สองอย่างคือ eventId , กับเช็คว่าคนที่เข้าเป็น adminไหม
-    InEventDetails: {
+    EventDetails: {
         eventId: number,
     },
     ManageStackRouter: undefined,
@@ -26,6 +26,9 @@ export type RootEachEventDetailsTabRouterList = {
 type Props = {
     route: RouteProp<EventsStackRouterType, 'EachEventDetails'>;
     navigation: StackNavigationProp<EventsStackRouterType, 'EachEventDetails'>
+}
+type EventDetailsRoute ={
+    route : RouteProp<RootEachEventDetailsTabRouterList, 'EventDetails'>
 }
 // type Props  = MaterialTopTabNavigationProp<RootEventDetailsTabRouterList, "PostStackRouter">
 const EventDetailsTab = createMaterialTopTabNavigator<RootEachEventDetailsTabRouterList>()
@@ -62,7 +65,7 @@ const EachEventDetailsTabRouter = ({ route, navigation }: Props) => {
     return (
         <>
             <EventDetailsTab.Navigator
-                initialRouteName="InEventDetails"
+                initialRouteName="EventDetails"
                 screenOptions={{
                     tabBarLabelStyle: { fontFamily: "noto-semibold", fontSize: 16 },
                     tabBarIndicatorStyle: { backgroundColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
@@ -71,7 +74,7 @@ const EachEventDetailsTabRouter = ({ route, navigation }: Props) => {
                 }}
             >
                 <EventDetailsTab.Screen
-                    name="InEventDetails"
+                    name="EventDetails"
                     options={{ title: "กิจกรรม" }}
                 >
                     {/* คิดว่าส่งเป็น params ได้ ไม่จำเป็นค้องใช้ props แต่ลองไว้เล่นเดียวแก้*/}

@@ -24,7 +24,7 @@ const useGetStaff = (userId:string)=>{
   
     return useQuery<AxiosResponse<GetStaffResponseType>, AxiosError<ResponseErrorType>>({
         queryFn: async () => {
-          return axios.get(`/staff/${userId}`, {
+          return axios.get(`/staffs/${userId}`, {
             headers: {
               Authorization: `Bearer ${auth.session.jwt}`,
             },

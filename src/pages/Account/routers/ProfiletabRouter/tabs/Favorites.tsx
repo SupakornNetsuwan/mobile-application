@@ -16,7 +16,7 @@ const Favorites = () => {
       <FlatList
         data={events}
         renderItem={({ item: camp }) => (
-          <StyledView className="flex-row justify-between items-center bg-white border-2 border-slate-100 p-4">
+          <StyledView className="flex-row justify-between items-center bg-white border-2 border-slate-100 p-4" >
             <StyledView className="flex-row items-center space-x-2">
               <StyledView className="space-y-2 flex-row items-center space-x-2">
                 <StyledImage

@@ -103,7 +103,7 @@ const EventDetails = ({ route, navigation }: Props) => {
 
             {postInEvent && postInEvent.length > 0 ? (
               Array.from({ length: postInEvent.length }, (_, index) => (
-                <WrappedCreateComment setOpeningPostModal={setOpeningPostModal} setOwnerId={setOwnerId} setPostId={setPostId} attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index} eventId={eventId} />
+                <WrappedCreateComment  setOpeningPostModal={setOpeningPostModal} setOwnerId={setOwnerId} setPostId={setPostId} attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index} eventId={eventId} />
               ))
             ) : (
               <>

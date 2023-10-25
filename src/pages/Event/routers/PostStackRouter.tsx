@@ -29,7 +29,7 @@ export type RootPostStackParamsList = {
 // navigation ขอเป็น MaterialTobtab จะได้มี tabBarStye มาด้วย เวลาไปหน้า CreatePost เราจะSet ให้ Tab bar หายไป
 // รายละเอียดเกี่ยวกับ Event คิดว่าส่งมาเป็น params ได้ ไม่จำเป็นต้องมี แต่ route กับ navigate เอาไว้ลบ Tabbar
 type Props = {
-    route: RouteProp<RootPostStackParamsList, 'InEventDetails'>; // Adjust this line
+    route: RouteProp<RootEachEventDetailsTabRouterList, 'EventDetails'>; // Adjust this line
     navigation: MaterialTopTabNavigationProp<RootPostStackParamsList, 'CreatePost'>
     eventId: number,
     // eventName: string
