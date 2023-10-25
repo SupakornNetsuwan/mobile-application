@@ -21,16 +21,18 @@ const ProfileTabRouter = () => {
       screenOptions={{
         tabBarStyle: { backgroundColor: "#FAFAFA" },
         tabBarItemStyle: { width: 120 },
-        tabBarLabelStyle: { fontFamily: "noto" },
+        tabBarLabelStyle: { fontFamily: "noto-semibold" },
         tabBarIndicatorStyle: { backgroundColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
         tabBarBounces: true,
         tabBarPressColor: "#f7e3fa",
         tabBarScrollEnabled: true,
+        tabBarActiveTintColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
+        tabBarInactiveTintColor: "#9e9e9e",
       }}
     >
       <ProfileTab.Screen name="Posts" component={Posts} options={{ title: "โพสต์" }} />
       <ProfileTab.Screen name="Events" component={Events} options={{ title: "กิจกรรม" }} />
-      <ProfileTab.Screen name="Favorites" component={Favorites} options={{ title: "กำลังติดตาม" }} />
+      <ProfileTab.Screen name="Favorites" component={Favorites} options={{ title: "กำลังเข้าร่วม" }} />
     </ProfileTab.Navigator>
   );
 };

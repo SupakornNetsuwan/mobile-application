@@ -35,6 +35,7 @@ const EdidtPost = ({postId}:Props) =>{
             onSuccess(data, variables, context) {
                 Toast.show({ text1: "แก้ไขโพสสำเร็จ" });
                 queryClient.invalidateQueries(["getPosts"]);
+                queryClient.invalidateQueries(["getPostsFromEventsJoined"]);
                 navigation.goBack()
           },
           onError(error, variables, context) {

@@ -103,7 +103,7 @@ const EventDetails = ({ route, navigation }: Props) => {
 
             {postInEvent && postInEvent.length > 0 ? (
               Array.from({ length: postInEvent.length }, (_, index) => (
-                <WrappedCreateComment  setOpeningPostModal={setOpeningPostModal} setOwnerId={setOwnerId} setPostId={setPostId} attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index} eventId={eventId} />
+                <WrappedCreateComment setOpeningPostModal={setOpeningPostModal} setOwnerId={setOwnerId} setPostId={setPostId} attributes={postInEvent[index].attributes} id={postInEvent[index].id} key={index} eventId={eventId} />
               ))
             ) : (
               <>
@@ -124,12 +124,12 @@ const EventDetails = ({ route, navigation }: Props) => {
         style={{ backgroundColor: "#B146C2" }}
         onPress={navigateToCreatePost}
       >
-        <StyledText className="text-purple-primary text-2xl font-noto-semibold bg-white block aspect-square text-center leading-10 rounded-full">
-          +
-        </StyledText>
+        <StyledView className="bg-white rounded-full p-1" style={{width:44}}>
+          <StyledText className="text-2xl font-noto-bold text-center mt-1 text-purple-primary">+</StyledText>
+        </StyledView>
       </StyledTouchableOpacity>
 
-        <PostModal openingPostModal={openingPostModal} setOpeningPostModal={setOpeningPostModal} ownerId={ownerId} postId={postId} />
+      <PostModal openingPostModal={openingPostModal} setOpeningPostModal={setOpeningPostModal} ownerId={ownerId} postId={postId} />
     </StyledView>
   );
 };

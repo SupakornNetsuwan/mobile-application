@@ -12,11 +12,14 @@ import PostContent from "../components/PostContent";
 import { ScrollView } from "react-native";
 import LoadingActivityindicator from "../../../core/components/LoadingActivityindicator";
 import EmptyData from "../../Account/components/EmptyData";
+import { useNavigation, type NavigationProp } from "@react-navigation/core";
+import { EventsStackRouterType } from "../routers/EventsStackRouter";
 
 const Following = () => {
   const { data, isLoading, error } = useGetPostsFromEventsJoined()!;
   const activities_events = useMemo(() => data?.data, [data?.data])!;
   const [searchQuery, setSearchQuery] = useState("");
+  const navigation = useNavigation<NavigationProp<EventsStackRouterType>>()
 
   if (error) throw error;
   if (isLoading) {
@@ -84,7 +87,7 @@ const Following = () => {
 
         <StyledView>
           {allPostsWithEvents.map((activity) => (
-            <StyledTouchableOpacity key={activity.post.id} intent="plain" className="bg-gray-100 mt-3 flex-row">
+            <StyledTouchableOpacity onPress={() => navigation.navigate("EachEventDetails", {eventId:activity.event.id, eventName:activity.event.name})} key={activity.post.id} intent="plain" className="bg-gray-100 mt-3 flex-row">
               <StyledView className="flex-row items-center justify-center w-20">
                 {activity.event.cover ? (
                   <StyledImage

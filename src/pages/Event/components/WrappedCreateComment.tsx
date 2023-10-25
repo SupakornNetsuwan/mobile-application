@@ -70,7 +70,7 @@ const Comment = ({ contents, owner }: CommentProp) => {
             {owner.data.attributes.activities.data.length > 0 &&
             owner.data.attributes.activities.data[0].attributes.position != null
               ? owner.data.attributes.activities.data[0].attributes.position
-              : "ประธานค่าย"}
+              : "เจ้าของกิจกรรม"}
           </StyledText>
         </StyledView>
       </StyledView>
@@ -196,14 +196,16 @@ const PostComponent: React.FC<
                 <StyledText className="text-base font-noto-semibold">
                   {postDetails.owner.data.attributes.username}
                 </StyledText>
-                <TouchableOpacity onPress={handleModal}>
+                { postDetails.owner.data.id == auth.session.user.id && (
+                  <TouchableOpacity onPress={handleModal}>
                   <MaterialCommunityIcons name="dots-horizontal" size={24} color="#777" />
                 </TouchableOpacity>
+                )}
               </StyledView>
               <StyledText className="text-gray-500">
                 {postDetails.owner.data.attributes.activities.data[0]
                   ? postDetails.owner.data.attributes.activities.data[0].attributes.position
-                  : "ประธานค่าย"}{" "}
+                  : "เจ้าของกิจกรรม"}{" "}
                 | {convertISOToCustomFormat(postDetails.createdAt)}
               </StyledText>
             </StyledView>

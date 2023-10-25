@@ -85,6 +85,7 @@ const PostModal: React.FC<{ openingPostModal: boolean, setOpeningPostModal?: (ne
                     setOpeningDeletePostModal?.(false)
                     Toast.show({ text1: `ลบโพสต์เรียบร้อยแล้ว 😿` });
                     queryClient.invalidateQueries(["getPosts"]);
+                    queryClient.invalidateQueries(["getPostsFromEventsJoined"]);
                 },
                 onError(error, variables, context) {
                     console.log(error.response?.data);

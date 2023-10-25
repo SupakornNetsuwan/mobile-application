@@ -15,7 +15,7 @@ const Posts = () => {
   return (
     <StyledView>
       <FlatList
-        ItemSeparatorComponent={() => <StyledView className="w-full h-2 bg-transparent" />}
+        ItemSeparatorComponent={() => <StyledView className="w-full bg-transparent" />}
         renderItem={({ item: event }) => {
           return <EachEvent postId={event.id} />;
         }}

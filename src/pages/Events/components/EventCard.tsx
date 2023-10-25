@@ -158,7 +158,9 @@ const EventCard: React.FC<{ event: Event, setOpeningEventModal?: (newType: boole
 
         {/* ชื่อกิจกรรม */}
         <StyledView className="flex-row justify-between items-center">
-          <StyledText className="font-noto-semibold text-xl">{event.attributes.name}</StyledText>
+          <StyledView style={{width:250}}>
+          <StyledText numberOfLines={1} className="font-noto-semibold text-xl">{event.attributes.name}</StyledText>
+          </StyledView>
 
           {/* ปุ่มเข้าร่วม */}
           <StyledTouchableOpacity

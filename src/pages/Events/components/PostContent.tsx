@@ -30,7 +30,7 @@ const PostContent: React.FC<{
         {activity[0] && activity[0].attributes.position ? (
           <StyledText className="text-gray-500">{activity[0].attributes.position}</StyledText>
         ) : (
-          <StyledText className="text-gray-500">ประธานค่าย</StyledText>
+          <StyledText className="text-gray-500">เจ้าของกิจกรรม</StyledText>
         )}
         <StyledText className="text-gray-500">|</StyledText>
         <StyledText className="text-gray-500">{convertISOToCustomFormat(post.createdAt)}</StyledText>

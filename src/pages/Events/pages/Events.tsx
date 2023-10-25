@@ -66,9 +66,9 @@ const Events = () => {
         style={{ backgroundColor: "#B146C2" }}
         onPress={navigateToAddEvent}
       >
-        <StyledText className="text-purple-primary text-2xl font-noto-semibold bg-white block aspect-square text-center leading-10 rounded-full">
-          +
-        </StyledText>
+        <StyledView className="bg-white rounded-full p-1" style={{width:44}}>
+          <StyledText className="text-2xl font-noto-bold text-center mt-1 text-purple-primary">+</StyledText>
+        </StyledView>
       </StyledTouchableOpacity>
 
       {/* Modal for Editing action */}
