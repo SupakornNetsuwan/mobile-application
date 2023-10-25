@@ -30,11 +30,10 @@ const MainRouter = () => {
         return {
           headerShown: false,
           tabBarActiveTintColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR,
-          tabBarHideOnKeyboard: true
+          tabBarHideOnKeyboard: true,
         };
       }}
     >
-      {/* @ts-ignore */}
       <BottomStack.Screen
         name="EventBottomTab"
         component={EventsStackRouter}
@@ -48,8 +47,8 @@ const MainRouter = () => {
             return <MaterialCommunityIcons name="calendar" {...props} />;
           },
         }}
-      >
-      </BottomStack.Screen>
+      />
+
       <BottomStack.Screen
         component={AccountStackRouter}
         name="AccountStackRouter"

@@ -1,6 +1,6 @@
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { StyledView, StyledText } from "../../../../core/components/styled";
-import Comments from "./tabs/Comments";
+
 import Events from "./tabs/Events";
 import Favorites from "./tabs/Favorites";
 import Posts from "./tabs/Posts";
@@ -8,7 +8,7 @@ import Posts from "./tabs/Posts";
 export type ProfileTabRouterType = {
   Posts: undefined;
   Favorites: undefined;
-  comments: undefined;
+
   Events: undefined;
 };
 
@@ -20,7 +20,7 @@ const ProfileTabRouter = () => {
       initialRouteName="Posts"
       screenOptions={{
         tabBarStyle: { backgroundColor: "#FAFAFA" },
-        tabBarItemStyle:{width:120},
+        tabBarItemStyle: { width: 120 },
         tabBarLabelStyle: { fontFamily: "noto" },
         tabBarIndicatorStyle: { backgroundColor: process.env.EXPO_PUBLIC_PRIMARY_COLOR },
         tabBarBounces: true,
@@ -31,7 +31,6 @@ const ProfileTabRouter = () => {
       <ProfileTab.Screen name="Posts" component={Posts} options={{ title: "โพสต์" }} />
       <ProfileTab.Screen name="Events" component={Events} options={{ title: "กิจกรรม" }} />
       <ProfileTab.Screen name="Favorites" component={Favorites} options={{ title: "กำลังติดตาม" }} />
-      <ProfileTab.Screen name="comments" component={Comments} options={{ title: "คอมเม้นต์" }} />
     </ProfileTab.Navigator>
   );
 };

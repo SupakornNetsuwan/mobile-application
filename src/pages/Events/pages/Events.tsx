@@ -54,7 +54,7 @@ const Events = () => {
           placeholder="ค้นหากิจกรรม"
           className="text-lg bg-gray-100"
         />
-        <StyledView className="mb-8">
+        <StyledView className="mb-8 ">
           {filteredEvents.map((event) => (
             <EventCard event={event} setOpeningEventModal={setOpeningEventModal} setEvent={setEvent} key={event.id} />
           ))}

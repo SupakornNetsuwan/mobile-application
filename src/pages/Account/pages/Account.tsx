@@ -58,11 +58,11 @@ const Account = () => {
               <StyledText className="text-lg font-medium text-purple-primary">แก้ไข</StyledText>
             </StyledTouchableOpacity>
           </StyledView>
-          <StyledView className="w-full flex-row pt-4 justify-between">
+          {/* <StyledView className="w-full flex-row pt-4 justify-between">
             <ProfileStatistic amount={0} label="Posts" />
             <ProfileStatistic amount={0} label="Comments" />
             <ProfileStatistic amount={0} label="Favorites" />
-          </StyledView>
+          </StyledView> */}
         </StyledView>
       </StyledView>
       <ProfileTabRouter />

@@ -15,15 +15,14 @@ import EmptyData from "../../Account/components/EmptyData";
 
 const Following = () => {
   const { data, isLoading, error } = useGetPostsFromEventsJoined()!;
-  const activities_events = useMemo(
-    () => data?.data,
-    [data?.data]
-  )!;
+  const activities_events = useMemo(() => data?.data, [data?.data])!;
   const [searchQuery, setSearchQuery] = useState("");
 
   if (error) throw error;
-  if (isLoading) { return <LoadingActivityindicator />; }
-
+  if (isLoading) {
+    return <LoadingActivityindicator />;
+  }
+  
   const activityPostsWithEvents = activities_events.activities.flatMap((activity) => {
     if (activity?.event && activity.event.posts?.length) {
       return (activity.event.posts || []).map((post) => ({
