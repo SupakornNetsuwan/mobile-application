@@ -10,8 +10,8 @@ const SignInProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
   const methods = useForm<SignInFormType>({
     defaultValues: {
-      identifier: "64070108",
-      password: "Earththai",
+      identifier: "",
+      password: "",
     },
   });
 
